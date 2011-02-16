@@ -5,7 +5,8 @@
 
 .all-course-list-category {
   display: block;
-  width: 35%;
+  flex: 1;
+  width: 20%;
   margin-right: 20px;
   text-align: center;
 }

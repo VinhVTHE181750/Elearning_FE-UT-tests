@@ -8,10 +8,11 @@ import Sidebar from '../../../components/Sidebar/Sidebar';
 
 function AddQuiz() {
   const { lessonID } = useParams();
+  const [courseID, setCourseID] = useState('');
   const [quizName, setQuizName] = useState('');
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
-  console.log('Lesson ID:', lessonID);
+  const [checkFinalQuiz, setCheckFinalQuiz] = useState(false);
 
   const [user, setUser] = useState('');
 
@@ -20,9 +21,27 @@ function AddQuiz() {
     if (userString) {
       var deCoded = jwt_decode(userString);
       setUser(deCoded.sub);
+      authApi
+        .getLessonById(lessonID)
+        .then((resp) => {
+          setCourseID(resp.data.course.id);
+        })
+        .catch((err) => {});
     }
   }, []);
-  console.log('user: ', user);
+
+  useEffect(() => {
+    if (courseID) {
+      authApi
+        .getLessonByCourseId(courseID)
+        .then((resp) => {
+          const listLesson = resp.data.lessonList;
+          if (listLesson.length && listLesson[listLesson.length - 1].id === lessonID) setCheckFinalQuiz(true);
+        })
+        .catch((err) => {});
+    }
+  }, [courseID]);
+
   const handleSubmit = (e) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     e.preventDefault();
@@ -32,8 +51,9 @@ function AddQuiz() {
         username: user,
         lessonID: lessonID,
         quizName,
+        finalQuiz: checkFinalQuiz,
       };
-
+      console.log(params);
       authApi
         .addQuiz(params)
         .then((response) => {

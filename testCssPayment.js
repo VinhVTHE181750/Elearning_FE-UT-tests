@@ -1,6 +1,6 @@
 return (
     <div className="receipt">
-    <h2 className="name">Name Course: {course.name}</h2>
+    <h2 className="name">Your order information</h2>
     <p className="greeting">Thank you for your order!</p>
     {/* Order info */}
     <div className="order">
@@ -15,28 +15,27 @@ return (
       <div className="product">
         <img src="https://www.freeiconspng.com/uploads/aesthetic-chair-png-5.png" alt="" />
         <div className="info">
-          <h4>Zmerc</h4>
-          <p>Color: Mercine</p>
+          <h4>Name Course: {course.name}</h4>
           <p>Qty: 1</p>
         </div>
       </div>
-      <p>128 $</p>
+      <p> Price:{course.price && course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND</p>
     </div>
     {/* Sub and total price */}
     <div className="totalprice">
       <p className="sub">
-        Subtotal <span>Price:{course.price}VND</span>
+        Subtotal <span> Price:{course.price && course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND</span>
       </p>
       <p className="del">
-        Delivery <span>10 $</span>
+        Delivery <span>0 vnd</span>
       </p>
       <hr />
       <p className="tot">
-        Total <span>138 $</span>
+        Total <span> Price:{course.price && course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND</span>
       </p>
     </div>
 
     {/* Footer */}
-    <footer>Lorem ipsum dolor sit amet consectetur adipisicing.</footer>
+    <footer> <button onClick={() => handleEnroll()}>Order Now</button></footer>
   </div>
     );
