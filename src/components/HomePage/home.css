@@ -1,0 +1,108 @@
+/* Header.css */
+
+header {
+  background-color: white;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.header-logo img {
+  width: 100px; /* Adjust the width as needed */
+  height: auto;
+}
+
+.header-search {
+  display: flex;
+  align-items: center;
+}
+
+.header-search input[type='text'] {
+  padding: 5px;
+  border: solid;
+  border-radius: 10px;
+  margin-right: 10px;
+  width: 200px; /* Adjust the width as needed */
+}
+
+.header-search button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.header-login button {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.header-login button:hover,
+.header-search button:hover {
+  background-color: #0056b3; /* Darker color on hover */
+}
+.content-header {
+  text-decoration: none;
+}
+/* CSS */
+/* home.css */
+.course-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 20px;
+  padding: 20px;
+}
+
+.course-card {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.course-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* home.css */
+.course-card img {
+  max-width: 100%;
+  height: auto;
+  width: 100%; /* You can adjust this width as needed */
+}
+
+.course-card h3 {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.course-card p {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Add more CSS rules as needed */
+
+/* Footer.css */
+.footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.footer-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
