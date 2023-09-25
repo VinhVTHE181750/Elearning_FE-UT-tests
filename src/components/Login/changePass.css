@@ -1,0 +1,47 @@
+/* Trong file CSS của bạn hoặc sử dụng styled-components */
+
+/* Style cho nút thay đổi mật khẩu */
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Style cho các input và nhãn */
+div {
+  margin: 10px 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Style cho thông báo thành công hoặc lỗi */
+p {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #ff0000; /* Màu đỏ cho thông báo lỗi */
+}
+
+/* Style cho tiêu đề của trang */
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
