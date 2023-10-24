@@ -1,0 +1,8 @@
+.carousel-inner {
+  align-items: center;
+}
+
+.carousel-inner img {
+  width: 1000px;
+  height: 500px;
+}

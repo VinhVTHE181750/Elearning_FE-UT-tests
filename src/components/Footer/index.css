@@ -1,0 +1,15 @@
+.footer {
+  display: flex;
+  background-color: #1f2028;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  padding: 55px 0;
+  justify-content: center;
+}
+
+.footer h3 {
+  font-size: 14px;
+  color: #ffffff87;
+  align-items: center;
+}

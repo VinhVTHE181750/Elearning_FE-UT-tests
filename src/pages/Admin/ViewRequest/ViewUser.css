@@ -1,0 +1,57 @@
+/* ViewUser.css */
+
+.view-user-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.user-details {
+  background-color: rgb(44, 41, 41);
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 20px;
+  width: 400px;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+.user-details p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.label {
+  font-weight: bold;
+}
+
+/* Centering user details */
+.user-details p {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Adding space between label and value */
+.label::after {
+  margin-right: 5px;
+}
+
+/* Adding space between label and value */
+.user-details p {
+  display: flex;
+  align-items: center;
+}
+
+/* Styling the "User not found" message */
+.user-not-found {
+  text-align: center;
+  font-size: 18px;
+  color: red;
+  margin-top: 20px;
+}
