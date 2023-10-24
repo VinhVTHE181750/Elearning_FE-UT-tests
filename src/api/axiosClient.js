@@ -40,7 +40,6 @@ axiosClient.interceptors.request.use(
 );
 
 const isExistedUrl = (array, url) => {
-  console.log(url);
   for (let data in array) {
     if (url.search(data) !== -1) {
       return true;

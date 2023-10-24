@@ -23,6 +23,7 @@ import ViewUser from './pages/Admin/ViewRequest';
 import ViewCourse from './pages/Admin/ViewRequest/ViewCourse';
 import ViewQuiz from './pages/Admin/ViewRequest/ViewQuiz';
 import ViewAnswer from './pages/Admin/ViewRequest/ViewAnswer';
+import ViewLesson from './pages/Admin/ViewRequest/ViewLesson';
 
 // import add request
 import AddCourse from './pages/Admin/AddRequest/AddCourse';
@@ -40,10 +41,10 @@ import EditLesson from './pages/Admin/EditRequest/EditLesson';
 import EditQuiz from './pages/Admin/EditRequest/EditQuiz';
 import EditQuestion from './pages/Admin/EditRequest/EditQuestion';
 import EditAnswer from './pages/Admin/EditRequest/EditAnswer';
+import PaymentPage from './pages/PaymentPage/PaymentPage';
 
 function App() {
   const [theme, colorMode] = useMode();
-  console.log(localStorage.getItem('role'));
 
   return (
     <div className="App">
@@ -98,6 +99,8 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/allCourse" element={<AllCourse />} />
             <Route path="/course/:nameCourse" element={<Course />} />
+
+            <Route path="/payment" element={<PaymentPage />} />
           </Routes>
         </>
       )}

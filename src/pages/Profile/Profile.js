@@ -16,7 +16,6 @@ const Profile = () => {
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       var deCoded = jwt_decode(userString);
-      console.log('decode: ', deCoded);
       setUser(deCoded.sub);
     }
   }, []);
@@ -26,7 +25,6 @@ const Profile = () => {
       if (user) {
         try {
           const response = await authApi.getUserByUserName(user);
-          console.log('data: ', response);
           setEmail(response.data.user.email);
           setFullName(response.data.user.fullName);
           setPhoneNum(response.data.user.phone);
@@ -51,17 +49,16 @@ const Profile = () => {
         dateOfBirth: dateOfBirth,
       };
       const response = await authApi.changeProfile(params);
-      console.log('data: ', response);
-      setUser(response.data);
+      console.log(response);
+      window.alert(`Change profile: ${response.message}`);
     } catch (error) {
-      console.error('Lỗi khi lưu thông tin người dùng:', error);
+      window.alert('Change profile error!');
     }
   };
 
   if (!user) {
     return <div>Loading...</div>;
   }
-  console.log('username: ', user);
   return (
     <div>
       <Header />

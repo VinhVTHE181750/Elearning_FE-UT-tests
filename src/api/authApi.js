@@ -228,6 +228,10 @@ const authApi = {
     const url = `/api/v1/user/get-user-by-username?username=${username}`;
     return axiosClient.get(url);
   },
+  enrollCourse: (params) => {
+    const url = 'api/v1/course/enroll-course';
+    return axiosClient.post(url, params);
+  },
 };
 
 export default authApi;
