@@ -53,7 +53,6 @@ export default function ManageUser() {
     { field: 'username', headerName: 'Username', flex: 1 },
     { field: 'email', headerName: 'Email', flex: 1 },
     { field: 'gender', headerName: 'Gender', flex: 1 },
-    { field: 'phone', headerName: 'Phone', flex: 1 },
     { field: 'dob', headerName: 'DOB', flex: 1 },
     {
       field: 'status',
@@ -80,6 +79,7 @@ export default function ManageUser() {
             sx={{
               backgroundColor: 'green',
               color: 'white',
+              width: '20px',
               '&:hover': {
                 backgroundColor: 'darkgreen',
               },
@@ -93,6 +93,7 @@ export default function ManageUser() {
             sx={{
               backgroundColor: 'red',
               color: 'white',
+              width: '20px',
               '&:hover': {
                 backgroundColor: 'darkred',
               },
@@ -106,6 +107,7 @@ export default function ManageUser() {
             sx={{
               backgroundColor: 'Blue',
               color: 'white',
+              width: '20px',
               '&:hover': {
                 backgroundColor: 'darkred',
               },

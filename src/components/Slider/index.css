@@ -1,8 +1,5 @@
-.carousel-inner {
-  align-items: center;
-}
-
-.carousel-inner img {
-  width: 1000px;
-  height: 500px;
+.slider-img img {
+  margin: auto;
+  width: 80%;
+  height: 480px;
 }

@@ -2,8 +2,6 @@ import { Box, Button, IconButton, Typography, useTheme } from '@mui/material';
 import { tokens } from '../../../theme';
 import { mockTransactions } from '../../../data/mockData';
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
-import EmailIcon from '@mui/icons-material/Email';
-import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TrafficIcon from '@mui/icons-material/Traffic';
 import Header from '../../../components/Admin/Header/Header';
@@ -12,11 +10,25 @@ import GeographyChart from '../../../components/Admin/GeographyChart';
 import BarChart from '../../../components/Admin/BarChart';
 import StatBox from '../../../components/Admin/StatBox';
 import ProgressCircle from '../../../components/Admin/ProgressCircle';
+import { useEffect, useState } from 'react';
+import authApi from '../../../api/authApi';
 
-export default function Dashboard() {
+const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const [totalUser, setTotalUser] = useState('');
+  const [totalCoure, setTotalCourse] = useState('');
 
+  useEffect(() => {
+    authApi.totalUser().then((response) => {
+      setTotalUser(response.data);
+    });
+  }, []);
+  useEffect(() => {
+    authApi.totalCourse().then((response) => {
+      setTotalCourse(response.data);
+    });
+  }, []);
   return (
     <Box m="20px">
       {/* HEADER */}
@@ -50,13 +62,14 @@ export default function Dashboard() {
           justifyContent="center"
         >
           <StatBox
-            title="100"
-            subtitle="Total Student"
+            title={totalUser.totalUser}
+            subtitle="Total User"
             progress="0.75"
             increase="+14%"
             icon={<PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: '26px' }} />}
           />
         </Box>
+
         <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
@@ -65,37 +78,7 @@ export default function Dashboard() {
           justifyContent="center"
         >
           <StatBox
-            title="50"
-            subtitle="Total Teacher"
-            progress="0.50"
-            increase="+21%"
-            icon={<PersonAddIcon sx={{ color: colors.greenAccent[600], fontSize: '26px' }} />}
-          />
-        </Box>
-        <Box
-          gridColumn="span 3"
-          backgroundColor={colors.primary[400]}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <StatBox
-            title="1000"
-            subtitle="Total Price"
-            progress="0.30"
-            increase="+5%"
-            icon={<PointOfSaleIcon sx={{ color: colors.greenAccent[600], fontSize: '26px' }} />}
-          />
-        </Box>
-        <Box
-          gridColumn="span 3"
-          backgroundColor={colors.primary[400]}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <StatBox
-            title="8"
+            title={totalCoure.totalCourse}
             subtitle="Total Course"
             progress="0.80"
             increase="+43%"
@@ -192,4 +175,6 @@ export default function Dashboard() {
       </Box>
     </Box>
   );
-}
+};
+
+export default Dashboard;

@@ -1,4 +1,4 @@
-.page-content {
+.homepage-content-course-list {
   margin: 40px;
   margin-bottom: 50px;
 }
@@ -9,7 +9,7 @@ h2 {
   font-weight: bold; /* Đặt độ đậm cho chữ */
 }
 
-.course-list {
+.homepage-content-course-list {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 20px;
@@ -33,6 +33,7 @@ h2 {
   max-height: 200px;
   object-fit: cover;
   border-radius: 5px;
+  margin: auto;
   margin-bottom: 10px;
 }
 
@@ -44,4 +45,19 @@ h2 {
 .course-card p {
   font-size: 14px;
   color: #777;
+}
+
+.page-content-button {
+  display: flex;
+  justify-content: space-between;
+}
+
+.page-content-button button {
+  font-size: 15px;
+  text-align: center;
+  width: 50%;
+  height: 60px;
+  margin-left: 1px;
+  margin-right: 1px;
+  border-radius: 5px;
 }

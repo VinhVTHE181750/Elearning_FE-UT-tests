@@ -1,0 +1,8 @@
+.course-list {
+  width: 90%;
+  margin: auto;
+}
+
+tr:hover {
+  text-decoration: underline;
+}

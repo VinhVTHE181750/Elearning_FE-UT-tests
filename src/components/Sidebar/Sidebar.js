@@ -16,6 +16,7 @@ import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
+import { DeleteForever } from '@mui/icons-material';
 
 const Sidebar = () => {
   const theme = useTheme();
@@ -165,11 +166,11 @@ const Sidebar = () => {
               setSelected={setSelected}
             />
             <Item
-              title="Setting"
-              to=""
+              title="Recycle Bin"
+              to="/recycleBin"
               icon={
                 <IconButton>
-                  <SettingsOutlinedIcon />
+                  <DeleteForever />
                 </IconButton>
               }
               selected={selected}

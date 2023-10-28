@@ -103,7 +103,7 @@ export default function ManageCourse() {
             sx={{
               backgroundColor: 'green',
               color: 'white',
-              width: 100,
+              width: '20px',
               '&:hover': {
                 backgroundColor: 'darkgreen',
               },
@@ -117,7 +117,7 @@ export default function ManageCourse() {
             sx={{
               backgroundColor: 'red',
               color: 'white',
-              width: 100,
+              width: '20px',
               '&:hover': {
                 backgroundColor: 'darkred',
               },
@@ -131,7 +131,7 @@ export default function ManageCourse() {
             sx={{
               backgroundColor: 'blue',
               color: 'white',
-              width: 100,
+              width: '20px',
               '&:hover': {
                 backgroundColor: 'darkred',
               },

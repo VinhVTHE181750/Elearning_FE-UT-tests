@@ -42,6 +42,11 @@ import EditQuiz from './pages/Admin/EditRequest/EditQuiz';
 import EditQuestion from './pages/Admin/EditRequest/EditQuestion';
 import EditAnswer from './pages/Admin/EditRequest/EditAnswer';
 import PaymentPage from './pages/PaymentPage/PaymentPage';
+import MyLearning from './pages/MyLearning/MyLearning';
+import Lesson from './pages/Lesson/Lesson';
+import TakeQuiz from './pages/TakeQuiz/TakeQuiz';
+import RecycleBin from './pages/Admin/RecycleBin/RecycleBin';
+import PaymentVnPaySuccess from './pages/PaymentPage/PaymentVnPaySuccess';
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -81,6 +86,8 @@ function App() {
                     <Route path="/edit-quiz/:quizID" element={<EditQuiz />} />
                     <Route path="/edit-question/:questionID" element={<EditQuestion />} />
                     <Route path="/edit-answer" element={<EditAnswer />} />
+
+                    <Route path="/recycleBin" element={<RecycleBin />} />
                   </Routes>
                 </main>
               </div>
@@ -98,9 +105,12 @@ function App() {
             <Route path="/changePassword" element={<ChangePassword />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/allCourse" element={<AllCourse />} />
-            <Route path="/course/:nameCourse" element={<Course />} />
-
+            <Route path="/view-course/:id" element={<Course />} />
+            <Route path="/viewLesson/:id" element={<Lesson />} />
             <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/myLearning" element={<MyLearning />} />
+            <Route path="/takeQuiz/:id" element={<TakeQuiz />} />
+            <Route path="/payment-result" element={<PaymentVnPaySuccess />} />
           </Routes>
         </>
       )}

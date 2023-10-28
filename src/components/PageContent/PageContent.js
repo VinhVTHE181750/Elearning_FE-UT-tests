@@ -4,22 +4,26 @@ import jwt_decode from 'jwt-decode';
 import './index.css';
 import authApi from '../../api/authApi';
 import PaymentPage from '../../pages/PaymentPage/PaymentPage';
+import { error } from 'jquery';
 
 export default function PageContent() {
   const [allCourses, setAllCourses] = useState([]);
   const [newCourses, setNewCourses] = useState([]);
   const [user, setUser] = useState('');
   const [paymentUrl, setPaymentUrl] = useState('');
-  const [returnUrl, setReturnUrl] = useState('');
-
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [enrolled, setEnrolled] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Gọi API để lấy danh sách khoá học hàng đầu
     authApi
       .findAllCourse()
       .then((response) => {
-        setAllCourses(response.data.listCourse);
+        const sortedAllCourses = response.data.listCourse.sort((a, b) => a.price - b.price);
+
+        const topAllCourses = sortedAllCourses.slice(0, 5);
+
+        setAllCourses(topAllCourses);
       })
       .catch((error) => {
         console.error('Error fetching top courses:', error);
@@ -27,64 +31,123 @@ export default function PageContent() {
   }, []);
 
   useEffect(() => {
+    authApi
+      .getNewestCourse()
+      .then((response) => {
+        const sortedNewCourses = response.data.listCourse.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        const topNewCourses = sortedNewCourses.slice(0, 5);
+
+        setNewCourses(topNewCourses);
+      })
+      .catch((error) => {
+        console.error('Error fetching newest courses:', error);
+      });
+  }, []);
+
+  useEffect(() => {
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       var deCoded = jwt_decode(userString);
-      console.log('decode: ', deCoded);
       setUser(deCoded.sub);
     }
   }, []);
 
-  const handleEnrollCourse = (courseId) => {
-    const params = {
-      courseId: courseId,
-      username: user,
-    };
-    console.log(courseId);
+  const handleGetCourseById = (courseId) => {
     authApi
-      .enrollCourse(params)
+      .getCourseById(courseId)
       .then((response) => {
-        const { orderId, urlPayment } = response.data;
-        console.log('Enroll Course Success:', orderId, urlPayment);
-        const url = urlPayment;
-        console.log({ url });
-        localStorage.setItem('paymentUrl', url);
-        setPaymentUrl(url);
-        console.log('paymentUrl: ', url);
-        navigate('/payment'); // Điều hướng đến trang thanh toán
+        setSelectedCourse(response.data);
       })
       .catch((error) => {
-        console.error('Error enrolling course:', error);
+        console.error('Error fetching course by id:', error);
       });
+  };
+
+  function checkEnroll(user, courseId) {
+    authApi
+      .checkEnroll({ courseId: courseId, username: user })
+      .then((response) => {
+        return true;
+      })
+      .catch((error) => {
+        return false;
+      });
+    return true;
+  }
+
+  const handleEnrollCourse = (courseId) => {
+    const userString = localStorage.getItem('user-access-token');
+    if (userString) {
+      handleGetCourseById(courseId);
+      const params = {
+        courseId: courseId,
+        username: user,
+      };
+      // if (checkEnroll(user, courseId)) {
+      //   return navigate(`/view-course/${courseId}`);
+      // }
+      console.log(courseId);
+      authApi
+        .enrollCourse(params)
+        .then((response) => {
+          const { orderId, urlPayment } = response.data;
+          const url = urlPayment;
+          const orderID = orderId;
+          localStorage.setItem('paymentUrl', url);
+          localStorage.setItem('orderID', orderID);
+          setPaymentUrl(url);
+          setEnrolled(true);
+          navigate('/payment');
+        })
+        .catch((error) => {
+          console.error('Error enrolling course:', error);
+        });
+    } else return navigate('/signin');
+  };
+
+  const handleViewCourse = (id) => {
+    return navigate(`/view-course/${id}`);
   };
 
   return (
     <div>
       <h2>All Course</h2>
-      <div className="course-list">
+      <div className="homepage-content-course-list">
         {allCourses.map((course) => (
           <div key={course.id} className="course-card">
-            <Link to={`/lesson/${course.id}`}>
-              <img src={course.linkThumnail} alt={course.name} />
+            <Link to={`/vew-course/${course.id}`} style={{ height: '250px' }}>
+              <img
+                src="https://images.shiksha.com/mediadata/images/articles/1653376864phpNspXVa.jpeg"
+                alt={course.name}
+              />
               <h3>{course.name}</h3>
-              <p>{course.description}</p>
               <p>Price: {course.price}</p>
             </Link>
-            <button onClick={() => handleEnrollCourse(course.id)}>Enroll Course</button>
+            <div className="page-content-button">
+              <button onClick={() => handleEnrollCourse(course.id)}>Enroll Course</button>
+              <button onClick={() => handleViewCourse(course.id)}>View Course</button>
+            </div>
           </div>
         ))}
       </div>
 
-      <h2>New Course</h2>
-      <div className="course-list">
+      <h2 style={{ marginTop: '40px' }}>New Course</h2>
+      <div className="homepage-content-course-list">
         {newCourses.map((course) => (
           <div key={course.id} className="course-card">
-            <Link to={`/lesson/${course.id}`}>
-              <img src={course.linkThumnail} alt={course.name} />
+            <Link to={`/view-course/${course.id}`} style={{ height: '250px' }}>
+              <img
+                src="https://images.shiksha.com/mediadata/images/articles/1653376864phpNspXVa.jpeg"
+                alt={course.name}
+              />
               <h3>{course.name}</h3>
-              <p>{course.description}</p>
+              <p>Price: {course.price}</p>
             </Link>
-            <button onClick={() => handleEnrollCourse(course.id)}>Enroll Course</button>
+            <div className="page-content-button">
+              <button onClick={() => handleEnrollCourse(course.id)}>Enroll Course</button>
+              <button onClick={() => handleViewCourse(course.id)}>View Course</button>
+            </div>
           </div>
         ))}
       </div>

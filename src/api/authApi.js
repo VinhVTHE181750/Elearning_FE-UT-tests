@@ -1,4 +1,4 @@
-import { AxiosHeaders } from 'axios';
+import axios, { AxiosHeaders } from 'axios';
 import axiosClient from './axiosClient';
 
 const authApi = {
@@ -18,7 +18,6 @@ const authApi = {
     return axiosClient
       .post(url, params)
       .then((response) => {
-        console.log(response);
         if (response.data.code === 0) {
           // Lưu access_token vào Local Storage
           localStorage.setItem('access_token', response?.data?.accessToken);
@@ -228,9 +227,54 @@ const authApi = {
     const url = `/api/v1/user/get-user-by-username?username=${username}`;
     return axiosClient.get(url);
   },
+  getCourseById: (id) => {
+    const url = `/api/v1/course/get-course-by-id?id=${id}`;
+    return axiosClient.get(url);
+  },
+  getLessonByCourseId: (id) => {
+    const url = `/api/v1/lesson/get-lessons-by-course?courseId=${id}`;
+    return axiosClient.get(url);
+  },
   enrollCourse: (params) => {
-    const url = 'api/v1/course/enroll-course';
+    const url = '/api/v1/course/enroll-course';
     return axiosClient.post(url, params);
+  },
+  confirmPayment: (params) => {
+    const url = '/api/v1/course/confirm-payment';
+    return axiosClient.get(url, params);
+  },
+  getCourseByUser: (username) => {
+    const url = `/api/v1/course/get-course-user?username=${username}`;
+    return axiosClient.get(url, username);
+  },
+  getLessonById: (id) => {
+    const url = `/api/v1/lesson/get-lesson-by-id?id=${id}`;
+    return axiosClient.get(url, id);
+  },
+  checkEnroll: (params) => {
+    const url = `/api/v1/course/check-enroll?courseId=${params.courseId}&username=${params.username}`;
+    return axiosClient.get(url, params);
+  },
+  totalCourse: (params) => {
+    const url = '/api/v1/course/get-total-course';
+    return axiosClient.get(url, params);
+  },
+  totalUser: (params) => {
+    const url = '/api/v1/user/total-user';
+    return axiosClient.get(url, params);
+  },
+  getQuestionByQuizId: (id) => {
+    const url = `/api/v1/question/get-questions-by-quiz-id?quizId=${id}`;
+    return axiosClient.get(url, id);
+  },
+  findAllDeleted: (str) => {
+    const url = `/api/v1/${str}/find-all-${str}-by-deleted?deleted=${true}`;
+    return axiosClient.get(url);
+  },
+  restoreEntity: (params, str) => {
+    const url = `/api/v1/${str}/update-${str}`;
+    if (str === 'category' || str === 'course') return axiosClient.post(url, params);
+    else return axiosClient.put(url, params);
   },
 };
 

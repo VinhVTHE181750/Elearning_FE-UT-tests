@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './ViewCourse.css';
 import authApi from '../../../api/authApi';
-import AddQuiz from '../../../pages/Admin/AddRequest/AddQuiz';
+import AddQuiz from '../AddRequest/AddQuiz';
 
 const ViewCourse = () => {
   const { courseID } = useParams();
@@ -33,16 +33,19 @@ const ViewCourse = () => {
   }, [courseID]);
   // find all lesson
   useEffect(() => {
-    authApi
-      .findAllLesson()
-      .then((response) => {
-        const lessonArray = (response.data && response.data.listLesson) || [];
-        setLessons(lessonArray);
-      })
-      .catch((error) => {
-        console.error('Error fetching lesson data:', error);
-      });
-  }, []);
+    if (courseToView) {
+      authApi
+        .getLessonByCourseId(courseToView.id)
+        .then((response) => {
+          const lessonArray = (response.data && response.data.lessonList) || [];
+          console.log(lessonArray);
+          setLessons(lessonArray);
+        })
+        .catch((error) => {
+          console.error('Error fetching lesson by id:', error);
+        });
+    }
+  }, [courseToView]);
   // find all quiz
 
   useEffect(() => {
@@ -179,7 +182,7 @@ const ViewCourse = () => {
       <ul>
         {lessons.map((lesson) => (
           <li key={lesson.id} className="lesson-item">
-            <a>{lesson.description}</a>
+            <a style={{ color: '#000' }}>{lesson.name}</a>
             <div className="lesson-actions">
               <button onClick={() => handleEditLesson(lesson.id)} className="edit-button">
                 Edit

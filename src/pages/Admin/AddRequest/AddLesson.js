@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './add.css';
 import authApi from '../../../api/authApi';
+import { useEffect } from 'react';
 function AddLesson() {
   const [lessonName, setLessonName] = useState('');
   const [ordNumber, setOrdNumber] = useState(0);
@@ -9,14 +10,27 @@ function AddLesson() {
   const [description, setDescription] = useState('');
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [courses, setCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  useEffect(() => {
+    authApi
+      .findAllCourse()
+      .then((response) => {
+        console.log('data: ', response.data);
+        const courseArray = (response.data && response.data.listCourse) || [];
+        setCourses(courseArray);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (lessonName && ordNumber && courseID && linkContent && description) {
       const params = {
         lessonName,
         ordNumber,
-        courseID,
+        courseID: selectedCourse.id,
         linkContent,
         description,
       };
@@ -54,8 +68,15 @@ function AddLesson() {
         </label>
 
         <label>
-          Course ID:
-          <input type="number" value={courseID} onChange={(e) => setCourseID(parseInt(e.target.value))} />
+          Course:
+          <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)}>
+            <option value="">Select a course</option>
+            {courses.map((course) => (
+              <option key={course.id} value={course.id}>
+                {course.name}
+              </option>
+            ))}
+          </select>
         </label>
 
         <label>

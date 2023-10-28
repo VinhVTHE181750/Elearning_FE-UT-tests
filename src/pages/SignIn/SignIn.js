@@ -219,7 +219,7 @@ export default function SignIn() {
             </MDBCol>
           </MDBRow>
           <MDBRow>
-            <MDBCol col="6">
+            <MDBCol>
               <div className="select">
                 <select value={gender} onChange={(e) => setGender(e.target.value)}>
                   <option value="">Select Gender</option>
@@ -229,16 +229,6 @@ export default function SignIn() {
                 </select>
                 <br />
                 <label>Gender</label>
-              </div>
-            </MDBCol>
-            <MDBCol col="6">
-              <div className="select">
-                <select value={role} onChange={(e) => setRole(e.target.value)}>
-                  <option value="Students">Students</option>
-                  <option value="Teacher">Teacher</option>
-                </select>
-                <br />
-                <label>Role</label>
               </div>
             </MDBCol>
           </MDBRow>

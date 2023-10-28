@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './add.css'; // Import file CSS tùy chỉnh
 import authApi from '../../../api/authApi';
 
@@ -8,8 +8,22 @@ const AddCourse = () => {
   const [price, setPrice] = useState('');
   const [link_thumnail, setLinkThumnail] = useState('');
   const [category, setCategory] = useState('');
+  const [categories, setCategories] = useState([]);
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    authApi
+      .findAllCategory()
+      .then((response) => {
+        const categoryArray = (response.data && response.data.categoryList) || [];
+        setCategories(categoryArray);
+      })
+      .catch((error) => {
+        console.error('Error fetching categories:', error);
+      });
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -19,15 +33,15 @@ const AddCourse = () => {
         name,
         price,
         link_thumnail,
-        category,
+        category, // Use the category state directly
         description,
       };
-
+      console.log(params);
       authApi
         .addCourse(params)
         .then((response) => {
           // Handle the success response
-          setMessage('Đăng kí thành công');
+          setMessage('Add Course Successful');
           setIsSuccess(true);
           console.log(response);
           // Reset the form fields
@@ -39,15 +53,15 @@ const AddCourse = () => {
         })
         .catch((error) => {
           // Handle the error response
-          setMessage('Đăng kí không thành công');
+          setMessage('Fail Add course');
           setIsSuccess(false);
         });
     } else {
-      setMessage('Đăng kí không thành công');
+      setMessage('Đăng ký không thành công');
       setIsSuccess(false);
     }
   };
-
+  console.log(category);
   return (
     <div className="add-course-container">
       <h2>Add Course</h2>
@@ -73,8 +87,16 @@ const AddCourse = () => {
         </div>
         <div className="form-group">
           <label htmlFor="category">Category:</label>
-          <input type="text" id="category" value={category} onChange={(e) => setCategory(e.target.value)} />
+          <select id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
+            <option value="">Select a category</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
         </div>
+
         <div className="form-group">
           <label htmlFor="description">Description:</label>
           <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
