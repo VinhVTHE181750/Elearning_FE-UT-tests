@@ -1,17 +1,13 @@
-import { Box, Button, useTheme } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
-import { tokens } from '../../../theme';
+import { Box } from '@mui/material';
 import Header from '../../../components/Admin/Header/Header';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import authApi from '../../../api/authApi';
+import { Table, Space, Button } from 'antd';
 
 export default function ManageCategory() {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
   const [category, setCategory] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -21,14 +17,10 @@ export default function ManageCategory() {
     authApi
       .findAllCategory()
       .then((response) => {
-        console.log('data: ', response.data);
         const categoryArray = (response.data && response.data.categoryList) || [];
         setCategory(categoryArray);
-        console.log('Category state after update:', categoryArray);
       })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
+      .catch((error) => {});
   }, []);
 
   const handleEditClick = (categoryId) => {
@@ -49,7 +41,6 @@ export default function ManageCategory() {
         .then((response) => {
           if (response.data && response.data.deleted) {
             setSuccessMessage('Delete Successfully!');
-            // Remove the deleted category from the category state
             setCategory(category.filter((category) => category.id !== categoryId));
           } else {
             setErrorMessage('Delete Failed!');
@@ -66,44 +57,36 @@ export default function ManageCategory() {
   };
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 300 },
-    { field: 'name', headerName: 'Name', width: 300 },
     {
-      field: 'actions',
-      headerName: 'Actions',
-      sortable: false,
-      width: 300,
-      renderCell: (params) => (
-        <div>
-          <Button
-            aria-label="Edit"
-            onClick={() => handleEditClick(params.row.id)}
-            sx={{
-              backgroundColor: 'green',
-              color: 'white',
-              width: 150,
-              '&:hover': {
-                backgroundColor: 'darkgreen',
-              },
-            }}
-          >
-            Edit
-          </Button>
-          <Button
-            aria-label="Delete"
-            onClick={() => handleDeleteClick(params.row.id)}
-            sx={{
-              backgroundColor: 'red',
-              color: 'white',
-              width: 150,
-              '&:hover': {
-                backgroundColor: 'darkred',
-              },
-            }}
-          >
-            Delete
-          </Button>
-        </div>
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      width: '3%',
+      align: 'center',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      width: '40%',
+      align: 'center',
+    },
+    {
+      title: 'Updated Date',
+      dataIndex: 'updatedAt',
+      key: 'updatedAt',
+      width: '20%',
+      align: 'center',
+    },
+    {
+      title: 'Actions',
+      key: 'action',
+      align: 'center',
+      render: (_, record) => (
+        <Space size="small">
+          <Button onClick={() => handleEditClick(record.id)}>Edit</Button>
+          <Button onClick={() => handleDeleteClick(record.id)}>Delete</Button>
+        </Space>
       ),
     },
   ];
@@ -124,37 +107,7 @@ export default function ManageCategory() {
       >
         Add Category
       </Button>
-      <Box
-        m="40px 0 0 0"
-        height="75vh"
-        sx={{
-          '& .MuiDataGrid-root': {
-            border: 'none',
-          },
-          '& .MuiDataGrid-cell': {
-            borderBottom: 'none',
-          },
-          '& .name-column--cell': {
-            color: colors.greenAccent[300],
-          },
-          '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: colors.blueAccent[700],
-            borderBottom: 'none',
-          },
-          '& .MuiDataGrid-virtualScroller': {
-            backgroundColor: colors.primary[400],
-          },
-          '& .MuiDataGrid-footerContainer': {
-            borderTop: 'none',
-            backgroundColor: colors.blueAccent[700],
-          },
-          '& .MuiCheckbox-root': {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-        }}
-      >
-        <DataGrid checkboxSelection rows={category} columns={columns} />
-      </Box>
+      <Table columns={columns} dataSource={category} rowKey={(record) => record.id} />
     </Box>
   );
 }

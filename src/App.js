@@ -1,6 +1,5 @@
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-
 import Home from './pages/Home/Home';
 import SignIn from './pages/SignIn/SignIn';
 import VerifyOtp from './pages/SignIn/VerifyOtp/VerifyOtp';
@@ -9,7 +8,6 @@ import ChangePassword from './pages/ChangePassword/ChangePassword';
 import Profile from './pages/Profile/Profile';
 import AllCourse from './pages/AllCourse/AllCourse';
 import Course from './pages/Course/Course';
-
 import { ColorModeContext, useMode } from './theme';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import Dashboard from './pages/Admin/Dashboard/Dashboard';
@@ -17,23 +15,17 @@ import Sidebar from './components/Sidebar/Sidebar';
 import ManageUser from './pages/Admin/ManageUser/ManageUser';
 import ManageCourse from './pages/Admin/ManageCourse/ManageCourse';
 import ManageCategory from './pages/Admin/ManageCategory/ManageCategory';
-
-// import view request
 import ViewUser from './pages/Admin/ViewRequest';
 import ViewCourse from './pages/Admin/ViewRequest/ViewCourse';
 import ViewQuiz from './pages/Admin/ViewRequest/ViewQuiz';
 import ViewAnswer from './pages/Admin/ViewRequest/ViewAnswer';
 import ViewLesson from './pages/Admin/ViewRequest/ViewLesson';
-
-// import add request
 import AddCourse from './pages/Admin/AddRequest/AddCourse';
 import AddCategory from './pages/Admin/AddRequest/AddCategory';
 import AddLesson from './pages/Admin/AddRequest/AddLesson';
 import AddAnswer from './pages/Admin/AddRequest/AddAnswer';
 import AddQuiz from './pages/Admin/AddRequest/AddQuiz';
 import AddQuestion from './pages/Admin/AddRequest/AddQuestion';
-
-// import edit request
 import EditUser from './pages/Admin/EditRequest';
 import EditCourse from './pages/Admin/EditRequest/EditCourse';
 import EditCategory from './pages/Admin/EditRequest/EditCategory';

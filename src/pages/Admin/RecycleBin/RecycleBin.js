@@ -5,6 +5,12 @@ import { Button, DatePicker, Input, Space, Table, Select } from 'antd';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import authApi from '../../../api/authApi';
+import moment from 'moment';
+
+export const getFullDate = (date) => {
+  const dateAndTime = date.split('T');
+  return dateAndTime[0].split('-').reverse().join('-');
+};
 
 export default function RecycleBin() {
   const [categoryEntity, setCategoryEntity] = useState('category');
@@ -103,11 +109,23 @@ export default function RecycleBin() {
       key: 'name',
       width: '40%',
     },
-    // column person delete
+    {
+      title: 'Deleter',
+      dataIndex: '',
+      key: 'deleter',
+      width: '20%',
+    },
     {
       title: 'Date Deleted',
-      dataIndex: 'updateAt',
-      key: 'updateAt',
+      dataIndex: 'updatedAt',
+      key: 'updatdeAt',
+      render: (record) => {
+        return (
+          <div>
+            <a>{moment(record.updatedAt).format('LLLL')}</a>
+          </div>
+        );
+      },
     },
     {
       title: 'Actions',
@@ -123,7 +141,7 @@ export default function RecycleBin() {
   const handleChange = (value) => {
     setCategoryEntity(value.value);
   };
-
+  console.log(listDeleted);
   return (
     <Box m="20px">
       <Header title="Recycle Bin" subtitle="Managing the recycle bin " />
