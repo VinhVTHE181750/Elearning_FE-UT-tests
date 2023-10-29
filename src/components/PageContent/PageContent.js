@@ -73,7 +73,6 @@ export default function PageContent() {
       .catch((error) => {
         return false;
       });
-    return true;
   }
 
   const handleEnrollCourse = (courseId) => {
@@ -84,9 +83,9 @@ export default function PageContent() {
         courseId: courseId,
         username: user,
       };
-      // if (checkEnroll(user, courseId)) {
-      //   return navigate(`/view-course/${courseId}`);
-      // }
+      if (checkEnroll(user, courseId)) {
+        return navigate(`/view-course/${courseId}`);
+      }
       console.log(courseId);
       authApi
         .enrollCourse(params)

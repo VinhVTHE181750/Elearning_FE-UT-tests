@@ -60,27 +60,23 @@ export default function ManageCategory() {
     {
       title: 'ID',
       dataIndex: 'id',
-      key: 'id',
       width: '3%',
       align: 'center',
     },
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'name',
       width: '40%',
       align: 'center',
     },
     {
       title: 'Updated Date',
       dataIndex: 'updatedAt',
-      key: 'updatedAt',
       width: '20%',
       align: 'center',
     },
     {
       title: 'Actions',
-      key: 'action',
       align: 'center',
       render: (_, record) => (
         <Space size="small">

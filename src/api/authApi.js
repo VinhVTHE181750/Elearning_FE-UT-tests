@@ -276,6 +276,10 @@ const authApi = {
     if (str === 'category' || str === 'course') return axiosClient.post(url, params);
     else return axiosClient.put(url, params);
   },
+  getAllUser: () => {
+    const url = '/api/v1/user/get-all-user';
+    return axiosClient.get(url);
+  },
 };
 
 export default authApi;

@@ -39,6 +39,10 @@ const PaymentPage = () => {
           Thanh toán hoá đơn của bạn <a href={paymentUrl}>Tại Đây</a>
         </p>
       )}
+
+      <div style={{ position: 'fixed', bottom: '0', left: '0', zIndex: '1000', width: '100%', margin: '0' }}>
+        <Footer />
+      </div>
     </div>
   );
 };

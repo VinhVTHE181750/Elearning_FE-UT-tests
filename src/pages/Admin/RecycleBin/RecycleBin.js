@@ -100,25 +100,21 @@ export default function RecycleBin() {
     {
       title: 'ID',
       dataIndex: 'id',
-      key: 'id',
       width: '3%',
     },
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'name',
       width: '40%',
     },
     {
       title: 'Deleter',
       dataIndex: '',
-      key: 'deleter',
       width: '20%',
     },
     {
       title: 'Date Deleted',
       dataIndex: 'updatedAt',
-      key: 'updatdeAt',
       render: (record) => {
         return (
           <div>
@@ -129,7 +125,6 @@ export default function RecycleBin() {
     },
     {
       title: 'Actions',
-      key: 'action',
       render: (_, record) => (
         <Space size="middle">
           <a onClick={() => handleRestore(record)}>Restore</a>
