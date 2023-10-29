@@ -36,7 +36,6 @@ import EditAnswer from './pages/Admin/EditRequest/EditAnswer';
 import PaymentPage from './pages/PaymentPage/PaymentPage';
 import MyLearning from './pages/MyLearning/MyLearning';
 import Lesson from './pages/Lesson/Lesson';
-import TakeQuiz from './pages/TakeQuiz/TakeQuiz';
 import RecycleBin from './pages/Admin/RecycleBin/RecycleBin';
 import PaymentVnPaySuccess from './pages/PaymentPage/PaymentVnPaySuccess';
 
@@ -59,7 +58,7 @@ function App() {
                     <Route path="/manageCourse" element={<ManageCourse />} />
                     <Route path="/manageCategory" element={<ManageCategory />} />
 
-                    <Route path="/view/:userId" element={<ViewUser />} />
+                    <Route path="/view/:username" element={<ViewUser />} />
                     <Route path="/viewCourse/:courseID" element={<ViewCourse />} />
                     <Route path="/view-quiz/:quizID" element={<ViewQuiz />} />
                     <Route path="/view-answer/:quizID" element={<ViewAnswer />} />
@@ -101,7 +100,6 @@ function App() {
             <Route path="/viewLesson/:id" element={<Lesson />} />
             <Route path="/payment" element={<PaymentPage />} />
             <Route path="/myLearning" element={<MyLearning />} />
-            <Route path="/takeQuiz/:id" element={<TakeQuiz />} />
             <Route path="/payment-result" element={<PaymentVnPaySuccess />} />
           </Routes>
         </>

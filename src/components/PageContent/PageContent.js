@@ -86,7 +86,6 @@ export default function PageContent() {
       if (checkEnroll(user, courseId)) {
         return navigate(`/view-course/${courseId}`);
       }
-      console.log(courseId);
       authApi
         .enrollCourse(params)
         .then((response) => {

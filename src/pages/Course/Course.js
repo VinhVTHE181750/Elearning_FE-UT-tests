@@ -10,6 +10,8 @@ export default function Course() {
   const { id } = useParams();
   const [course, setCourse] = useState([]);
   const [lesson, setLesson] = useState([]);
+  const [paymentUrl, setPaymentUrl] = useState('');
+  const [enrolled, setEnrolled] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,14 +38,46 @@ export default function Course() {
         });
     }
   }, [course]);
-  if (!course) {
-    return <div className="not-found">Course not found</div>;
+
+  function checkEnroll(user, courseId) {
+    authApi
+      .checkEnroll({ courseId: courseId, username: user })
+      .then((response) => {
+        return true;
+      })
+      .catch((error) => {
+        return false;
+      });
   }
 
   const handleViewLesson = (item) => {
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
+      const user = jwtDecode(userString).sub;
+      const params = {
+        courseId: id,
+        username: user,
+      };
       return navigate(`/viewLesson/${item.id}`);
+      if (checkEnroll(user, id)) {
+        return navigate(`/viewLesson/${item.id}`);
+      } else {
+        authApi
+          .enrollCourse(params)
+          .then((response) => {
+            const { orderId, urlPayment } = response.data;
+            const url = urlPayment;
+            const orderID = orderId;
+            localStorage.setItem('paymentUrl', url);
+            localStorage.setItem('orderID', orderID);
+            setPaymentUrl(url);
+            setEnrolled(true);
+            navigate('/payment');
+          })
+          .catch((error) => {
+            console.error('Error enrolling course:', error);
+          });
+      }
     } else return navigate('/signin');
   };
 

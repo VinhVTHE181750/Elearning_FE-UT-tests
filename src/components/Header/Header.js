@@ -43,9 +43,6 @@ export default function Header() {
       </div>
       <div className="header-search">
         <input type="text" placeholder="Search" onChange={(e) => setSearchText(e.target.value)} />
-        {/* <button type="button" className="buttonSearch">
-          <i className="bi bi-search">Search</i>
-        </button> */}
       </div>
       <div className="header-options">
         {isSignIn ? (
@@ -55,9 +52,6 @@ export default function Header() {
               <img src={user_icon} onClick={handleUserMenuClick} />
               <div className="user-menu" style={{ display: userMenuVisible ? 'flex' : 'none' }}>
                 <Link to="/profile">My Profile</Link>
-                <Link to="/dashboard" style={{ display: role === 'TEACHER' ? 'flex' : 'none' }}>
-                  Teacher
-                </Link>
                 <Link to="/myPayment">My payment</Link>
                 <Link to="/changePassword">Change Password</Link>
                 <Link to="/setting">Setting</Link>

@@ -1,48 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { dataUser } from '../../../data/dataUser';
+import authApi from '../../../api/authApi';
 import './ViewUser.css'; // Import your custom CSS file
 
 const ViewUser = () => {
-  const { userId } = useParams();
-  const [userToView, setUserToView] = useState(null);
-  const negative = useNavigate();
-
-  // Find user information based on userId
+  const { username } = useParams();
+  const [user, setUser] = useState([]);
   useEffect(() => {
-    const user = dataUser.find((user) => user.id === parseInt(userId));
-    setUserToView(user);
-  }, [userId]);
+    authApi
+      .getUserByEmail(username)
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((err) => {});
+  }, [username]);
 
-  if (!userToView) {
-    return <div>User not found</div>;
-  }
-
+  console.log(user);
   return (
     <div className="view-user-container">
       <h1>User Details</h1>
 
       <div className="user-details">
         <p>
-          <span className="label">Full Name:</span> {userToView.fullName}
+          <span className="label">Full Name:</span> {user.fullName}
         </p>
         <p>
-          <span className="label">Username:</span> {userToView.username}
+          <span className="label">Username:</span> {user.username}
         </p>
         <p>
-          <span className="label">Email:</span> {userToView.email}
+          <span className="label">Email:</span> {user.email}
         </p>
         <p>
-          <span className="label">Gender:</span> {userToView.gender}
+          <span className="label">Gender:</span> {user.gender}
         </p>
         <p>
-          <span className="label">Phone:</span> {userToView.phone}
+          <span className="label">Phone:</span> {user.phone}
         </p>
         <p>
-          <span className="label">DOB:</span> {userToView.dob}
+          <span className="label">DOB:</span> {user.date_of_birth}
         </p>
         <p>
-          <span className="label">Status:</span> {userToView.status}
+          <span className="label">Status:</span> {user.status}
         </p>
       </div>
     </div>

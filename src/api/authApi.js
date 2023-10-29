@@ -280,6 +280,18 @@ const authApi = {
     const url = '/api/v1/user/get-all-user';
     return axiosClient.get(url);
   },
+  getAnswerByQuestionId: (id) => {
+    const url = `/api/v1/answer/get-answer-by-question-id?questionId=${id}`;
+    return axiosClient.get(url, id);
+  },
+  changeRoleUser: (params) => {
+    const url = '/api/v1/user/set-role-user';
+    return axiosClient.post(url, params);
+  },
+  getUserByEmail: (email) => {
+    const url = `/api/v1/user/get-user-by-email?email=${email}`;
+    return axiosClient.get(url, email);
+  },
 };
 
 export default authApi;
