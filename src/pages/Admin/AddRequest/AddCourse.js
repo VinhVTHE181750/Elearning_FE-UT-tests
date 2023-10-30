@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './add.css'; // Import file CSS tùy chỉnh
 import authApi from '../../../api/authApi';
 import Sidebar from '../../../components/Sidebar/Sidebar';
+import jwtDecode from 'jwt-decode';
 
 const AddCourse = () => {
   const [name, setName] = useState('');
@@ -12,12 +13,22 @@ const AddCourse = () => {
   const [categories, setCategories] = useState([]);
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    if (localStorage.getItem('user-access-token')) {
+      setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
+    }
+  }, [localStorage.getItem('user-access-token')]);
 
   useEffect(() => {
     authApi
       .findAllCategory()
       .then((response) => {
         const categoryArray = (response.data && response.data.categoryList) || [];
+        if (categoryArray) {
+          setCategory(categoryArray[0].name);
+        }
         setCategories(categoryArray);
       })
       .catch((error) => {
@@ -29,8 +40,8 @@ const AddCourse = () => {
     e.preventDefault();
 
     if (name && description && price && link_thumnail && category) {
-      // Create the params object to send to the addCourse API
       const params = {
+        username: username,
         name,
         price,
         link_thumnail,
@@ -92,9 +103,8 @@ const AddCourse = () => {
             <div className="form-group">
               <label htmlFor="category">Category:</label>
               <select id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
-                <option value="">Select a category</option>
                 {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
+                  <option key={category.id} value={category.name}>
                     {category.name}
                   </option>
                 ))}

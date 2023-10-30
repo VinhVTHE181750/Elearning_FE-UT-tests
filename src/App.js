@@ -83,9 +83,9 @@ function App() {
               <Route path="/view-quiz/:quizID" element={<ViewQuiz />} />
               <Route path="/view-answer/:quizID" element={<ViewAnswer />} />
 
-              <Route path="/add-course" element={<AddCourse />} />
+              <Route path="/add-course/:courseId" element={<AddCourse />} />
               <Route path="/add-category" element={<AddCategory />} />
-              <Route path="/add-lesson" element={<AddLesson />} />
+              <Route path="/add-lesson/:courseID" element={<AddLesson />} />
               <Route path="/add-answer" element={<AddAnswer />} />
               <Route path="/add-quiz/:lessonID" element={<AddQuiz />} />
               <Route path="/add-question/:quizID" element={<AddQuestion />} />

@@ -2,22 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import './edit.css';
+import jwtDecode from 'jwt-decode';
+import { Box } from '@mui/material';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 
 const EditCourse = () => {
   const { courseID } = useParams();
   const navigate = useNavigate();
-  const [course, setCourse] = useState(null);
-  const [editedCourse, setEditedCourse] = useState({
-    name: '',
-    description: '',
-    price: 0,
-    linkThumnail: '',
-    categoryID: 0,
-  });
+  const [course, setCourse] = useState([]);
+  const [username, setUsername] = useState('');
   const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState('');
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  useEffect(() => {
+    authApi
+      .getCourseById(courseID)
+      .then((response) => {
+        console.log(response);
+        setCategory({ categoryId: response.data.category.id, categoryName: response.data.category.name });
+        setCourse(response.data);
+      })
+      .catch((err) => {});
+  }, [courseID]);
   useEffect(() => {
     authApi
       .findAllCategory()
@@ -31,35 +38,22 @@ const EditCourse = () => {
         console.error('Error fetching data:', error);
       });
   }, []);
+
   useEffect(() => {
-    authApi
-      .findAllCourse()
-      .then((response) => {
-        const courseArray = (response.data && response.data.listCourse) || [];
-        const selectedCourse = courseArray.find((course) => course.id === parseInt(courseID));
-        setCourse(selectedCourse);
-        setEditedCourse({
-          name: selectedCourse.name,
-          description: selectedCourse.description,
-          price: selectedCourse.price,
-          linkThumnail: selectedCourse.linkThumnail,
-          categoryID: selectedCourse.category.name,
-        });
-        console.log(selectedCourse);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  }, [courseID]);
+    if (localStorage.getItem('user-access-token')) {
+      setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
+    }
+  }, [localStorage.getItem('user-access-token')]);
 
   const handleSaveClick = () => {
     const params = {
+      username: username,
       courseID: courseID,
-      name: editedCourse.name,
-      description: editedCourse.description,
-      price: editedCourse.price,
-      link_thumnail: editedCourse.linkThumnail,
-      categoryID: editedCourse.categoryID,
+      name: course.name,
+      description: course.description,
+      price: course.price,
+      link_thumnail: course.linkThumail,
+      categoryID: course.category.id,
     };
     authApi
       .updateCourse(params)
@@ -86,8 +80,8 @@ const EditCourse = () => {
                 <input
                   id="name"
                   type="text"
-                  value={editedCourse.name}
-                  onChange={(e) => setEditedCourse({ ...editedCourse, name: e.target.value })}
+                  value={course.name}
+                  onChange={(e) => setCourse({ ...course, name: e.target.value })}
                   className="form-control"
                 />
               </div>
@@ -96,8 +90,8 @@ const EditCourse = () => {
                 <input
                   id="description"
                   type="text"
-                  value={editedCourse.description}
-                  onChange={(e) => setEditedCourse({ ...editedCourse, description: e.target.value })}
+                  value={course.description}
+                  onChange={(e) => setCourse({ ...course, description: e.target.value })}
                   className="form-control"
                 />
               </div>
@@ -106,8 +100,8 @@ const EditCourse = () => {
                 <input
                   id="price"
                   type="number"
-                  value={editedCourse.price}
-                  onChange={(e) => setEditedCourse({ ...editedCourse, price: e.target.value })}
+                  value={course.price}
+                  onChange={(e) => setCourse({ ...course, price: e.target.value })}
                   className="form-control"
                 />
               </div>
@@ -116,8 +110,8 @@ const EditCourse = () => {
                 <input
                   id="link_thumnail"
                   type="text"
-                  value={editedCourse.linkThumnail} // Thay đổi tên trường thành linkThumnail
-                  onChange={(e) => setEditedCourse({ ...editedCourse, linkThumnail: e.target.value })} // Thay đổi tên trường thành linkThumnail
+                  value={course.linkThumail} // Thay đổi tên trường thành linkThumnail
+                  onChange={(e) => setCourse({ ...course, linkThumail: e.target.value })} // Thay đổi tên trường thành linkThumnail
                   margin="normal"
                 />
               </div>
@@ -125,11 +119,11 @@ const EditCourse = () => {
                 <label htmlFor="category">Category:</label>
                 <select
                   id="category"
-                  value={editedCourse.categoryID}
-                  onChange={(e) => setEditedCourse({ ...editedCourse, categoryID: parseInt(e.target.value) })}
+                  value={category.categoryId}
+                  onChange={(e) => setCategory(e.target.value)}
                   className="form-control"
                 >
-                  <option value={0}>Select a category</option>
+                  <option value={category.categoryId}>{category.categoryName}</option>
                   {categories.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.name}

@@ -6,6 +6,7 @@ import authApi from '../../../api/authApi';
 import { Table, Button, Space } from 'antd';
 import moment from 'moment';
 import Sidebar from '../../../components/Sidebar/Sidebar';
+import jwtDecode from 'jwt-decode';
 
 export default function ManageCourse() {
   const [courses, setCourse] = useState([]);
@@ -13,6 +14,14 @@ export default function ManageCourse() {
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
+
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    if (localStorage.getItem('user-access-token')) {
+      setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
+    }
+  }, [localStorage.getItem('user-access-token')]);
 
   useEffect(() => {
     authApi
@@ -34,10 +43,12 @@ export default function ManageCourse() {
 
   const handleDeleteClick = (courseID) => {
     if (window.confirm('Do you want to delete this course?')) {
+      const params = { username: username, courseID: courseID };
       authApi
-        .deleteCourse(courseID)
+        .deleteCourse(params)
         .then((response) => {
           if (response.data && response.data.deleted) {
+            window.alert('Delete Successfully!');
             setSuccessMessage('Delete Successfully!');
             setCourse(courses.filter((course) => course.id !== courseID));
           } else {

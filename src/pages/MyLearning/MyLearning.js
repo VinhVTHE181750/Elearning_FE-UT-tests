@@ -7,6 +7,10 @@ import moment from 'moment';
 import './index.css';
 import Footer from '../../components/Footer/Footer';
 import Course from '../Course/Course';
+import Highlighter from 'react-highlight-words';
+import { Button, Input, Space, Table } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import { useRef } from 'react';
 
 export default function MyLearning() {
   const [courses, setCourses] = useState([]);
@@ -59,55 +63,162 @@ export default function MyLearning() {
     navigate(`/view-course/${course.id}`);
   };
 
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText('');
+  };
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? '#1677ff' : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#ffc069',
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  const columns = [
+    {
+      title: 'No',
+      dataIndex: 'no',
+      align: 'center',
+      width: '3%',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      align: 'center',
+      width: '40%',
+      ...getColumnSearchProps('name'),
+    },
+    {
+      title: 'Category',
+      dataIndex: 'category',
+      align: 'center',
+      width: '15%',
+      ...getColumnSearchProps('category'),
+    },
+    {
+      title: 'Price',
+      dataIndex: 'price',
+      align: 'center',
+      width: '15%',
+      ...getColumnSearchProps('price'),
+    },
+    {
+      title: 'Create At',
+      dataIndex: 'createdAt',
+      align: 'center',
+      render: (record) => {
+        return (
+          <div>
+            <a>{moment(record.createdAt).format('LLLL')}</a>
+          </div>
+        );
+      },
+      ...getColumnSearchProps('createdAt'),
+    },
+  ];
+
   return (
     <>
       <Header />
       <div style={{ marginBottom: '150px' }}>
         <div className="course-list">
           <h4 style={{ textAlign: 'center', marginTop: '40px' }}>My learning</h4>
-          <table style={{ marginTop: '40px' }}>
-            <thead style={{ color: '#fff' }}>
-              <th>No</th>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Create At</th>
-            </thead>
-            <tbody>
-              {records.map((course, index) => {
-                return (
-                  <tr key={course.id} onClick={() => handleViewCourse(course)}>
-                    <td>{index + (currentPage - 1) * recordsPerPage + 1}</td>
-                    <td>{course.name}</td>
-                    <td>{course.category.name}</td>
-                    <td>{course.price}</td>
-                    <td>{moment(course.createdAt).format('DD/MM/YYYY')}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          <nav>
-            <ul className="pagination" style={{ marginTop: '30px' }}>
-              <li className="page-item">
-                <a className="page-link" onClick={prePage}>
-                  Prev
-                </a>
-              </li>
-              {numbers.map((n, index) => (
-                <li className={`page-item ${currentPage === n ? 'active' : ''}`} key={index}>
-                  <a className="page-item" onClick={() => changeCPage(index + 1)}>
-                    {index + 1}
-                  </a>
-                </li>
-              ))}
-              <li className="page-item">
-                <a className="page-link" onClick={nextPage}>
-                  Next
-                </a>
-              </li>
-            </ul>
-          </nav>
+          <Table columns={columns} dataSource={courses} rowKey={(record) => record.id} />
         </div>
       </div>
       <Footer />

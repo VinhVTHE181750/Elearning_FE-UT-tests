@@ -3,41 +3,42 @@ import './add.css';
 import authApi from '../../../api/authApi';
 import { useEffect } from 'react';
 import Sidebar from '../../../components/Sidebar/Sidebar';
+import jwtDecode from 'jwt-decode';
+import { useNavigate, useParams } from 'react-router-dom';
+
 function AddLesson() {
   const [lessonName, setLessonName] = useState('');
   const [ordNumber, setOrdNumber] = useState(0);
-  const [courseID, setCourseID] = useState(0);
+  const { courseID } = useParams();
   const [linkContent, setLinkContent] = useState('');
   const [description, setDescription] = useState('');
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
-  const [courses, setCourses] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [username, setUsername] = useState('');
+  const navigate = useNavigate();
+
   useEffect(() => {
-    authApi
-      .findAllCourse()
-      .then((response) => {
-        console.log('data: ', response.data);
-        const courseArray = (response.data && response.data.listCourse) || [];
-        setCourses(courseArray);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
+    if (localStorage.getItem('user-access-token')) {
+      setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
+    }
+  }, [localStorage.getItem('user-access-token')]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (lessonName && ordNumber && courseID && linkContent && description) {
+    if (lessonName && ordNumber && linkContent && description) {
       const params = {
+        username: username,
         lessonName,
         ordNumber,
-        courseID: selectedCourse.id,
+        courseID: courseID,
         linkContent,
         description,
       };
+      console.log(params);
       authApi.addLesson(params).then((response) => {
         setMessage('Add Successfully Lesson');
         setIsSuccess(true);
+        navigate(`/viewCourse/${courseID}`);
       });
       // Đăng kí thành công
     } else {
@@ -45,13 +46,6 @@ function AddLesson() {
       setMessage('Add Fail Lesson');
       setIsSuccess(false);
     }
-
-    // Sau khi xử lý xong, có thể reset giá trị trong form
-    setLessonName('');
-    setOrdNumber(0);
-    setCourseID(0);
-    setLinkContent('');
-    setDescription('');
   };
   return (
     <div style={{ display: 'flex' }}>
@@ -69,18 +63,6 @@ function AddLesson() {
             <label>
               Order Number:
               <input type="number" value={ordNumber} onChange={(e) => setOrdNumber(parseInt(e.target.value))} />
-            </label>
-
-            <label>
-              Course:
-              <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)}>
-                <option value="">Select a course</option>
-                {courses.map((course) => (
-                  <option key={course.id} value={course.id}>
-                    {course.name}
-                  </option>
-                ))}
-              </select>
             </label>
 
             <label>

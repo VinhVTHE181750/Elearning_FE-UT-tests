@@ -3,77 +3,55 @@ import { useParams, useNavigate } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import './edit.css';
 import Sidebar from '../../../components/Sidebar/Sidebar';
+import jwtDecode from 'jwt-decode';
 
 const EditLesson = () => {
   const { lessonID } = useParams();
-  const navigate = useNavigate();
-  const [lessons, setLessons] = useState(null);
+  const [username, setUsername] = useState('');
   const [editedLesson, setEditedLesson] = useState({
+    username: username,
     lessonID: lessonID,
     lessonName: '',
-    ordNumber: 0,
-    courseID: null,
+    ordNumber: '',
+    courseID: '',
     linkContent: '',
     description: '',
   });
-  const [categories, setCategories] = useState([]);
-  const [courses, setCourses] = useState([]);
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
+
   useEffect(() => {
-    // Gọi API để lấy dữ liệu của bài học dựa trên lessonID
+    if (localStorage.getItem('user-access-token')) {
+      setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
+    }
+  }, [localStorage.getItem('user-access-token')]);
+  useEffect(() => {
     authApi
-      .findAllLesson()
+      .getLessonById(lessonID)
       .then((response) => {
-        const lessonArray = (response.data && response.data.listLesson) || [];
-        console.log(lessonArray);
-        const selectedLesson = lessonArray.find((lesson) => Number(lesson.id) === Number(lessonID));
-        console.log(selectedLesson);
-        if (selectedLesson) {
-          setEditedLesson({
-            lessonID: lessonID,
-            lessonName: selectedLesson.name,
-            ordNumber: selectedLesson.ordNumber,
-            courseID: selectedLesson.courseID,
-            linkContent: selectedLesson.linkContent,
-            description: selectedLesson.description,
-          });
-        } else {
-          console.error('Lesson not found');
-        }
+        setEditedLesson({
+          username: username,
+          lessonID: lessonID,
+          lessonName: response.data.name,
+          ordNumber: response.data.ordNumber,
+          courseID: response.data.course.id,
+          linkContent: response.data.linkContent,
+          description: response.data.description,
+        });
       })
-      .catch((error) => {
-        console.error('Error fetching lesson data:', error);
-      });
-    authApi
-      .findAllCourse()
-      .then((response) => {
-        const courseArray = (response.data && response.data.listCourse) || [];
-        setCourses(courseArray);
-      })
-      .catch((error) => {
-        console.error('Error fetching course data:', error);
+      .catch((err) => {
+        console.log(err);
       });
   }, [lessonID]);
+  const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const handleSaveClick = () => {
-    const params = {
-      lessonID: lessonID,
-      lessonName: editedLesson.lessonName,
-      ordNumber: editedLesson.ordNumber,
-      courseID: editedLesson.courseID,
-      linkContent: editedLesson.linkContent,
-      description: editedLesson.description,
-    };
-
-    // Call API to update lesson
+    console.log(editedLesson);
     authApi
-      .updateLesson(params)
+      .updateLesson(editedLesson)
       .then((response) => {
-        // Handle success
         setSuccessMessage('Lesson updated successfully.');
       })
       .catch((error) => {
-        // Handle error
         setErrorMessage('Failed to update lesson.');
       });
   };
@@ -101,21 +79,6 @@ const EditLesson = () => {
               onChange={(e) => setEditedLesson({ ...editedLesson, ordNumber: parseInt(e.target.value) })}
               className="input"
             />
-          </div>
-          <div className="form-group">
-            <label className="label">Course ID:</label>
-            <select
-              value={editedLesson.courseID}
-              onChange={(e) => setEditedLesson({ ...editedLesson, courseID: parseInt(e.target.value) })}
-              className="input"
-            >
-              <option value="">Select a course</option>
-              {courses.map((course) => (
-                <option key={course.id} value={course.id}>
-                  {course.name}
-                </option>
-              ))}
-            </select>
           </div>
           <div className="form-group">
             <label className="label">Link Content:</label>
