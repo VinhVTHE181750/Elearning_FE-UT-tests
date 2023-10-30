@@ -300,6 +300,14 @@ const authApi = {
     const url = '/api/v1/quiz/finish-quiz';
     return axiosClient.post(url, params);
   },
+  getAllPayment: () => {
+    const url = '/api/v1/payment/get-all-payment';
+    return axiosClient.get(url);
+  },
+  getPaymentUser: (username) => {
+    const url = `/api/v1/payment/get-payment-user?username=${username}`;
+    return axiosClient.get(url, username);
+  },
 };
 
 export default authApi;
