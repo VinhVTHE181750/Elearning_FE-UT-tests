@@ -1,0 +1,25 @@
+img {
+  width: 50px;
+  margin: 10px 45%;
+}
+
+.select select {
+  width: 348px;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.button button {
+  background-color: #007bff;
+  color: #fff;
+  width: 100%;
+  height: 40px;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.button button:hover {
+  background-color: #0052aa;
+}

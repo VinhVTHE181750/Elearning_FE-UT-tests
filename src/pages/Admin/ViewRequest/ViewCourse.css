@@ -1,0 +1,81 @@
+/* view-course.css */
+
+/* ... Your existing CSS ... */
+.label-ord {
+  color: black;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.lesson-item {
+  background-color: whitesmoke;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.lesson-item a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+}
+
+.lesson-item a:hover {
+  text-decoration: none;
+}
+.success-message {
+  color: green;
+}
+
+.error-message {
+  color: red;
+}
+/* view-course.css */
+
+/* ... Your existing CSS ... */
+
+/* Edit button style */
+.edit-button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  background-color: #4caf50; /* Màu xanh lá */
+  color: #fff; /* Màu chữ trắng */
+  border: none;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background-color: #45a049; /* Màu nền xanh lá khi hover */
+}
+
+/* Delete button style */
+.delete-button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  background-color: #f44336; /* Màu đỏ */
+  color: #fff; /* Màu chữ trắng */
+  border: none;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f; /* Màu nền đỏ khi hover */
+}
+
+/* View button style */
+.view-button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  background-color: #007bff; /* Màu xanh dương */
+  color: #fff; /* Màu chữ trắng */
+  border: none;
+  cursor: pointer;
+}
+
+.view-button:hover {
+  background-color: #0056b3; /* Màu nền xanh dương khi hover */
+}
+
+/* Các kiểu dáng khác tùy theo ý muốn của bạn */

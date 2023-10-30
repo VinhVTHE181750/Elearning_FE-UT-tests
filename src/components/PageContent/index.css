@@ -1,0 +1,63 @@
+.homepage-content-course-list {
+  margin: 40px;
+  margin-bottom: 50px;
+}
+
+h2 {
+  color: black; /* Đặt màu chữ là đen */
+  font-size: 24px; /* Đặt kích thước chữ là 24px */
+  font-weight: bold; /* Đặt độ đậm cho chữ */
+}
+
+.homepage-content-course-list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 20px;
+  text-decoration: none;
+}
+
+.course-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #333;
+}
+
+.course-card img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin: auto;
+  margin-bottom: 10px;
+}
+
+.course-card h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.course-card p {
+  font-size: 14px;
+  color: #777;
+}
+
+.page-content-button {
+  display: flex;
+  justify-content: space-between;
+}
+
+.page-content-button button {
+  font-size: 15px;
+  text-align: center;
+  width: 50%;
+  height: 60px;
+  margin-left: 1px;
+  margin-right: 1px;
+  border-radius: 5px;
+}
