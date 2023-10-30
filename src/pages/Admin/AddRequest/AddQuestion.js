@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import './add.css';
 import authApi from '../../../api/authApi';
+import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 
 function AddQuestion() {
@@ -19,6 +20,15 @@ function AddQuestion() {
 
   console.log('Quiz ID:', quizID);
 
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    const userString = localStorage.getItem('user-access-token');
+    if (userString) {
+      var deCoded = jwt_decode(userString);
+      setUser(deCoded.sub);
+    }
+  }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -62,6 +72,7 @@ function AddQuestion() {
         answers = [answerA, answerB, answerC, answerD];
       }
       const params = {
+        username: user,
         quizID: quizID,
         questionName,
         questionType,

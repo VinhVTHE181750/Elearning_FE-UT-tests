@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import './edit.css';
+import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
+
 const EditQuestion = () => {
   const { questionID } = useParams();
   const [questionName, setQuestionName] = useState('');
@@ -12,6 +14,15 @@ const EditQuestion = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const [answers, setAnswers] = useState([]);
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    const userString = localStorage.getItem('user-access-token');
+    if (userString) {
+      var deCoded = jwt_decode(userString);
+      setUser(deCoded.sub);
+    }
+  }, []);
 
   useEffect(() => {
     authApi
@@ -34,6 +45,7 @@ const EditQuestion = () => {
   }, [questionID]);
   const handleEditQuestion = () => {
     const params = {
+      username: user,
       questionID,
       quizID: quizID,
       questionName,

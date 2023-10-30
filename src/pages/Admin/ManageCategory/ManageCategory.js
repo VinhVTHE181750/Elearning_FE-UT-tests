@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import authApi from '../../../api/authApi';
 import { Table, Space, Button } from 'antd';
+import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 
 export default function ManageCategory() {
@@ -14,6 +15,15 @@ export default function ManageCategory() {
   const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
 
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    const userString = localStorage.getItem('user-access-token');
+    if (userString) {
+      var deCoded = jwt_decode(userString);
+      setUser(deCoded.sub);
+    }
+  }, []);
   useEffect(() => {
     authApi
       .findAllCategory()
@@ -35,6 +45,7 @@ export default function ManageCategory() {
     setSelectedCategoryId(categoryToDelete.id);
     if (window.confirm('Do you want to delete this category?')) {
       const params = {
+        username: user,
         categoryID: categoryId,
       };
       authApi

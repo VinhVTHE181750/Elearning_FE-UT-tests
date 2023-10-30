@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { dataCategory } from '../../../data/dataCategory';
 import authApi from '../../../api/authApi';
 import './edit.css';
+import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 
 function EditCategory() {
@@ -13,7 +14,15 @@ function EditCategory() {
   const [name, setName] = useState('');
   const [id, setId] = useState(dataCategory);
   const navigate = useNavigate();
+  const [user, setUser] = useState('');
 
+  useEffect(() => {
+    const userString = localStorage.getItem('user-access-token');
+    if (userString) {
+      var deCoded = jwt_decode(userString);
+      setUser(deCoded.sub);
+    }
+  }, []);
   useEffect(() => {
     const category = dataCategory.find((category) => category.id === parseInt(categoryId));
     setCategoryEdit(category);
@@ -31,8 +40,10 @@ function EditCategory() {
   const handleSave = (e) => {
     e.preventDefault();
     const params = {
+      username: user,
       categoryID: id,
       categoryUpdate: name,
+      deleted: false,
     };
 
     if (name) {

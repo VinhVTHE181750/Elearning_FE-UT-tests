@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import './edit.css';
+import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 
 const EditQuiz = () => {
@@ -12,6 +13,15 @@ const EditQuiz = () => {
   const [editedQuiz, setEditedQuiz] = useState('');
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    const userString = localStorage.getItem('user-access-token');
+    if (userString) {
+      var deCoded = jwt_decode(userString);
+      setUser(deCoded.sub);
+    }
+  }, []);
 
   useEffect(() => {
     console.log(quizID);
@@ -27,6 +37,7 @@ const EditQuiz = () => {
 
   const handleSaveClick = () => {
     const params = {
+      username: user,
       quizID: quizID,
       quizName: editedQuiz,
       lessonID: lesson.id,

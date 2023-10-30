@@ -4,8 +4,8 @@ import './ViewCourse.css';
 import authApi from '../../../api/authApi';
 import { Button, Space, Table } from 'antd';
 import moment from 'moment';
+import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
-import jwtDecode from 'jwt-decode';
 
 const ViewCourse = () => {
   const { courseID } = useParams();
@@ -13,14 +13,16 @@ const ViewCourse = () => {
   const [lessons, setLessons] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
+
+  const [user, setUser] = useState('');
 
   useEffect(() => {
-    if (localStorage.getItem('user-access-token')) {
-      setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
+    const userString = localStorage.getItem('user-access-token');
+    if (userString) {
+      var deCoded = jwt_decode(userString);
+      setUser(deCoded.sub);
     }
-  }, [localStorage.getItem('user-access-token')]);
-
+  }, []);
   useEffect(() => {
     authApi
       .getCourseById(courseID)
@@ -51,13 +53,13 @@ const ViewCourse = () => {
   }, []);
 
   const handleAddLesson = () => {
-    navigate(`/add-lesson/${courseID}`);
+    navigate('/add-lesson');
   };
 
   const handleDeleteLesson = (lessonID) => {
     if (window.confirm('Do you want to delete this lesson?')) {
       authApi
-        .deleteLesson({ username: username, lessonID: lessonID })
+        .deleteLesson(lessonID)
         .then((response) => {
           setLessons(lessons.filter((lesson) => lesson.id !== lessonID));
           setLessons((prevLessons) => prevLessons.map((lesson, index) => ({ ...lesson, id: index + 1 })));
@@ -78,9 +80,13 @@ const ViewCourse = () => {
   };
 
   const handleDeleteQuiz = (quizID) => {
+    const params = {
+      username: user,
+      quizID,
+    };
     if (window.confirm('Do you want to delete this quiz?')) {
       authApi
-        .deleteQuiz(quizID)
+        .deleteQuiz(params)
         .then((response) => {
           setQuizzes(quizzes.filter((quiz) => quiz.id !== quizID));
           setQuizzes((prevQuizzes) => prevQuizzes.map((quiz, index) => ({ ...quiz, id: index + 1 })));
@@ -128,6 +134,9 @@ const ViewCourse = () => {
       align: 'center',
       render: (_, record) => (
         <Space size="small">
+          <Button style={{ width: '80px' }} onClick={() => handleViewLesson(record.id)}>
+            View
+          </Button>
           <Button style={{ width: '80px' }} onClick={() => handleEditLesson(record.id)}>
             Edit
           </Button>
@@ -158,7 +167,7 @@ const ViewCourse = () => {
                   <span className="label">Category:</span> {courseToView.category.name}
                 </p>
                 <p>
-                  <span className="label">Created:</span> {moment(courseToView.createAt).format('LLLL')}
+                  <span className="label">Created:</span> {courseToView.createdAt}
                 </p>
                 <p>
                   <span className="label">Price:</span> {courseToView.price}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import authApi from '../../../api/authApi';
+import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 
 const ViewQuiz = () => {
@@ -10,7 +11,15 @@ const ViewQuiz = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const [user, setUser] = useState('');
 
+  useEffect(() => {
+    const userString = localStorage.getItem('user-access-token');
+    if (userString) {
+      var deCoded = jwt_decode(userString);
+      setUser(deCoded.sub);
+    }
+  }, []);
   useEffect(() => {
     authApi
       .findAllQuiz()
@@ -64,6 +73,7 @@ const ViewQuiz = () => {
     if (questionToDelete) {
       if (window.confirm('Do you want to delete this question?')) {
         const params = {
+          username: user,
           quizID,
           questionID,
         };

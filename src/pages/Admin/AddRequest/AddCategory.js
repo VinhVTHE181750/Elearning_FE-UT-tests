@@ -1,18 +1,29 @@
 import React, { useState } from 'react';
 import './add.css'; // Import file CSS tùy chỉnh
 import authApi from '../../../api/authApi';
+import jwt_decode from 'jwt-decode';
+import { useEffect } from 'react';
 import Sidebar from '../../../components/Sidebar/Sidebar';
-
 const AddCategory = () => {
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [user, setUser] = useState('');
 
+  useEffect(() => {
+    const userString = localStorage.getItem('user-access-token');
+    if (userString) {
+      var deCoded = jwt_decode(userString);
+      setUser(deCoded.sub);
+    }
+  }, []);
+  console.log('user: ', user);
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (name) {
       const params = {
+        username: user,
         name,
       };
       authApi.addCategory(params).then((response) => {

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import './add.css';
 import authApi from '../../../api/authApi';
+import jwt_decode from 'jwt-decode';
+import { useEffect } from 'react';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 
 function AddQuiz() {
@@ -11,11 +13,22 @@ function AddQuiz() {
   const [isSuccess, setIsSuccess] = useState(false);
   console.log('Lesson ID:', lessonID);
 
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    const userString = localStorage.getItem('user-access-token');
+    if (userString) {
+      var deCoded = jwt_decode(userString);
+      setUser(deCoded.sub);
+    }
+  }, []);
+  console.log('user: ', user);
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (lessonID && quizName) {
       const params = {
+        username: user,
         lessonID: lessonID,
         quizName,
       };
