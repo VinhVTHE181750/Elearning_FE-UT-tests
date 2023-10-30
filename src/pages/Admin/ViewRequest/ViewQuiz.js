@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import authApi from '../../../api/authApi';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 
 const ViewQuiz = () => {
   const { quizID } = useParams();
@@ -86,49 +87,54 @@ const ViewQuiz = () => {
   };
 
   return (
-    <div>
-      {successMessage && <div className="success-message">{successMessage}</div>}
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
-      {quizToView ? (
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div>
-          <h1>Quiz Detail</h1>
-          {quizToView.length > 0 ? (
+          {successMessage && <div className="success-message">{successMessage}</div>}
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
+          {quizToView ? (
+            <div>
+              <h1>Quiz Detail</h1>
+              {quizToView.length > 0 ? (
+                <ul>
+                  {quizToView.map((quiz) => {
+                    if (quiz.id === parseInt(quizID)) {
+                      return <li key={quiz.id}>Name: {quiz.name}</li>;
+                    }
+                  })}
+                </ul>
+              ) : (
+                <div>No quizzes available</div>
+              )}
+            </div>
+          ) : (
+            <div>Loading quiz details...</div>
+          )}
+
+          <h2>List Question</h2>
+          {questions.length > 0 ? (
             <ul>
-              {quizToView.map((quiz) => {
-                if (quiz.id === parseInt(quizID)) {
-                  return <li key={quiz.id}>Name: {quiz.name}</li>;
+              {questions.map((question) => {
+                if (question.quizID === parseInt(quizID)) {
+                  return (
+                    <li key={question.id}>
+                      {question.questionName} {question.questionType}
+                      <button onClick={() => handleEditQuestion(question.id)}>Edit</button>
+                      <button onClick={() => handleDeleteQuestion(question.id)}>Delete</button>
+                      <button onClick={() => handleViewAnswer(question.id)}>View</button>
+                    </li>
+                  );
                 }
               })}
             </ul>
           ) : (
-            <div>No quizzes available</div>
+            <div>No questions available</div>
           )}
+
+          <button onClick={() => handleAddQuestion(quizID)}>Add Question</button>
         </div>
-      ) : (
-        <div>Loading quiz details...</div>
-      )}
-
-      <h2>List Question</h2>
-      {questions.length > 0 ? (
-        <ul>
-          {questions.map((question) => {
-            if (question.quizID === parseInt(quizID)) {
-              return (
-                <li key={question.id}>
-                  {question.questionName} {question.questionType}
-                  <button onClick={() => handleEditQuestion(question.id)}>Edit</button>
-                  <button onClick={() => handleDeleteQuestion(question.id)}>Delete</button>
-                  <button onClick={() => handleViewAnswer(question.id)}>View</button>
-                </li>
-              );
-            }
-          })}
-        </ul>
-      ) : (
-        <div>No questions available</div>
-      )}
-
-      <button onClick={() => handleAddQuestion(quizID)}>Add Question</button>
+      </div>
     </div>
   );
 };

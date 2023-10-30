@@ -31,10 +31,6 @@ const Sidebar = () => {
     document.body.style.backgroundColor = colors.primary[400];
   }, [colors.primary]);
 
-  // const handleToggleColorMode = () => {
-  //   colorMode.toggleColorMode();
-  // };
-
   const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -52,6 +48,15 @@ const Sidebar = () => {
           }
           if (to === 'signin') {
             localStorage.clear();
+            document.body.style.backgroundColor = null;
+            navigate('/signin');
+          }
+          if (title === 'Home') {
+            document.body.style.backgroundColor = null;
+            navigate('/');
+            // document.body.style.removeProperty
+            // document.body.style.backgroundColor
+            // turn off
           }
         }}
         icon={icon}
@@ -162,6 +167,13 @@ const Sidebar = () => {
             <Typography variant="h6" color={colors.grey[300]} sx={{ m: '15px 0 5px 20px' }}>
               Change
             </Typography>
+            <Item
+              title="Home"
+              to="/home"
+              icon={<ReceiptOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
             <Item
               title="Dark/Light"
               icon={

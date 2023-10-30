@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import './edit.css';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 
 const EditQuiz = () => {
   const { quizID } = useParams();
@@ -46,22 +47,27 @@ const EditQuiz = () => {
   };
 
   return (
-    <div className="container-edit">
-      <h2>Edit Quiz</h2>
-      <div className="form-group">
-        <label className="label">Quiz Name:</label>
-        <input
-          type="text"
-          value={editedQuiz.quizName}
-          onChange={(e) => setEditedQuiz(e.target.value)}
-          className="input"
-        />
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className="container-edit">
+          <h2>Edit Quiz</h2>
+          <div className="form-group">
+            <label className="label">Quiz Name:</label>
+            <input
+              type="text"
+              value={editedQuiz.quizName}
+              onChange={(e) => setEditedQuiz(e.target.value)}
+              className="input"
+            />
+          </div>
+          <button type="submit" onClick={handleSaveClick} className="button">
+            Save
+          </button>
+          {successMessage && <div className="success-message">{successMessage}</div>}
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
+        </div>
       </div>
-      <button type="submit" onClick={handleSaveClick} className="button">
-        Save
-      </button>
-      {successMessage && <div className="success-message">{successMessage}</div>}
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
     </div>
   );
 };

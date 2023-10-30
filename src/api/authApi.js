@@ -241,7 +241,7 @@ const authApi = {
   },
   confirmPayment: (params) => {
     const url = '/api/v1/course/confirm-payment';
-    return axiosClient.get(url, params);
+    return axiosClient.post(url, params);
   },
   getCourseByUser: (username) => {
     const url = `/api/v1/course/get-course-user?username=${username}`;
@@ -291,6 +291,14 @@ const authApi = {
   getUserByEmail: (email) => {
     const url = `/api/v1/user/get-user-by-email?email=${email}`;
     return axiosClient.get(url, email);
+  },
+  startQuiz: (id) => {
+    const url = `/api/v1/quiz/start-quiz?quizId=${id}`;
+    return axiosClient.get(url, id);
+  },
+  finishQuiz: (params) => {
+    const url = '/api/v1/quiz/finish-quiz';
+    return axiosClient.post(url, params);
   },
 };
 

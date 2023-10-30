@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { List, Table, Button, Card, Radio, Space } from 'antd';
+import { List, Table, Button, Card, Radio, Space, Alert } from 'antd';
 import authApi from '../../../api/authApi';
+import jwtDecode from 'jwt-decode';
 
-export default function TakeQuiz({ quizId, type }) {
+export default function TakeQuiz({ quizId, type, courseID, session }) {
   const [questionId, setQuestionId] = useState(-1);
   const [listQuestion, setListQuestion] = useState([]);
   const [listAnswer, setListAnswer] = useState([]);
@@ -13,7 +14,7 @@ export default function TakeQuiz({ quizId, type }) {
     authApi.getQuestionByQuizId(13).then((response) => {
       setListQuestion(response.data.questionList);
     });
-  }, [quizId]);
+  }, [session]);
 
   useEffect(() => {
     if (questionId !== 'video') {
@@ -27,23 +28,36 @@ export default function TakeQuiz({ quizId, type }) {
   }, [questionId]);
 
   const handleSubmit = () => {
-    // const params = {
-    //   username: jwtDecode(localStorage.getItem('user-access-token')).sub,
-    //   courseId: courseID,
-    //   quizId: typeShow,
-    // };
+    if (listUserChooseAnswer.length !== listQuestion.length) {
+      return window.alert('The question is not choose answer!');
+    }
+    const params = {
+      username: jwtDecode(localStorage.getItem('user-access-token')).sub,
+      courseId: courseID,
+      quizId: quizId,
+      sessionId: session,
+      answerIdList: listUserChooseAnswer.map((answer) => answer.answerId),
+    };
+    authApi
+      .finishQuiz(params)
+      .then((response) => {
+        return window.alert(`Total correct: ${response.data.totalCorrect} and mark: ${response.data.percent}`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  const onChangeAnswerUserChoose = (questionId, answer) => {
-    setValueRadio(answer);
+  const onChangeAnswerUserChoose = (questionId, answerId) => {
+    setValueRadio(answerId);
     const currentListUserChooseAnswer = listUserChooseAnswer;
     const answerToUpdate = currentListUserChooseAnswer.find((answer) => answer.questionId === questionId);
     if (answerToUpdate) {
-      answerToUpdate.answer = answer;
+      answerToUpdate.answerId = answerId;
     } else {
       currentListUserChooseAnswer.push({
         questionId,
-        answer,
+        answerId,
       });
     }
     setListUserChooseAnswer(currentListUserChooseAnswer);
@@ -69,17 +83,16 @@ export default function TakeQuiz({ quizId, type }) {
         renderItem={(data) => {
           setQuestionId(data.id);
           const answerUserChoose = listUserChooseAnswer.find((answer) => answer.questionId === data.id);
-          console.log(answerUserChoose);
           return (
             <List.Item key={data.id} style={{ display: 'contents' }}>
               <Card type="inner" title={`Question ${data.ordQuestion}:${data.questionName}`}>
                 <Radio.Group
                   onChange={(e) => onChangeAnswerUserChoose(data.id, e.target.value)}
-                  value={answerUserChoose !== undefined ? answerUserChoose.answer : valueRadio}
+                  value={answerUserChoose !== undefined ? answerUserChoose.answerId : valueRadio}
                 >
                   <Space direction="vertical">
                     {listAnswer.map((answer) => (
-                      <Radio value={answer.answerContent}>{answer.answerContent}</Radio>
+                      <Radio value={answer.answerId}>{answer.answerContent}</Radio>
                     ))}
                   </Space>
                 </Radio.Group>

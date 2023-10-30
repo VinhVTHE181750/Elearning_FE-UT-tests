@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './add.css';
 import authApi from '../../../api/authApi';
 import { useEffect } from 'react';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 function AddLesson() {
   const [lessonName, setLessonName] = useState('');
   const [ordNumber, setOrdNumber] = useState(0);
@@ -53,46 +54,51 @@ function AddLesson() {
     setDescription('');
   };
   return (
-    <div className="add-lesson-container">
-      <h1>Add Lesson</h1>
-      {message && <p className={isSuccess ? 'success-message' : 'error-message'}>{message}</p>}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Lesson Name:
-          <input type="text" value={lessonName} onChange={(e) => setLessonName(e.target.value)} />
-        </label>
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className="add-lesson-container">
+          <h1>Add Lesson</h1>
+          {message && <p className={isSuccess ? 'success-message' : 'error-message'}>{message}</p>}
+          <form onSubmit={handleSubmit}>
+            <label>
+              Lesson Name:
+              <input type="text" value={lessonName} onChange={(e) => setLessonName(e.target.value)} />
+            </label>
 
-        <label>
-          Order Number:
-          <input type="number" value={ordNumber} onChange={(e) => setOrdNumber(parseInt(e.target.value))} />
-        </label>
+            <label>
+              Order Number:
+              <input type="number" value={ordNumber} onChange={(e) => setOrdNumber(parseInt(e.target.value))} />
+            </label>
 
-        <label>
-          Course:
-          <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)}>
-            <option value="">Select a course</option>
-            {courses.map((course) => (
-              <option key={course.id} value={course.id}>
-                {course.name}
-              </option>
-            ))}
-          </select>
-        </label>
+            <label>
+              Course:
+              <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)}>
+                <option value="">Select a course</option>
+                {courses.map((course) => (
+                  <option key={course.id} value={course.id}>
+                    {course.name}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-        <label>
-          Link Content:
-          <input type="text" value={linkContent} onChange={(e) => setLinkContent(e.target.value)} />
-        </label>
+            <label>
+              Link Content:
+              <input type="text" value={linkContent} onChange={(e) => setLinkContent(e.target.value)} />
+            </label>
 
-        <label>
-          Description:
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
-        </label>
+            <label>
+              Description:
+              <textarea value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+            </label>
 
-        <button type="submit" onClick={handleSubmit}>
-          Add Lesson
-        </button>
-      </form>
+            <button type="submit" onClick={handleSubmit}>
+              Add Lesson
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

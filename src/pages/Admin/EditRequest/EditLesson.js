@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import './edit.css';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 
 const EditLesson = () => {
   const { lessonID } = useParams();
@@ -78,65 +79,71 @@ const EditLesson = () => {
   };
 
   return (
-    <div className="container-edit">
-      <h2>Edit Lesson</h2>
-      <div className="form-group">
-        <label className="label">Lesson Name:</label>
-        <input
-          type="text"
-          value={editedLesson.lessonName}
-          onChange={(e) => setEditedLesson({ ...editedLesson, lessonName: e.target.value })}
-          className="input"
-        />
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className="container-edit">
+          <h2>Edit Lesson</h2>
+          <div className="form-group">
+            <label className="label">Lesson Name:</label>
+            <input
+              type="text"
+              value={editedLesson.lessonName}
+              onChange={(e) => setEditedLesson({ ...editedLesson, lessonName: e.target.value })}
+              className="input"
+            />
+          </div>
+          <div className="form-group">
+            <label className="label">Order Number:</label>
+            <input
+              type="number"
+              value={editedLesson.ordNumber}
+              onChange={(e) => setEditedLesson({ ...editedLesson, ordNumber: parseInt(e.target.value) })}
+              className="input"
+            />
+          </div>
+          <div className="form-group">
+            <label className="label">Course ID:</label>
+            <select
+              value={editedLesson.courseID}
+              onChange={(e) => setEditedLesson({ ...editedLesson, courseID: parseInt(e.target.value) })}
+              className="input"
+            >
+              <option value="">Select a course</option>
+              {courses.map((course) => (
+                <option key={course.id} value={course.id}>
+                  {course.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label className="label">Link Content:</label>
+            <input
+              type="text"
+              value={editedLesson.linkContent}
+              onChange={(e) => setEditedLesson({ ...editedLesson, linkContent: e.target.value })}
+              className="input"
+            />
+          </div>
+          <div className="form-group">
+            <label className="label">Description:</label>
+            <input
+              type="text"
+              value={editedLesson.description}
+              onChange={(e) => setEditedLesson({ ...editedLesson, description: e.target.value })}
+              className="input"
+            />
+          </div>
+          <button type="submit" onClick={handleSaveClick} className="button">
+            Save
+          </button>{' '}
+          {/* Apply button class */}
+          {successMessage && <div className="success-message">{successMessage}</div>}{' '}
+          {/* Apply success-message class */}
+          {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Apply error-message class */}
+        </div>
       </div>
-      <div className="form-group">
-        <label className="label">Order Number:</label>
-        <input
-          type="number"
-          value={editedLesson.ordNumber}
-          onChange={(e) => setEditedLesson({ ...editedLesson, ordNumber: parseInt(e.target.value) })}
-          className="input"
-        />
-      </div>
-      <div className="form-group">
-        <label className="label">Course ID:</label>
-        <select
-          value={editedLesson.courseID}
-          onChange={(e) => setEditedLesson({ ...editedLesson, courseID: parseInt(e.target.value) })}
-          className="input"
-        >
-          <option value="">Select a course</option>
-          {courses.map((course) => (
-            <option key={course.id} value={course.id}>
-              {course.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="form-group">
-        <label className="label">Link Content:</label>
-        <input
-          type="text"
-          value={editedLesson.linkContent}
-          onChange={(e) => setEditedLesson({ ...editedLesson, linkContent: e.target.value })}
-          className="input"
-        />
-      </div>
-      <div className="form-group">
-        <label className="label">Description:</label>
-        <input
-          type="text"
-          value={editedLesson.description}
-          onChange={(e) => setEditedLesson({ ...editedLesson, description: e.target.value })}
-          className="input"
-        />
-      </div>
-      <button type="submit" onClick={handleSaveClick} className="button">
-        Save
-      </button>{' '}
-      {/* Apply button class */}
-      {successMessage && <div className="success-message">{successMessage}</div>} {/* Apply success-message class */}
-      {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Apply error-message class */}
     </div>
   );
 };

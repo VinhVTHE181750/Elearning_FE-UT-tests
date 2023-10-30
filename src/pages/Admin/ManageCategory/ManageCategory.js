@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import authApi from '../../../api/authApi';
 import { Table, Space, Button } from 'antd';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 
 export default function ManageCategory() {
   const [category, setCategory] = useState([]);
@@ -88,22 +89,27 @@ export default function ManageCategory() {
   ];
 
   return (
-    <Box m="20px">
-      <Header title="Category" subtitle="List of Category" />
-      <Button
-        variant="contained"
-        sx={{
-          mb: 2,
-          backgroundColor: '#1F883D',
-          '&:hover': {
-            backgroundColor: '#3D9E53',
-          },
-        }}
-        onClick={handleAddCategoryClick}
-      >
-        Add Category
-      </Button>
-      <Table columns={columns} dataSource={category} rowKey={(record) => record.id} />
-    </Box>
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <Box m="20px">
+          <Header title="Category" subtitle="List of Category" />
+          <Button
+            variant="contained"
+            sx={{
+              mb: 2,
+              backgroundColor: '#1F883D',
+              '&:hover': {
+                backgroundColor: '#3D9E53',
+              },
+            }}
+            onClick={handleAddCategoryClick}
+          >
+            Add Category
+          </Button>
+          <Table columns={columns} dataSource={category} rowKey={(record) => record.id} />
+        </Box>
+      </div>
+    </div>
   );
 }

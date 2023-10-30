@@ -13,6 +13,8 @@ export default function PageContent() {
   const [paymentUrl, setPaymentUrl] = useState('');
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [enrolled, setEnrolled] = useState(false);
+  const [checkEnroll, setCheckEnroll] = useState(-1);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,9 +22,7 @@ export default function PageContent() {
       .findAllCourse()
       .then((response) => {
         const sortedAllCourses = response.data.listCourse.sort((a, b) => a.price - b.price);
-
         const topAllCourses = sortedAllCourses.slice(0, 5);
-
         setAllCourses(topAllCourses);
       })
       .catch((error) => {
@@ -35,9 +35,7 @@ export default function PageContent() {
       .getNewestCourse()
       .then((response) => {
         const sortedNewCourses = response.data.listCourse.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
         const topNewCourses = sortedNewCourses.slice(0, 5);
-
         setNewCourses(topNewCourses);
       })
       .catch((error) => {
@@ -64,16 +62,18 @@ export default function PageContent() {
       });
   };
 
-  function checkEnroll(user, courseId) {
-    authApi
-      .checkEnroll({ courseId: courseId, username: user })
-      .then((response) => {
-        return true;
-      })
-      .catch((error) => {
-        return false;
-      });
-  }
+  useEffect(() => {
+    if (checkEnroll !== -1) {
+      authApi
+        .checkEnroll({ courseId: checkEnroll, username: user })
+        .then((response) => {
+          setCheckEnroll(true);
+        })
+        .catch((error) => {
+          setCheckEnroll(-1);
+        });
+    }
+  }, [checkEnroll]);
 
   const handleEnrollCourse = (courseId) => {
     const userString = localStorage.getItem('user-access-token');
@@ -83,7 +83,9 @@ export default function PageContent() {
         courseId: courseId,
         username: user,
       };
-      if (checkEnroll(user, courseId)) {
+      setCheckEnroll(courseId);
+      console.log(checkEnroll);
+      if (checkEnroll) {
         return navigate(`/view-course/${courseId}`);
       }
       authApi

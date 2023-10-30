@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import './edit.css';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 const EditQuestion = () => {
   const { questionID } = useParams();
   const [questionName, setQuestionName] = useState('');
@@ -56,124 +57,42 @@ const EditQuestion = () => {
   };
 
   return (
-    <div className="container-edit">
-      {successMessage && <div className="success-message">{successMessage}</div>}
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className="container-edit">
+          {successMessage && <div className="success-message">{successMessage}</div>}
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-      <h1>Edit Question</h1>
-      <div>
-        <label>
-          Question Name:
-          <input type="text" value={questionName} onChange={(e) => setQuestionName(e.target.value)} />
-        </label>
+          <h1>Edit Question</h1>
+          <div>
+            <label>
+              Question Name:
+              <input type="text" value={questionName} onChange={(e) => setQuestionName(e.target.value)} />
+            </label>
 
-        <label>
-          Question Type:
-          <select value={questionType} onChange={(e) => setQuestionType(e.target.value)}>
-            <option value="">Select Type</option>
-            <option value="ONE_CHOICE">One Choice</option>
-            <option value="MUILTPLE_CHOICE">MUILTPLE_CHOICE</option>
-          </select>
-        </label>
-        {questionType === 'ONE_CHOICE' ? (
-          <>
-            {answers?.map((data) => {
-              return (
-                <>
-                  <input
-                    type="text"
-                    value={data.answerContent}
-                    onChange={(e) => {
-                      const newAnswers = answers?.map((a) => {
-                        if (a?.id === data?.id) {
-                          return {
-                            ...data,
-                            answerContent: e.target.value,
-                          };
-                        }
-                        return a;
-                      });
-                      setAnswers(newAnswers);
-                    }}
-                  />
-                </>
-              );
-            })}
-            <div style={{ display: 'flex' }}>
-              {answers?.map((data, index) => {
-                return (
-                  <>
-                    <div style={{ display: 'flex' }}>
+            <label>
+              Question Type:
+              <select value={questionType} onChange={(e) => setQuestionType(e.target.value)}>
+                <option value="">Select Type</option>
+                <option value="ONE_CHOICE">One Choice</option>
+                <option value="MUILTPLE_CHOICE">MUILTPLE_CHOICE</option>
+              </select>
+            </label>
+            {questionType === 'ONE_CHOICE' ? (
+              <>
+                {answers?.map((data) => {
+                  return (
+                    <>
                       <input
-                        type="radio"
-                        name="result"
-                        id={index}
-                        value={data.id}
-                        checked={data.correct}
+                        type="text"
+                        value={data.answerContent}
                         onChange={(e) => {
                           const newAnswers = answers?.map((a) => {
                             if (a?.id === data?.id) {
                               return {
                                 ...data,
-                                correct: true,
-                              };
-                            }
-                            return {
-                              ...a,
-                              correct: false,
-                            };
-                          });
-                          setAnswers(newAnswers);
-                        }}
-                      />
-                      <label htmlFor={index}>Option {index}</label>
-                    </div>
-                  </>
-                );
-              })}
-            </div>
-          </>
-        ) : questionType === 'MUILTPLE_CHOICE' ? (
-          <>
-            {answers?.map((data) => {
-              return (
-                <>
-                  <input
-                    type="text"
-                    value={data.answerContent}
-                    onChange={(e) => {
-                      const newAnswers = answers?.map((a) => {
-                        if (a?.id === data?.id) {
-                          return {
-                            ...data,
-                            answerContent: e.target.value,
-                          };
-                        }
-                        return a;
-                      });
-                      setAnswers(newAnswers);
-                    }}
-                  />
-                </>
-              );
-            })}
-            <div style={{ display: 'flex' }}>
-              {answers?.map((data, index) => {
-                return (
-                  <>
-                    <div style={{ display: 'flex' }}>
-                      <input
-                        type="checkbox"
-                        name="result"
-                        id={index}
-                        value={data.id}
-                        checked={data.correct}
-                        onChange={(e) => {
-                          const newAnswers = answers?.map((a) => {
-                            if (a?.id === data?.id) {
-                              return {
-                                ...data,
-                                correct: true,
+                                answerContent: e.target.value,
                               };
                             }
                             return a;
@@ -181,18 +100,105 @@ const EditQuestion = () => {
                           setAnswers(newAnswers);
                         }}
                       />
-                      <label htmlFor={index}>Option {index}</label>
-                    </div>
-                  </>
-                );
-              })}
-            </div>
-          </>
-        ) : (
-          <></>
-        )}
+                    </>
+                  );
+                })}
+                <div style={{ display: 'flex' }}>
+                  {answers?.map((data, index) => {
+                    return (
+                      <>
+                        <div style={{ display: 'flex' }}>
+                          <input
+                            type="radio"
+                            name="result"
+                            id={index}
+                            value={data.id}
+                            checked={data.correct}
+                            onChange={(e) => {
+                              const newAnswers = answers?.map((a) => {
+                                if (a?.id === data?.id) {
+                                  return {
+                                    ...data,
+                                    correct: true,
+                                  };
+                                }
+                                return {
+                                  ...a,
+                                  correct: false,
+                                };
+                              });
+                              setAnswers(newAnswers);
+                            }}
+                          />
+                          <label htmlFor={index}>Option {index}</label>
+                        </div>
+                      </>
+                    );
+                  })}
+                </div>
+              </>
+            ) : questionType === 'MUILTPLE_CHOICE' ? (
+              <>
+                {answers?.map((data) => {
+                  return (
+                    <>
+                      <input
+                        type="text"
+                        value={data.answerContent}
+                        onChange={(e) => {
+                          const newAnswers = answers?.map((a) => {
+                            if (a?.id === data?.id) {
+                              return {
+                                ...data,
+                                answerContent: e.target.value,
+                              };
+                            }
+                            return a;
+                          });
+                          setAnswers(newAnswers);
+                        }}
+                      />
+                    </>
+                  );
+                })}
+                <div style={{ display: 'flex' }}>
+                  {answers?.map((data, index) => {
+                    return (
+                      <>
+                        <div style={{ display: 'flex' }}>
+                          <input
+                            type="checkbox"
+                            name="result"
+                            id={index}
+                            value={data.id}
+                            checked={data.correct}
+                            onChange={(e) => {
+                              const newAnswers = answers?.map((a) => {
+                                if (a?.id === data?.id) {
+                                  return {
+                                    ...data,
+                                    correct: true,
+                                  };
+                                }
+                                return a;
+                              });
+                              setAnswers(newAnswers);
+                            }}
+                          />
+                          <label htmlFor={index}>Option {index}</label>
+                        </div>
+                      </>
+                    );
+                  })}
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
 
-        <button onClick={handleEditQuestion}>Edit</button>
+            <button onClick={handleEditQuestion}>Edit</button>
+          </div>
+        </div>
       </div>
     </div>
   );

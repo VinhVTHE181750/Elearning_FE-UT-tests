@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import './add.css';
 import authApi from '../../../api/authApi';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 
 function AddQuiz() {
   const { lessonID } = useParams();
@@ -38,19 +39,24 @@ function AddQuiz() {
   };
 
   return (
-    <div className="add-quiz-container">
-      <h1>Add Quiz</h1>
-      {message && <p className={isSuccess ? 'success-message' : 'error-message'}>{message}</p>}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Quiz Name:
-          <input type="text" value={quizName} onChange={(e) => setQuizName(e.target.value)} />
-        </label>
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className="add-quiz-container">
+          <h1>Add Quiz</h1>
+          {message && <p className={isSuccess ? 'success-message' : 'error-message'}>{message}</p>}
+          <form onSubmit={handleSubmit}>
+            <label>
+              Quiz Name:
+              <input type="text" value={quizName} onChange={(e) => setQuizName(e.target.value)} />
+            </label>
 
-        <button type="submit" onClick={handleSubmit}>
-          Add Quiz
-        </button>
-      </form>
+            <button type="submit" onClick={handleSubmit}>
+              Add Quiz
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

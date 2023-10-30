@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './add.css'; // Import file CSS tùy chỉnh
 import authApi from '../../../api/authApi';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 
 const AddCourse = () => {
   const [name, setName] = useState('');
@@ -63,46 +64,55 @@ const AddCourse = () => {
   };
   console.log(category);
   return (
-    <div className="add-course-container">
-      <h2>Add Course</h2>
-      {message && <p className={`message ${isSuccess ? 'success' : 'error'}`}>{message}</p>}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="name">Name:</label>
-          <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} />
-        </div>
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className="add-course-container">
+          <h2>Add Course</h2>
+          {message && <p className={`message ${isSuccess ? 'success' : 'error'}`}>{message}</p>}
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="name">Name:</label>
+              <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} />
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="price">Price:</label>
-          <input type="text" id="price" value={price} onChange={(e) => setPrice(e.target.value)} />
-        </div>
-        <div className="form-group">
-          <label htmlFor="link_thumbnail">Link Thumbnail:</label>
-          <input
-            type="text"
-            id="link_thumbnail"
-            value={link_thumnail}
-            onChange={(e) => setLinkThumnail(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="category">Category:</label>
-          <select id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option value="">Select a category</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
+            <div className="form-group">
+              <label htmlFor="price">Price:</label>
+              <input type="text" id="price" value={price} onChange={(e) => setPrice(e.target.value)} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="link_thumbnail">Link Thumbnail:</label>
+              <input
+                type="text"
+                id="link_thumbnail"
+                value={link_thumnail}
+                onChange={(e) => setLinkThumnail(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="category">Category:</label>
+              <select id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
+                <option value="">Select a category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-        <div className="form-group">
-          <label htmlFor="description">Description:</label>
-          <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+            <div className="form-group">
+              <label htmlFor="description">Description:</label>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              ></textarea>
+            </div>
+            <button type="submit">Add Course</button>
+          </form>
         </div>
-        <button type="submit">Add Course</button>
-      </form>
+      </div>
     </div>
   );
 };

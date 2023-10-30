@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { dataUser } from '../../../data/dataUser';
 import './edit.css';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 function EditUser() {
   const { userId } = useParams();
   const [userToEdit, setUserToEdit] = useState(null);
@@ -50,42 +51,47 @@ function EditUser() {
     negative('/team');
   };
   return (
-    <div className="container-edit">
-      <h2>Edit User</h2>
-      <form>
-        <div>
-          <label>Full Name:</label>
-          <input type="text" value={userToEdit.fullName} onChange={handleFullNameChange} />
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className="container-edit">
+          <h2>Edit User</h2>
+          <form>
+            <div>
+              <label>Full Name:</label>
+              <input type="text" value={userToEdit.fullName} onChange={handleFullNameChange} />
+            </div>
+            <div>
+              <label>Username:</label>
+              <input type="text" value={userToEdit.username} onChange={handleUsernameChange} />
+            </div>
+            <div>
+              <label>Email:</label>
+              <input type="text" value={userToEdit.email} onChange={handleEmailChange} />
+            </div>
+            <div>
+              <label>Gender:</label>
+              <input type="text" value={userToEdit.gender} onChange={handleGenderChange} />
+            </div>
+            <div>
+              <label>Phone:</label>
+              <input type="text" value={userToEdit.phone} onChange={handlePhoneChange} />
+            </div>
+            <div>
+              <label>DOB:</label>
+              <input type="text" value={userToEdit.dob} onChange={handleDobChange} />
+            </div>
+            <div>
+              <label>Status:</label>
+              <input type="text" value={userToEdit.status} onChange={handleStatusChange} />
+            </div>
+            {/* Thêm các trường thông tin khác của user */}
+            <button type="submit" className="button-edit" onClick={handleSave}>
+              Save
+            </button>
+          </form>
         </div>
-        <div>
-          <label>Username:</label>
-          <input type="text" value={userToEdit.username} onChange={handleUsernameChange} />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input type="text" value={userToEdit.email} onChange={handleEmailChange} />
-        </div>
-        <div>
-          <label>Gender:</label>
-          <input type="text" value={userToEdit.gender} onChange={handleGenderChange} />
-        </div>
-        <div>
-          <label>Phone:</label>
-          <input type="text" value={userToEdit.phone} onChange={handlePhoneChange} />
-        </div>
-        <div>
-          <label>DOB:</label>
-          <input type="text" value={userToEdit.dob} onChange={handleDobChange} />
-        </div>
-        <div>
-          <label>Status:</label>
-          <input type="text" value={userToEdit.status} onChange={handleStatusChange} />
-        </div>
-        {/* Thêm các trường thông tin khác của user */}
-        <button type="submit" className="button-edit" onClick={handleSave}>
-          Save
-        </button>
-      </form>
+      </div>
     </div>
   );
 }

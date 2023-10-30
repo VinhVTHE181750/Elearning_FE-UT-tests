@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { dataCategory } from '../../../data/dataCategory';
 import authApi from '../../../api/authApi';
 import './edit.css';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 
 function EditCategory() {
   const { categoryId } = useParams();
@@ -50,23 +51,28 @@ function EditCategory() {
   };
 
   return (
-    <div className="container-edit">
-      <h2>Edit Category</h2>
-      {successMessage && <div className="success-message">{successMessage}</div>}
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
-      <form>
-        <div>
-          <label>ID:</label>
-          <input type="text" value={id} readOnly />
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className="container-edit">
+          <h2>Edit Category</h2>
+          {successMessage && <div className="success-message">{successMessage}</div>}
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
+          <form>
+            <div>
+              <label>ID:</label>
+              <input type="text" value={id} readOnly />
+            </div>
+            <div>
+              <label>Name:</label>
+              <input type="text" value={name} onChange={handleCategoryNameChange} />
+            </div>
+            <button type="submit" className="button-edit" onClick={handleSave}>
+              Save
+            </button>
+          </form>
         </div>
-        <div>
-          <label>Name:</label>
-          <input type="text" value={name} onChange={handleCategoryNameChange} />
-        </div>
-        <button type="submit" className="button-edit" onClick={handleSave}>
-          Save
-        </button>
-      </form>
+      </div>
     </div>
   );
 }

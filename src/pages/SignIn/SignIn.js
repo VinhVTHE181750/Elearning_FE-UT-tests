@@ -60,12 +60,7 @@ export default function SignIn() {
           localStorage.setItem('user-access-token', response.data.accessToken);
           var decoded = jwtDecode(response.data.accessToken);
           localStorage.setItem('role', decoded.userInfo[0]);
-          console.log(localStorage.getItem('role'));
-          if (localStorage.getItem('role') === 'ADMIN') {
-            navigate('/dashboard');
-          } else {
-            navigate('/home');
-          }
+          navigate('/home');
           return;
         } else {
           return window.alert(`Login Failed: ${response.message}`);

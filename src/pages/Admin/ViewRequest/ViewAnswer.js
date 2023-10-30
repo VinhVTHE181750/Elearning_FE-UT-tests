@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import './ViewAnswer.css';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 
 const ViewAnswer = () => {
   const { questionID } = useParams();
@@ -62,31 +63,36 @@ const ViewAnswer = () => {
   };
 
   return (
-    <div>
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
-      {successMessage && <div className="success-message">{successMessage}</div>}
-      <h1>View Answer</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Answer Content</th>
-            <th>Correct</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {answers.map((answer) => (
-            <tr key={answer.answerID}>
-              <td>{answer.answerContent}</td>
-              <td>{answer.correct ? 'Yes' : 'No'}</td>
-              <td>
-                <button onClick={() => handleEditAnswer(answer.answerID)}>Edit</button>
-                <button onClick={() => handleDeleteAnswer(answer.answerID)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div>
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
+          {successMessage && <div className="success-message">{successMessage}</div>}
+          <h1>View Answer</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>Answer Content</th>
+                <th>Correct</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {answers.map((answer) => (
+                <tr key={answer.answerID}>
+                  <td>{answer.answerContent}</td>
+                  <td>{answer.correct ? 'Yes' : 'No'}</td>
+                  <td>
+                    <button onClick={() => handleEditAnswer(answer.answerID)}>Edit</button>
+                    <button onClick={() => handleDeleteAnswer(answer.answerID)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

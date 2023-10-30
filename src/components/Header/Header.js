@@ -53,6 +53,9 @@ export default function Header() {
               <div className="user-menu" style={{ display: userMenuVisible ? 'flex' : 'none' }}>
                 <Link to="/profile">My Profile</Link>
                 <Link to="/myPayment">My payment</Link>
+                <Link to="/dashboard" style={{ display: role === 'ADMIN' ? 'flex' : 'none' }}>
+                  Admin dashboard
+                </Link>
                 <Link to="/changePassword">Change Password</Link>
                 <Link to="/setting">Setting</Link>
                 <Link to="/" onClick={handleLogout}>

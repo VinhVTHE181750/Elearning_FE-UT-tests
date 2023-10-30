@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import './edit.css';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 
 const EditCourse = () => {
   const { courseID } = useParams();
@@ -73,74 +74,79 @@ const EditCourse = () => {
       });
   };
   return (
-    <div className="container-edit">
-      <h2>Edit Course</h2>
-      {course && (
-        <div className="form-container" style={{ maxWidth: '400px' }}>
-          <div className="form-group">
-            <label htmlFor="name">Name:</label>
-            <input
-              id="name"
-              type="text"
-              value={editedCourse.name}
-              onChange={(e) => setEditedCourse({ ...editedCourse, name: e.target.value })}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="description">Description:</label>
-            <input
-              id="description"
-              type="text"
-              value={editedCourse.description}
-              onChange={(e) => setEditedCourse({ ...editedCourse, description: e.target.value })}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="price">Price:</label>
-            <input
-              id="price"
-              type="number"
-              value={editedCourse.price}
-              onChange={(e) => setEditedCourse({ ...editedCourse, price: e.target.value })}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="link_thumnail">Link Thumbnail:</label>
-            <input
-              id="link_thumnail"
-              type="text"
-              value={editedCourse.linkThumnail} // Thay đổi tên trường thành linkThumnail
-              onChange={(e) => setEditedCourse({ ...editedCourse, linkThumnail: e.target.value })} // Thay đổi tên trường thành linkThumnail
-              margin="normal"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="category">Category:</label>
-            <select
-              id="category"
-              value={editedCourse.categoryID}
-              onChange={(e) => setEditedCourse({ ...editedCourse, categoryID: parseInt(e.target.value) })}
-              className="form-control"
-            >
-              <option value={0}>Select a category</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          {/* Các trường thông tin khác */}
-          {successMessage && <div className="success-message">{successMessage}</div>}
-          {errorMessage && <div className="error-message">{errorMessage}</div>}
-          <button type="submit" className="btn btn-primary" onClick={handleSaveClick}>
-            Save
-          </button>
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className="container-edit">
+          <h2>Edit Course</h2>
+          {course && (
+            <div className="form-container" style={{ maxWidth: '400px' }}>
+              <div className="form-group">
+                <label htmlFor="name">Name:</label>
+                <input
+                  id="name"
+                  type="text"
+                  value={editedCourse.name}
+                  onChange={(e) => setEditedCourse({ ...editedCourse, name: e.target.value })}
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="description">Description:</label>
+                <input
+                  id="description"
+                  type="text"
+                  value={editedCourse.description}
+                  onChange={(e) => setEditedCourse({ ...editedCourse, description: e.target.value })}
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="price">Price:</label>
+                <input
+                  id="price"
+                  type="number"
+                  value={editedCourse.price}
+                  onChange={(e) => setEditedCourse({ ...editedCourse, price: e.target.value })}
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="link_thumnail">Link Thumbnail:</label>
+                <input
+                  id="link_thumnail"
+                  type="text"
+                  value={editedCourse.linkThumnail} // Thay đổi tên trường thành linkThumnail
+                  onChange={(e) => setEditedCourse({ ...editedCourse, linkThumnail: e.target.value })} // Thay đổi tên trường thành linkThumnail
+                  margin="normal"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="category">Category:</label>
+                <select
+                  id="category"
+                  value={editedCourse.categoryID}
+                  onChange={(e) => setEditedCourse({ ...editedCourse, categoryID: parseInt(e.target.value) })}
+                  className="form-control"
+                >
+                  <option value={0}>Select a category</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {/* Các trường thông tin khác */}
+              {successMessage && <div className="success-message">{successMessage}</div>}
+              {errorMessage && <div className="error-message">{errorMessage}</div>}
+              <button type="submit" className="btn btn-primary" onClick={handleSaveClick}>
+                Save
+              </button>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

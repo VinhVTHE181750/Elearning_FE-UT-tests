@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import { Table, Button, Space } from 'antd';
 import moment from 'moment';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 
 export default function ManageCourse() {
   const [courses, setCourse] = useState([]);
@@ -114,24 +115,28 @@ export default function ManageCourse() {
   ];
 
   return (
-    <Box m="20px">
-      <Header title="Courses" subtitle="List of Course" />
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}></div>
+      <Box m="20px">
+        <Header title="Courses" subtitle="List of Course" />
 
-      <Button
-        variant="contained"
-        sx={{
-          mb: 2,
-          backgroundColor: '#1F883D',
-          '&:hover': {
-            backgroundColor: '#3D9E53',
-          },
-        }}
-        onClick={handleAddCourseClick}
-      >
-        Add Courses
-      </Button>
+        <Button
+          variant="contained"
+          sx={{
+            mb: 2,
+            backgroundColor: '#1F883D',
+            '&:hover': {
+              backgroundColor: '#3D9E53',
+            },
+          }}
+          onClick={handleAddCourseClick}
+        >
+          Add Courses
+        </Button>
 
-      <Table columns={columns} dataSource={courses} rowKey={(record) => record.id} />
-    </Box>
+        <Table columns={columns} dataSource={courses} rowKey={(record) => record.id} />
+      </Box>
+    </div>
   );
 }

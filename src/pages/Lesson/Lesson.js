@@ -15,6 +15,7 @@ export default function Lesson() {
   const [quizId, setQuizId] = useState('video');
   const [typeQuiz, setTypeQuiz] = useState('');
   const [url, setUrl] = useState('');
+  const [session, setSession] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -52,6 +53,12 @@ export default function Lesson() {
     // if ( type === 'View' ) {
     //   authApi.startQuiz
     // }
+    authApi
+      .startQuiz(13)
+      .then((response) => {
+        setSession(response.data.sessionId);
+      })
+      .catch((err) => {});
     setTypeQuiz(type);
     setQuizId(quizId);
   };
@@ -62,17 +69,17 @@ export default function Lesson() {
       dataIndex: 'name',
       key: 'name',
     },
-    {
-      title: 'Status',
-      align: 'center',
-      render: (record) => {
-        return (
-          <div>
-            <CheckOutlined />
-          </div>
-        );
-      },
-    },
+    // {
+    //   title: 'Status',
+    //   align: 'center',
+    //   render: (record) => {
+    //     return (
+    //       <div>
+    //         <CheckOutlined />
+    //       </div>
+    //     );
+    //   },
+    // },
   ];
 
   return (
@@ -91,7 +98,7 @@ export default function Lesson() {
               <Iframe src={url} width="900px" height="480px" />
             </div>
           ) : (
-            <TakeQuiz quizId={quizId} type={typeQuiz} />
+            <TakeQuiz quizId={quizId} type={typeQuiz} courseID={courseID} session={session} />
           )}
         </div>
         <div style={{ position: 'absolute', right: '0' }}>

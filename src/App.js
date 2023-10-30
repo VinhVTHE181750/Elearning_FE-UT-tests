@@ -1,5 +1,5 @@
 import './App.css';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home/Home';
 import SignIn from './pages/SignIn/SignIn';
 import VerifyOtp from './pages/SignIn/VerifyOtp/VerifyOtp';
@@ -39,73 +39,138 @@ import Lesson from './pages/Lesson/Lesson';
 import RecycleBin from './pages/Admin/RecycleBin/RecycleBin';
 import PaymentVnPaySuccess from './pages/PaymentPage/PaymentVnPaySuccess';
 
+function PrivateOutlet() {
+  const auth = localStorage.getItem('role');
+  return auth === 'ADMIN' ? <Outlet /> : <Navigate to="/login" />;
+}
+
 function App() {
   const [theme, colorMode] = useMode();
-
   return (
-    <div className="App">
-      {localStorage.getItem('role') === 'ADMIN' ? (
-        <ColorModeContext.Provider value={colorMode}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <div className="app" style={{ display: 'flex' }}>
-              <Sidebar />
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <main className="content">
-                  <Routes>
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/manageUser" element={<ManageUser />} />
-                    <Route path="/manageCourse" element={<ManageCourse />} />
-                    <Route path="/manageCategory" element={<ManageCategory />} />
+    <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/verifyOtp" element={<VerifyOtp />} />
+        <Route path="/forgotPassword" element={<ForgotPassword />} />
+        <Route path="/changePassword" element={<ChangePassword />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/allCourse" element={<AllCourse />} />
+        <Route path="/view-course/:id" element={<Course />} />
+        <Route path="/viewLesson/:id" element={<Lesson />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/myLearning" element={<MyLearning />} />
+        <Route path="/payment-result" element={<PaymentVnPaySuccess />} />
+        <Route path="/paymentResult" element={<PaymentVnPaySuccess />} />
+      </Routes>
 
-                    <Route path="/view/:username" element={<ViewUser />} />
-                    <Route path="/viewCourse/:courseID" element={<ViewCourse />} />
-                    <Route path="/view-quiz/:quizID" element={<ViewQuiz />} />
-                    <Route path="/view-answer/:quizID" element={<ViewAnswer />} />
-
-                    <Route path="/add-course" element={<AddCourse />} />
-                    <Route path="/add-category" element={<AddCategory />} />
-                    <Route path="/add-lesson" element={<AddLesson />} />
-                    <Route path="/add-answer" element={<AddAnswer />} />
-                    <Route path="/add-quiz/:lessonID" element={<AddQuiz />} />
-                    <Route path="/add-question/:quizID" element={<AddQuestion />} />
-
-                    <Route path="/editUser/:userId" element={<EditUser />} />
-                    <Route path="/editCourse/:courseID" element={<EditCourse />} />
-                    <Route path="/editCategory/:categoryId" element={<EditCategory />} />
-                    <Route path="/edit-lesson/:lessonID" element={<EditLesson />} />
-                    <Route path="/edit-quiz/:quizID" element={<EditQuiz />} />
-                    <Route path="/edit-question/:questionID" element={<EditQuestion />} />
-                    <Route path="/edit-answer" element={<EditAnswer />} />
-
-                    <Route path="/recycleBin" element={<RecycleBin />} />
-                  </Routes>
-                </main>
-              </div>
-            </div>
-          </ThemeProvider>
-        </ColorModeContext.Provider>
-      ) : (
-        <>
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/verifyOtp" element={<VerifyOtp />} />
-            <Route path="/forgotPassword" element={<ForgotPassword />} />
-            <Route path="/changePassword" element={<ChangePassword />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/allCourse" element={<AllCourse />} />
-            <Route path="/view-course/:id" element={<Course />} />
-            <Route path="/viewLesson/:id" element={<Lesson />} />
-            <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/myLearning" element={<MyLearning />} />
-            <Route path="/payment-result" element={<PaymentVnPaySuccess />} />
+            <Route element={<PrivateOutlet />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/manageUser" element={<ManageUser />} />
+              <Route path="/manageCourse" element={<ManageCourse />} />
+              <Route path="/manageCategory" element={<ManageCategory />} />
+
+              <Route path="/view/:username" element={<ViewUser />} />
+              <Route path="/viewCourse/:courseID" element={<ViewCourse />} />
+              <Route path="/view-quiz/:quizID" element={<ViewQuiz />} />
+              <Route path="/view-answer/:quizID" element={<ViewAnswer />} />
+
+              <Route path="/add-course" element={<AddCourse />} />
+              <Route path="/add-category" element={<AddCategory />} />
+              <Route path="/add-lesson" element={<AddLesson />} />
+              <Route path="/add-answer" element={<AddAnswer />} />
+              <Route path="/add-quiz/:lessonID" element={<AddQuiz />} />
+              <Route path="/add-question/:quizID" element={<AddQuestion />} />
+
+              <Route path="/editUser/:userId" element={<EditUser />} />
+              <Route path="/editCourse/:courseID" element={<EditCourse />} />
+              <Route path="/editCategory/:categoryId" element={<EditCategory />} />
+              <Route path="/edit-lesson/:lessonID" element={<EditLesson />} />
+              <Route path="/edit-quiz/:quizID" element={<EditQuiz />} />
+              <Route path="/edit-question/:questionID" element={<EditQuestion />} />
+              <Route path="/edit-answer" element={<EditAnswer />} />
+
+              <Route path="/recycleBin" element={<RecycleBin />} />
+            </Route>
           </Routes>
-        </>
-      )}
-    </div>
+        </ThemeProvider>
+      </ColorModeContext.Provider>
+    </>
   );
 }
+
+// function App() {
+//   const [theme, colorMode] = useMode();
+
+//   return (
+//     <div className="App">
+//       {localStorage.getItem('role') === 'ADMIN' ? (
+// <ColorModeContext.Provider value={colorMode}>
+//   <ThemeProvider theme={theme}>
+//     <CssBaseline />
+//     <div className="app" style={{ display: 'flex' }}>
+//       <Sidebar />
+//       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+//         <main className="content">
+//           <Routes>
+//             <Route path="/dashboard" element={<Dashboard />} />
+//             <Route path="/manageUser" element={<ManageUser />} />
+//             <Route path="/manageCourse" element={<ManageCourse />} />
+//             <Route path="/manageCategory" element={<ManageCategory />} />
+
+//             <Route path="/view/:username" element={<ViewUser />} />
+//             <Route path="/viewCourse/:courseID" element={<ViewCourse />} />
+//             <Route path="/view-quiz/:quizID" element={<ViewQuiz />} />
+//             <Route path="/view-answer/:quizID" element={<ViewAnswer />} />
+
+//             <Route path="/add-course" element={<AddCourse />} />
+//             <Route path="/add-category" element={<AddCategory />} />
+//             <Route path="/add-lesson" element={<AddLesson />} />
+//             <Route path="/add-answer" element={<AddAnswer />} />
+//             <Route path="/add-quiz/:lessonID" element={<AddQuiz />} />
+//             <Route path="/add-question/:quizID" element={<AddQuestion />} />
+
+//             <Route path="/editUser/:userId" element={<EditUser />} />
+//             <Route path="/editCourse/:courseID" element={<EditCourse />} />
+//             <Route path="/editCategory/:categoryId" element={<EditCategory />} />
+//             <Route path="/edit-lesson/:lessonID" element={<EditLesson />} />
+//             <Route path="/edit-quiz/:quizID" element={<EditQuiz />} />
+//             <Route path="/edit-question/:questionID" element={<EditQuestion />} />
+//             <Route path="/edit-answer" element={<EditAnswer />} />
+
+//             <Route path="/recycleBin" element={<RecycleBin />} />
+//           </Routes>
+//         </main>
+//       </div>
+//     </div>
+//   </ThemeProvider>
+// </ColorModeContext.Provider>
+//       ) : (
+// <>
+//   <Routes>
+//     <Route path="/" element={<Home />} />
+//     <Route path="/home" element={<Home />} />
+//     <Route path="/signin" element={<SignIn />} />
+//     <Route path="/verifyOtp" element={<VerifyOtp />} />
+//     <Route path="/forgotPassword" element={<ForgotPassword />} />
+//     <Route path="/changePassword" element={<ChangePassword />} />
+//     <Route path="/profile" element={<Profile />} />
+//     <Route path="/allCourse" element={<AllCourse />} />
+//     <Route path="/view-course/:id" element={<Course />} />
+//     <Route path="/viewLesson/:id" element={<Lesson />} />
+//     <Route path="/payment" element={<PaymentPage />} />
+//     <Route path="/myLearning" element={<MyLearning />} />
+//     <Route path="/payment-result" element={<PaymentVnPaySuccess />} />
+//     <Route path="/paymentResult" element={<PaymentVnPaySuccess />} />
+//   </Routes>
+// </>
+//       )}
+//     </div>
+//   );
+// }
 
 export default App;

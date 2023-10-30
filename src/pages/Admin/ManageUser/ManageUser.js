@@ -8,6 +8,7 @@ import authApi from '../../../api/authApi';
 import moment from 'moment';
 import Item from 'antd/es/list/Item';
 import Highlighter from 'react-highlight-words';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 
 export default function ManageUser() {
   const negative = useNavigate();
@@ -246,9 +247,14 @@ export default function ManageUser() {
   ];
 
   return (
-    <Box m="20px">
-      <Header title="LIST USER" subtitle="Managing the User " />
-      <Table columns={columns} dataSource={users} rowKey={(record) => record.id} />
-    </Box>
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <Box m="20px">
+          <Header title="LIST USER" subtitle="Managing the User " />
+          <Table columns={columns} dataSource={users} rowKey={(record) => record.id} />
+        </Box>
+      </div>
+    </div>
   );
 }

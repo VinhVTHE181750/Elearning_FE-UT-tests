@@ -4,6 +4,7 @@ import './ViewCourse.css';
 import authApi from '../../../api/authApi';
 import { Button, Space, Table } from 'antd';
 import moment from 'moment';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 
 const ViewCourse = () => {
   const { courseID } = useParams();
@@ -134,90 +135,95 @@ const ViewCourse = () => {
   ];
 
   return (
-    <div className="view-course-container">
-      {courseToView ? (
-        <div>
-          <h1>Course Details</h1>
-          <div className="course-details">
-            <p>
-              <span className="label">Name:</span> {courseToView.name}
-            </p>
-            <p>
-              <span className="label">Description:</span> {courseToView.description}
-            </p>
-            <p>
-              <span className="label">Category:</span> {courseToView.category.name}
-            </p>
-            <p>
-              <span className="label">Created:</span> {courseToView.createdAt}
-            </p>
-            <p>
-              <span className="label">Price:</span> {courseToView.price}
-            </p>
-          </div>
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <div className="view-course-container">
+          {courseToView ? (
+            <div>
+              <h1>Course Details</h1>
+              <div className="course-details">
+                <p>
+                  <span className="label">Name:</span> {courseToView.name}
+                </p>
+                <p>
+                  <span className="label">Description:</span> {courseToView.description}
+                </p>
+                <p>
+                  <span className="label">Category:</span> {courseToView.category.name}
+                </p>
+                <p>
+                  <span className="label">Created:</span> {courseToView.createdAt}
+                </p>
+                <p>
+                  <span className="label">Price:</span> {courseToView.price}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div>Loading course details...</div>
+          )}
+
+          <h2>List Lesson</h2>
+          <button onClick={handleAddLesson}>Add Lesson</button>
+
+          <Table
+            columns={columns}
+            dataSource={lessons}
+            rowKey={(record) => record.id}
+            expandable={{
+              expandedRowRender: (record) => {
+                const columns = [
+                  {
+                    title: 'Name Quiz',
+                    dataIndex: 'name',
+                    align: 'center',
+                  },
+                  {
+                    title: 'Create At',
+                    dataIndex: 'createdAt',
+                    align: 'center',
+                  },
+                  {
+                    title: 'Actions',
+                    align: 'center',
+                    render: (_, record) => (
+                      <Space size="small">
+                        <Button style={{ width: '80px' }} onClick={() => handleViewQuiz(record.id)}>
+                          View
+                        </Button>
+                        <Button style={{ width: '80px' }} onClick={() => handleEditQuiz(record.id)}>
+                          Edit
+                        </Button>
+                        <Button style={{ width: '80px' }} onClick={() => handleDeleteQuiz(record.id)}>
+                          Delete
+                        </Button>
+                      </Space>
+                    ),
+                  },
+                ];
+                const quiz = quizzes.filter((quiz) => quiz.lesson.id === record.id);
+                if (quiz.length !== 0) {
+                  return (
+                    <>
+                      <p style={{ color: '#000' }}>Description: {record.description}</p>
+                      <Table columns={columns} dataSource={quiz} rowKey={(record) => record.id} pagination={false} />
+                    </>
+                  );
+                }
+                return (
+                  <>
+                    <p style={{ color: '#000' }}>Description: {record.description}</p>
+                    <Button style={{ marginLeft: '40%' }} onClick={() => handleAddQuiz(record.id)}>
+                      Add new quiz
+                    </Button>
+                  </>
+                );
+              },
+            }}
+          />
         </div>
-      ) : (
-        <div>Loading course details...</div>
-      )}
-
-      <h2>List Lesson</h2>
-      <button onClick={handleAddLesson}>Add Lesson</button>
-
-      <Table
-        columns={columns}
-        dataSource={lessons}
-        rowKey={(record) => record.id}
-        expandable={{
-          expandedRowRender: (record) => {
-            const columns = [
-              {
-                title: 'Name Quiz',
-                dataIndex: 'name',
-                align: 'center',
-              },
-              {
-                title: 'Create At',
-                dataIndex: 'createdAt',
-                align: 'center',
-              },
-              {
-                title: 'Actions',
-                align: 'center',
-                render: (_, record) => (
-                  <Space size="small">
-                    <Button style={{ width: '80px' }} onClick={() => handleViewQuiz(record.id)}>
-                      View
-                    </Button>
-                    <Button style={{ width: '80px' }} onClick={() => handleEditQuiz(record.id)}>
-                      Edit
-                    </Button>
-                    <Button style={{ width: '80px' }} onClick={() => handleDeleteQuiz(record.id)}>
-                      Delete
-                    </Button>
-                  </Space>
-                ),
-              },
-            ];
-            const quiz = quizzes.filter((quiz) => quiz.lesson.id === record.id);
-            if (quiz.length !== 0) {
-              return (
-                <>
-                  <p style={{ color: '#000' }}>Description: {record.description}</p>
-                  <Table columns={columns} dataSource={quiz} rowKey={(record) => record.id} pagination={false} />
-                </>
-              );
-            }
-            return (
-              <>
-                <p style={{ color: '#000' }}>Description: {record.description}</p>
-                <Button style={{ marginLeft: '40%' }} onClick={() => handleAddQuiz(record.id)}>
-                  Add new quiz
-                </Button>
-              </>
-            );
-          },
-        }}
-      />
+      </div>
     </div>
   );
 };

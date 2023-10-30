@@ -1,11 +1,12 @@
 import { Box } from '@mui/material';
 import React from 'react';
 import Header from '../../../components/Admin/Header/Header';
-import { Button, DatePicker, Input, Space, Table, Select } from 'antd';
+import { Space, Table, Select } from 'antd';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import authApi from '../../../api/authApi';
 import moment from 'moment';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 
 export const getFullDate = (date) => {
   const dateAndTime = date.split('T');
@@ -136,52 +137,57 @@ export default function RecycleBin() {
   const handleChange = (value) => {
     setCategoryEntity(value.value);
   };
-  console.log(listDeleted);
+
   return (
-    <Box m="20px">
-      <Header title="Recycle Bin" subtitle="Managing the recycle bin " />
+    <div style={{ display: 'flex' }}>
+      <Sidebar />
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <Box m="20px">
+          <Header title="Recycle Bin" subtitle="Managing the recycle bin " />
 
-      <div className="recycle-bin-select">
-        <Select
-          labelInValue
-          defaultValue={{
-            value: 'category',
-            label: 'Category',
-          }}
-          style={{
-            width: 120,
-          }}
-          onChange={handleChange}
-          options={[
-            {
-              value: 'course',
-              label: 'Course',
-            },
-            {
-              value: 'lesson',
-              label: 'Lesson',
-            },
-            {
-              value: 'quiz',
-              label: 'Quiz',
-            },
-            {
-              value: 'question',
-              label: 'Question',
-            },
-            {
-              value: 'answer',
-              label: 'Answer',
-            },
-            {
-              value: 'category',
-              label: 'Category',
-            },
-          ]}
-        />
+          <div className="recycle-bin-select">
+            <Select
+              labelInValue
+              defaultValue={{
+                value: 'category',
+                label: 'Category',
+              }}
+              style={{
+                width: 120,
+              }}
+              onChange={handleChange}
+              options={[
+                {
+                  value: 'course',
+                  label: 'Course',
+                },
+                {
+                  value: 'lesson',
+                  label: 'Lesson',
+                },
+                {
+                  value: 'quiz',
+                  label: 'Quiz',
+                },
+                {
+                  value: 'question',
+                  label: 'Question',
+                },
+                {
+                  value: 'answer',
+                  label: 'Answer',
+                },
+                {
+                  value: 'category',
+                  label: 'Category',
+                },
+              ]}
+            />
+          </div>
+
+          <Table columns={columns} dataSource={listDeleted} rowKey={(record) => record.id} />
+        </Box>
       </div>
-
-      <Table columns={columns} dataSource={listDeleted} rowKey={(record) => record.id} />
-    </Box>
+    </div>
   );
 }
