@@ -95,7 +95,7 @@ export default function Lesson() {
                 marginLeft: '20px',
               }}
             >
-              <Iframe src={url} width="900px" height="480px" />
+              <Iframe src={url} width="800px" height="480px" />
             </div>
           ) : (
             <TakeQuiz quizId={quizId} type={typeQuiz} courseID={courseID} session={session} />

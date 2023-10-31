@@ -51,13 +51,13 @@ function EditCategory() {
         .updateCategory(params)
         .then((response) => {
           console.log(response);
-          setSuccessMessage('Edit thành công');
+          setSuccessMessage('Edit success');
         })
         .catch((error) => {
-          setErrorMessage('Edit thất bại');
+          setErrorMessage('Edit failed');
         });
     } else {
-      setErrorMessage('Edit thất bại');
+      setErrorMessage('Edit failed');
     }
   };
 

@@ -1,16 +1,6 @@
 /* ViewCourse.css */
 
-.not-found {
-  font-size: 20px;
-  text-align: center;
-  color: red;
-  margin-top: 20px;
-}
-
 .course-details {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
   background-color: #f5f5f5;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
@@ -38,16 +28,4 @@
 .course-details p.price {
   font-weight: bold;
   color: #009688;
-}
-
-.lesson-container {
-  overflow: hidden;
-}
-
-.lesson-details {
-  margin-bottom: 10px;
-}
-
-.lesson-details:hover {
-  text-decoration: underline;
 }

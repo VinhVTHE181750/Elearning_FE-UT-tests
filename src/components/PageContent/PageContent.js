@@ -84,10 +84,10 @@ export default function PageContent() {
         username: user,
       };
       setCheckEnroll(courseId);
-      console.log(checkEnroll);
-      if (checkEnroll) {
-        return navigate(`/view-course/${courseId}`);
-      }
+      // console.log(checkEnroll);
+      // if (checkEnroll) {
+      //   return navigate(`/view-course/${courseId}`);
+      // }
       authApi
         .enrollCourse(params)
         .then((response) => {

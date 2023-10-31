@@ -5,7 +5,7 @@ import './index.css';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import jwtDecode from 'jwt-decode';
-
+import { Table, Button } from 'antd';
 export default function Course() {
   const { id } = useParams();
   const [course, setCourse] = useState([]);
@@ -50,7 +50,7 @@ export default function Course() {
       });
   }
 
-  const handleViewLesson = (item) => {
+  const handleViewLesson = (lessonId) => {
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       const user = jwtDecode(userString).sub;
@@ -58,28 +58,45 @@ export default function Course() {
         courseId: id,
         username: user,
       };
-      return navigate(`/viewLesson/${item.id}`);
-      if (checkEnroll(user, id)) {
-        return navigate(`/viewLesson/${item.id}`);
-      } else {
-        authApi
-          .enrollCourse(params)
-          .then((response) => {
-            const { orderId, urlPayment } = response.data;
-            const url = urlPayment;
-            const orderID = orderId;
-            localStorage.setItem('paymentUrl', url);
-            localStorage.setItem('orderID', orderID);
-            setPaymentUrl(url);
-            setEnrolled(true);
-            navigate('/payment');
-          })
-          .catch((error) => {
-            console.error('Error enrolling course:', error);
-          });
-      }
+      return navigate(`/viewLesson/${lessonId}`);
+      // if (checkEnroll(user, id)) {
+      //   return navigate(`/viewLesson/${item.id}`);
+      // } else {
+      //   authApi
+      //     .enrollCourse(params)
+      //     .then((response) => {
+      //       const { orderId, urlPayment } = response.data;
+      //       const url = urlPayment;
+      //       const orderID = orderId;
+      //       localStorage.setItem('paymentUrl', url);
+      //       localStorage.setItem('orderID', orderID);
+      //       setPaymentUrl(url);
+      //       setEnrolled(true);
+      //       navigate('/payment');
+      //     })
+      //     .catch((error) => {
+      //       console.error('Error enrolling course:', error);
+      //     });
+      // }
     } else return navigate('/signin');
   };
+  const columns = [
+    {
+      title: 'No',
+      dataIndex: 'ordNumber',
+      key: 'ordNumber',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+    },
+  ];
 
   return (
     <>
@@ -90,18 +107,14 @@ export default function Course() {
         <p>{course.description}</p>
         <p className="price">Price: {course.price}</p>
 
-        {lesson && (
-          <div className="lesson-container">
-            {lesson.map((item, index) => (
-              <div key={index} className="lesson-details">
-                <h4 onClick={() => handleViewLesson(item)}>
-                  Lesson {index + 1}: {item.name}
-                </h4>
-                <p>{item.description}</p>
-              </div>
-            ))}
-          </div>
-        )}
+        <Table
+          columns={columns}
+          dataSource={lesson}
+          rowKey={(record) => record.id}
+          onRow={(record) => ({
+            onClick: () => handleViewLesson(record.id),
+          })}
+        />
       </div>
 
       <Footer />

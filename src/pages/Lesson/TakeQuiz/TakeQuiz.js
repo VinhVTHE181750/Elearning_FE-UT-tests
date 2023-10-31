@@ -10,8 +10,9 @@ export default function TakeQuiz({ quizId, type, courseID, session }) {
   const [listUserChooseAnswer, setListUserChooseAnswer] = useState([]);
   const [valueRadio, setValueRadio] = useState('-1');
 
+  console.log(quizId);
   useEffect(() => {
-    authApi.getQuestionByQuizId(13).then((response) => {
+    authApi.getQuestionByQuizId(quizId).then((response) => {
       setListQuestion(response.data.questionList);
     });
   }, [session]);
@@ -41,7 +42,7 @@ export default function TakeQuiz({ quizId, type, courseID, session }) {
     authApi
       .finishQuiz(params)
       .then((response) => {
-        return window.alert(`Total correct: ${response.data.totalCorrect} and mark: ${response.data.percent}`);
+        return window.alert(`Total correct: ${response.data.totalCorrect} and mark: ${response.data.percent * 100}`);
       })
       .catch((err) => {
         console.log(err);

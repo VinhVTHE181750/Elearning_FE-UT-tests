@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import './ViewAnswer.css';
+import { Table, Button, Space } from 'antd';
+import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 
 const ViewAnswer = () => {
@@ -10,6 +12,17 @@ const ViewAnswer = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+
+  const [user, setUser] = useState('');
+
+  useEffect(() => {
+    const userString = localStorage.getItem('user-access-token');
+    if (userString) {
+      var deCoded = jwt_decode(userString);
+      setUser(deCoded.sub);
+    }
+  }, []);
+  console.log('user: ', user);
   useEffect(() => {
     authApi
       .findAllAnswer()
@@ -37,6 +50,7 @@ const ViewAnswer = () => {
   const handleDeleteAnswer = (answerID) => {
     if (window.confirm('Do you want to delete this answer?')) {
       const params = {
+        username: user,
         questionID,
         answerID,
       };
@@ -61,7 +75,43 @@ const ViewAnswer = () => {
   const handleAddAnswer = () => {
     navigate('/add-answer');
   };
-
+  const columns = [
+    {
+      title: 'AnswerContent',
+      dataIndex: 'answerContent',
+      key: 'answerContent',
+    },
+    {
+      title: 'Correct',
+      dataIndex: 'correct',
+      key: 'correct',
+      render: (record) => (record.correct ? 'true' : 'false'),
+    },
+    {
+      title: 'CreatedBy',
+      dataIndex: 'createdBy',
+      key: 'createdBy',
+    },
+    {
+      title: 'UpdatedBy',
+      dataIndex: 'updatedBy',
+      key: 'updatedBy',
+    },
+    {
+      title: 'Actions',
+      align: 'center',
+      render: (_, record) => (
+        <Space size="small">
+          <Button style={{ width: '80px' }} onClick={() => handleEditAnswer(record.id)}>
+            Edit
+          </Button>
+          <Button style={{ width: '80px' }} onClick={() => handleDeleteAnswer(record.id)}>
+            Delete
+          </Button>
+        </Space>
+      ),
+    },
+  ];
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
@@ -70,27 +120,7 @@ const ViewAnswer = () => {
           {errorMessage && <div className="error-message">{errorMessage}</div>}
           {successMessage && <div className="success-message">{successMessage}</div>}
           <h1>View Answer</h1>
-          <table>
-            <thead>
-              <tr>
-                <th>Answer Content</th>
-                <th>Correct</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {answers.map((answer) => (
-                <tr key={answer.answerID}>
-                  <td>{answer.answerContent}</td>
-                  <td>{answer.correct ? 'Yes' : 'No'}</td>
-                  <td>
-                    <button onClick={() => handleEditAnswer(answer.answerID)}>Edit</button>
-                    <button onClick={() => handleDeleteAnswer(answer.answerID)}>Delete</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <Table columns={columns} dataSource={answers} />
         </div>
       </div>
     </div>

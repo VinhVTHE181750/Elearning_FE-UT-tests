@@ -53,7 +53,7 @@ const ViewCourse = () => {
   }, []);
 
   const handleAddLesson = () => {
-    navigate('/add-lesson');
+    navigate(`/add-lesson/${courseID}`);
   };
 
   const handleDeleteLesson = (lessonID) => {
@@ -134,9 +134,6 @@ const ViewCourse = () => {
       align: 'center',
       render: (_, record) => (
         <Space size="small">
-          <Button style={{ width: '80px' }} onClick={() => handleViewLesson(record.id)}>
-            View
-          </Button>
           <Button style={{ width: '80px' }} onClick={() => handleEditLesson(record.id)}>
             Edit
           </Button>

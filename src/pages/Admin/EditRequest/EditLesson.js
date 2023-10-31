@@ -7,6 +7,7 @@ import jwtDecode from 'jwt-decode';
 
 const EditLesson = () => {
   const { lessonID } = useParams();
+
   const [username, setUsername] = useState('');
   const [editedLesson, setEditedLesson] = useState({
     username: username,
@@ -45,6 +46,9 @@ const EditLesson = () => {
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const handleSaveClick = () => {
+    if (localStorage.getItem('user-access-token')) {
+      setEditedLesson({ ...editedLesson, username: jwtDecode(localStorage.getItem('user-access-token')).sub });
+    }
     console.log(editedLesson);
     authApi
       .updateLesson(editedLesson)

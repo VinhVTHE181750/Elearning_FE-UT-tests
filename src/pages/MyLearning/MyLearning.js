@@ -59,8 +59,8 @@ export default function MyLearning() {
     }
   }
 
-  const handleViewCourse = (course) => {
-    navigate(`/view-course/${course.id}`);
+  const handleViewCourse = (courseId) => {
+    navigate(`/viewLesson/${courseId}`);
   };
 
   const [searchText, setSearchText] = useState('');
@@ -218,7 +218,14 @@ export default function MyLearning() {
       <div style={{ marginBottom: '150px' }}>
         <div className="course-list">
           <h4 style={{ textAlign: 'center', marginTop: '40px' }}>My learning</h4>
-          <Table columns={columns} dataSource={courses} rowKey={(record) => record.id} />
+          <Table
+            columns={columns}
+            dataSource={courses}
+            rowKey={(record) => record.id}
+            onRow={(record) => ({
+              onClick: () => handleViewCourse(record.id),
+            })}
+          />
         </div>
       </div>
       <Footer />

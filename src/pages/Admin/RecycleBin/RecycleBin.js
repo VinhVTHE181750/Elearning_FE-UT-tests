@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import authApi from '../../../api/authApi';
 import moment from 'moment';
 import Sidebar from '../../../components/Sidebar/Sidebar';
+import jwtDecode from 'jwt-decode';
 
 export const getFullDate = (date) => {
   const dateAndTime = date.split('T');
@@ -16,6 +17,12 @@ export const getFullDate = (date) => {
 export default function RecycleBin() {
   const [categoryEntity, setCategoryEntity] = useState('category');
   const [listDeleted, setListDeleted] = useState([]);
+  const [username, setUsername] = useState('');
+  useEffect(() => {
+    if (localStorage.getItem('user-access-token')) {
+      setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
+    }
+  }, [localStorage.getItem('user-access-token')]);
 
   useEffect(() => {
     authApi
@@ -44,6 +51,7 @@ export default function RecycleBin() {
     const params = {};
     if (categoryEntity === 'quiz') {
       Object.assign(params, {
+        username: username,
         quizID: entity.id,
         quizName: entity.name,
         lessonID: entity.lesson.id,
@@ -51,6 +59,7 @@ export default function RecycleBin() {
       });
     } else if (categoryEntity === 'question') {
       Object.assign(params, {
+        username: username,
         questionID: entity.id,
         quizID: entity.quizID,
         questionName: entity.questionName,
@@ -59,6 +68,7 @@ export default function RecycleBin() {
       });
     } else if (categoryEntity === 'lesson') {
       Object.assign(params, {
+        username: username,
         lessonID: entity.id,
         lessonName: entity.name,
         ordNumber: entity.ordNumber,
@@ -68,6 +78,7 @@ export default function RecycleBin() {
       });
     } else if (categoryEntity === 'answer') {
       Object.assign(params, {
+        username: username,
         questionID: entity.questionID,
         answerID: entity.answerID,
         answerContent: entity.answerContent,
@@ -75,6 +86,7 @@ export default function RecycleBin() {
       });
     } else if (categoryEntity === 'course') {
       Object.assign(params, {
+        username: username,
         courseID: entity.id,
         name: entity.name,
         description: entity.description,
@@ -84,6 +96,7 @@ export default function RecycleBin() {
       });
     } else if (categoryEntity === 'category') {
       Object.assign(params, {
+        username: username,
         categoryID: entity.id,
         categoryUpdate: entity.name,
       });
