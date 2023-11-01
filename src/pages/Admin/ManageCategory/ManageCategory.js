@@ -6,6 +6,7 @@ import authApi from '../../../api/authApi';
 import { Table, Space, Button } from 'antd';
 import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
+import moment from 'moment';
 
 export default function ManageCategory() {
   const [category, setCategory] = useState([]);
@@ -83,17 +84,28 @@ export default function ManageCategory() {
     },
     {
       title: 'Updated Date',
-      dataIndex: 'updatedAt',
       width: '20%',
       align: 'center',
+      render: (record) => {
+        if (record.updatedAt !== null)
+          return (
+            <div>
+              <a>{moment(record.updatedAt).format('DD/MM/YYYY, h:mm a')}</a>
+            </div>
+          );
+      },
     },
     {
       title: 'Actions',
       align: 'center',
       render: (_, record) => (
         <Space size="small">
-          <Button onClick={() => handleEditClick(record.id)}>Edit</Button>
-          <Button onClick={() => handleDeleteClick(record.id)}>Delete</Button>
+          <Button style={{ width: '80px' }} onClick={() => handleEditClick(record.id)}>
+            Edit
+          </Button>
+          <Button style={{ width: '80px' }} onClick={() => handleDeleteClick(record.id)}>
+            Delete
+          </Button>
         </Space>
       ),
     },

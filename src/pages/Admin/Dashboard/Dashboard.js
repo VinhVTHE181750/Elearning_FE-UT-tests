@@ -6,10 +6,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TrafficIcon from '@mui/icons-material/Traffic';
 import Header from '../../../components/Admin/Header/Header';
 import LineChart from '../../../components/Admin/LineChart';
-import GeographyChart from '../../../components/Admin/GeographyChart';
-import BarChart from '../../../components/Admin/BarChart';
 import StatBox from '../../../components/Admin/StatBox';
-import ProgressCircle from '../../../components/Admin/ProgressCircle';
 import { useEffect, useState } from 'react';
 import authApi from '../../../api/authApi';
 import Sidebar from '../../../components/Sidebar/Sidebar';
@@ -145,36 +142,6 @@ const Dashboard = () => {
                   </Box>
                 </Box>
               ))}
-            </Box>
-
-            {/* ROW 3 */}
-            <Box gridColumn="span 4" gridRow="span 2" backgroundColor={colors.primary[400]} p="30px">
-              <Typography variant="h5" fontWeight="600">
-                Campaign
-              </Typography>
-              <Box display="flex" flexDirection="column" alignItems="center" mt="25px">
-                <ProgressCircle size="125" />
-                <Typography variant="h5" color={colors.greenAccent[500]} sx={{ mt: '15px' }}>
-                  $48,352 revenue generated
-                </Typography>
-                <Typography>Includes extra misc expenditures and costs</Typography>
-              </Box>
-            </Box>
-            <Box gridColumn="span 4" gridRow="span 2" backgroundColor={colors.primary[400]}>
-              <Typography variant="h5" fontWeight="600" sx={{ padding: '30px 30px 0 30px' }}>
-                Sales Quantity
-              </Typography>
-              <Box height="250px" mt="-20px">
-                <BarChart isDashboard={true} />
-              </Box>
-            </Box>
-            <Box gridColumn="span 4" gridRow="span 2" backgroundColor={colors.primary[400]} padding="30px">
-              <Typography variant="h5" fontWeight="600" sx={{ marginBottom: '15px' }}>
-                Geography Based Traffic
-              </Typography>
-              <Box height="200px">
-                <GeographyChart isDashboard={true} />
-              </Box>
             </Box>
           </Box>
         </Box>

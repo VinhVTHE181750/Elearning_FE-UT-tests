@@ -191,17 +191,15 @@ export default function ManageUser() {
     },
     {
       title: 'Date of birth',
-      dataIndex: 'date_of_birth',
       width: '20%',
       align: 'center',
       render: (record) => {
         return (
           <div>
-            <a>{moment(record.date_of_birth).format('L')}</a>
+            <a>{moment(record.date_of_birth).format('DD/MM/YYYY')}</a>
           </div>
         );
       },
-      ...getColumnSearchProps('date_of_birth'),
     },
     {
       title: 'Role',

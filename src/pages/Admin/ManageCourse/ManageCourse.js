@@ -89,9 +89,17 @@ export default function ManageCourse() {
     },
     {
       title: 'Price',
-      dataIndex: 'price',
-      width: '10%',
       align: 'center',
+      render: (record) => {
+        return (
+          <div>
+            <p style={{ color: '#000000e0', fontWeight: 'unset' }}>
+              {record.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
+            </p>
+          </div>
+        );
+      },
+      width: '10%',
     },
     {
       title: 'Updated Date',
@@ -101,7 +109,7 @@ export default function ManageCourse() {
       render: (record) => {
         return (
           <div>
-            <a>{moment(record.createdAt).format('LLLL')}</a>
+            <a>{moment(record.createdAt).format('DD/MM/YYYY, h:mm a')}</a>
           </div>
         );
       },

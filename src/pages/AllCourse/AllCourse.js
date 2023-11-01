@@ -7,7 +7,7 @@ import authApi from '../../api/authApi';
 import moment from 'moment';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
-import { Button, DatePicker, Input, Space, Table, Select } from 'antd';
+import { Button, DatePicker, Input, Space, Table, Select, Statistic } from 'antd';
 
 export default function AllCourse() {
   const [categories, setCategories] = useState([]);
@@ -137,8 +137,8 @@ export default function AllCourse() {
     {
       title: 'Name',
       dataIndex: 'name',
-      key: 'name',
       width: '45%',
+      align: 'center',
       ...getColumnSearchProps('name'),
       sorter: (course1, course2) => course1.name.localeCompare(course2.name),
       sortDirections: ['descend', 'ascend'],
@@ -146,23 +146,31 @@ export default function AllCourse() {
     {
       title: 'Category',
       dataIndex: ['category', 'name'],
-      key: 'name',
       width: '20%',
+      align: 'center',
     },
     {
       title: 'Price',
-      dataIndex: 'price',
-      key: 'price',
+      align: 'center',
+      render: (record) => {
+        return (
+          <div>
+            <p style={{ color: '#000000e0', fontWeight: 'unset' }}>
+              {record.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
+            </p>
+          </div>
+        );
+      },
       width: '17%',
-      ...getColumnSearchProps('price'),
       sorter: (course1, course2) => course2.price - course1.price,
       sortDirections: ['descend', 'ascend'],
     },
     {
       title: 'Create At',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      ...getColumnSearchProps('createAt'),
+      align: 'center',
+      render: (record) => {
+        return <a>{(record.createdAt = moment().format('MMMM Do YYYY, h:mm a'))}</a>;
+      },
       sorter: (a, b) => moment(a).diff(moment(b)),
       sortDirections: ['descend', 'ascend'],
     },

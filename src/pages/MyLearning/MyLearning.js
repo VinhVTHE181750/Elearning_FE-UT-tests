@@ -185,30 +185,35 @@ export default function MyLearning() {
     },
     {
       title: 'Category',
-      dataIndex: 'category',
+      dataIndex: ['category', 'name'],
       align: 'center',
       width: '15%',
       ...getColumnSearchProps('category'),
     },
     {
       title: 'Price',
-      dataIndex: 'price',
-      align: 'center',
-      width: '15%',
-      ...getColumnSearchProps('price'),
-    },
-    {
-      title: 'Create At',
-      dataIndex: 'createdAt',
       align: 'center',
       render: (record) => {
         return (
           <div>
-            <a>{moment(record.createdAt).format('LLLL')}</a>
+            <p style={{ color: '#000000e0', fontWeight: 'unset' }}>
+              {record.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
+            </p>
           </div>
         );
       },
-      ...getColumnSearchProps('createdAt'),
+      width: '17%',
+      sorter: (course1, course2) => course2.price - course1.price,
+      sortDirections: ['descend', 'ascend'],
+    },
+    {
+      title: 'Create At',
+      align: 'center',
+      render: (record) => {
+        return <a>{(record.createdAt = moment().format('MMMM Do YYYY, h:mm a'))}</a>;
+      },
+      sorter: (a, b) => moment(a).diff(moment(b)),
+      sortDirections: ['descend', 'ascend'],
     },
   ];
 

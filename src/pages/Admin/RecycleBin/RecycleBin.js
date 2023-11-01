@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import React from 'react';
 import Header from '../../../components/Admin/Header/Header';
-import { Space, Table, Select } from 'antd';
+import { Space, Table, Select, Button } from 'antd';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import authApi from '../../../api/authApi';
@@ -43,71 +43,73 @@ export default function RecycleBin() {
         }
       })
       .catch((err) => {
-        console.log(err);
+        setListDeleted(null);
       });
   }, [categoryEntity]);
 
   const handleRestore = (entity) => {
-    const params = {};
-    if (categoryEntity === 'quiz') {
-      Object.assign(params, {
-        username: username,
-        quizID: entity.id,
-        quizName: entity.name,
-        lessonID: entity.lesson.id,
-        lessonName: entity.lesson.name,
-      });
-    } else if (categoryEntity === 'question') {
-      Object.assign(params, {
-        username: username,
-        questionID: entity.id,
-        quizID: entity.quizID,
-        questionName: entity.questionName,
-        questionType: entity.questionType,
-        answers: entity.answerList,
-      });
-    } else if (categoryEntity === 'lesson') {
-      Object.assign(params, {
-        username: username,
-        lessonID: entity.id,
-        lessonName: entity.name,
-        ordNumber: entity.ordNumber,
-        courseID: entity.course.id,
-        linkContent: entity.linkContent,
-        description: entity.description,
-      });
-    } else if (categoryEntity === 'answer') {
-      Object.assign(params, {
-        username: username,
-        questionID: entity.questionID,
-        answerID: entity.answerID,
-        answerContent: entity.answerContent,
-        correct: entity.correct,
-      });
-    } else if (categoryEntity === 'course') {
-      Object.assign(params, {
-        username: username,
-        courseID: entity.id,
-        name: entity.name,
-        description: entity.description,
-        price: entity.price,
-        link_thumnail: entity.linkThumnail,
-        categoryID: entity.category.id,
-      });
-    } else if (categoryEntity === 'category') {
-      Object.assign(params, {
-        username: username,
-        categoryID: entity.id,
-        categoryUpdate: entity.name,
-      });
+    if (window.confirm('Do you want restore?')) {
+      const params = {};
+      if (categoryEntity === 'quiz') {
+        Object.assign(params, {
+          username: username,
+          quizID: entity.id,
+          quizName: entity.name,
+          lessonID: entity.lesson.id,
+          lessonName: entity.lesson.name,
+        });
+      } else if (categoryEntity === 'question') {
+        Object.assign(params, {
+          username: username,
+          questionID: entity.id,
+          quizID: entity.quizID,
+          questionName: entity.questionName,
+          questionType: entity.questionType,
+          answers: entity.answerList,
+        });
+      } else if (categoryEntity === 'lesson') {
+        Object.assign(params, {
+          username: username,
+          lessonID: entity.id,
+          lessonName: entity.name,
+          ordNumber: entity.ordNumber,
+          courseID: entity.course.id,
+          linkContent: entity.linkContent,
+          description: entity.description,
+        });
+      } else if (categoryEntity === 'answer') {
+        Object.assign(params, {
+          username: username,
+          questionID: entity.questionID,
+          answerID: entity.answerID,
+          answerContent: entity.answerContent,
+          correct: entity.correct,
+        });
+      } else if (categoryEntity === 'course') {
+        Object.assign(params, {
+          username: username,
+          courseID: entity.id,
+          name: entity.name,
+          description: entity.description,
+          price: entity.price,
+          link_thumnail: entity.linkThumnail,
+          categoryID: entity.category.id,
+        });
+      } else if (categoryEntity === 'category') {
+        Object.assign(params, {
+          username: username,
+          categoryID: entity.id,
+          categoryUpdate: entity.name,
+        });
+      }
+      authApi
+        .restoreEntity(params, categoryEntity)
+        .then((response) => {
+          const newListDeleted = listDeleted.filter((value) => value.id !== entity.id);
+          setListDeleted(newListDeleted);
+        })
+        .catch((err) => {});
     }
-    authApi
-      .restoreEntity(params, categoryEntity)
-      .then((response) => {
-        const newListDeleted = listDeleted.filter((value) => value.id !== entity.id);
-        setListDeleted(newListDeleted);
-      })
-      .catch((err) => {});
   };
 
   const columns = [
@@ -118,30 +120,39 @@ export default function RecycleBin() {
     },
     {
       title: 'Name',
-      dataIndex: 'name',
+      render: (record) => {
+        if (categoryEntity === 'question') return <a>{record.questionName}</a>;
+        else return <a>{record.name}</a>;
+      },
       width: '40%',
     },
     {
       title: 'Deleter',
+      align: 'center',
       dataIndex: '',
       width: '20%',
     },
     {
       title: 'Date Deleted',
-      dataIndex: 'updatedAt',
+      align: 'center',
       render: (record) => {
-        return (
-          <div>
-            <a>{moment(record.updatedAt).format('LLLL')}</a>
-          </div>
-        );
+        if (record.updatedAt) {
+          return (
+            <div>
+              <a>{moment(record.updatedAt).format('DD/MM/YYYY, h:mm a')}</a>
+            </div>
+          );
+        }
       },
     },
     {
       title: 'Actions',
+      align: 'center',
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => handleRestore(record)}>Restore</a>
+          <Button style={{ width: '80px' }} onClick={() => handleRestore(record)}>
+            Restore
+          </Button>
         </Space>
       ),
     },

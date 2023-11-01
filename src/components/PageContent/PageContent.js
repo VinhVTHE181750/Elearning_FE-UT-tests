@@ -5,12 +5,15 @@ import './index.css';
 import authApi from '../../api/authApi';
 import PaymentPage from '../../pages/PaymentPage/PaymentPage';
 import { error } from 'jquery';
+import moment from 'moment';
+import { Statistic } from 'antd';
 
 export default function PageContent() {
   const [allCourses, setAllCourses] = useState([]);
   const [newCourses, setNewCourses] = useState([]);
   const [user, setUser] = useState('');
   const [paymentUrl, setPaymentUrl] = useState('');
+  const [payments, setPayments] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [enrolled, setEnrolled] = useState(false);
   const [checkEnroll, setCheckEnroll] = useState(-1);
@@ -63,19 +66,20 @@ export default function PageContent() {
   };
 
   useEffect(() => {
-    if (checkEnroll !== -1) {
+    if (user) {
       authApi
-        .checkEnroll({ courseId: checkEnroll, username: user })
+        .getPaymentUser(user)
         .then((response) => {
-          setCheckEnroll(true);
+          console.log(response.data); // In ra dữ liệu trả về từ API
+          const paymentArray = (response.data && response.data.listPayment) || [];
+          setPayments(paymentArray);
         })
         .catch((error) => {
-          setCheckEnroll(-1);
+          console.error('Error fetching payments by username:', error);
         });
     }
-  }, [checkEnroll]);
-
-  const handleEnrollCourse = (courseId) => {
+  }, [user]);
+  const handleEnrollCourse = (courseId, courseName) => {
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       handleGetCourseById(courseId);
@@ -83,26 +87,25 @@ export default function PageContent() {
         courseId: courseId,
         username: user,
       };
-      setCheckEnroll(courseId);
-      // console.log(checkEnroll);
-      // if (checkEnroll) {
-      //   return navigate(`/view-course/${courseId}`);
-      // }
-      authApi
-        .enrollCourse(params)
-        .then((response) => {
-          const { orderId, urlPayment } = response.data;
-          const url = urlPayment;
-          const orderID = orderId;
-          localStorage.setItem('paymentUrl', url);
-          localStorage.setItem('orderID', orderID);
-          setPaymentUrl(url);
-          setEnrolled(true);
-          navigate('/payment');
-        })
-        .catch((error) => {
-          console.error('Error enrolling course:', error);
-        });
+      if (payments.filter((payment) => payment.courseName === courseName).length !== 0) {
+        return navigate(`/view-course/${courseId}`);
+      } else {
+        authApi
+          .enrollCourse(params)
+          .then((response) => {
+            const { orderId, urlPayment } = response.data;
+            const url = urlPayment;
+            const orderID = orderId;
+            localStorage.setItem('paymentUrl', url);
+            localStorage.setItem('orderID', orderID);
+            setPaymentUrl(url);
+            setEnrolled(true);
+            navigate('/payment');
+          })
+          .catch((error) => {
+            console.error('Error enrolling course:', error);
+          });
+      }
     } else return navigate('/signin');
   };
 
@@ -112,7 +115,7 @@ export default function PageContent() {
 
   return (
     <div>
-      <h2>All Course</h2>
+      <h2>Top 5 course</h2>
       <div className="homepage-content-course-list">
         {allCourses.map((course) => (
           <div key={course.id} className="course-card">
@@ -122,17 +125,17 @@ export default function PageContent() {
                 alt={course.name}
               />
               <h3>{course.name}</h3>
-              <p>Price: {course.price}</p>
+              <p>Price:{course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND</p>
             </Link>
             <div className="page-content-button">
-              <button onClick={() => handleEnrollCourse(course.id)}>Enroll Course</button>
+              <button onClick={() => handleEnrollCourse(course.id, course.name)}>Enroll Course</button>
               <button onClick={() => handleViewCourse(course.id)}>View Course</button>
             </div>
           </div>
         ))}
       </div>
 
-      <h2 style={{ marginTop: '40px' }}>New Course</h2>
+      <h2 style={{ marginTop: '40px' }}>Top 5 new Course</h2>
       <div className="homepage-content-course-list">
         {newCourses.map((course) => (
           <div key={course.id} className="course-card">
@@ -142,10 +145,10 @@ export default function PageContent() {
                 alt={course.name}
               />
               <h3>{course.name}</h3>
-              <p>Price: {course.price}</p>
+              <p>Price:{course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND</p>
             </Link>
             <div className="page-content-button">
-              <button onClick={() => handleEnrollCourse(course.id)}>Enroll Course</button>
+              <button onClick={() => handleEnrollCourse(course.id, course.name)}>Enroll Course</button>
               <button onClick={() => handleViewCourse(course.id)}>View Course</button>
             </div>
           </div>

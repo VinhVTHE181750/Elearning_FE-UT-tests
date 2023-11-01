@@ -3,6 +3,7 @@ import authApi from '../../../api/authApi';
 import { Table, Button } from 'antd';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import { Box } from '@mui/material';
+import moment from 'moment';
 
 const ManagePayment = () => {
   const [payments, setPayments] = useState([]);
@@ -19,6 +20,14 @@ const ManagePayment = () => {
       title: 'Created At',
       dataIndex: 'createdAt',
       key: 'createdAt',
+      render: (record) => {
+        if (record.updatedAt !== null)
+          return (
+            <div>
+              <a>{moment(record.createdAt).format('DD/MM/YYYY, h:mm a')}</a>
+            </div>
+          );
+      },
     },
     {
       title: 'Status',
@@ -27,8 +36,17 @@ const ManagePayment = () => {
     },
     {
       title: 'Amount',
-      dataIndex: 'amount',
-      key: 'amount',
+      align: 'center',
+      render: (record) => {
+        return (
+          <div>
+            <p style={{ color: '#000000e0', fontWeight: 'unset' }}>
+              {record.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
+            </p>
+          </div>
+        );
+      },
+      width: '10%',
     },
     {
       title: 'Course Name',

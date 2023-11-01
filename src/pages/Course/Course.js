@@ -6,10 +6,14 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import jwtDecode from 'jwt-decode';
 import { Table, Button } from 'antd';
+
 export default function Course() {
   const { id } = useParams();
   const [course, setCourse] = useState([]);
   const [lesson, setLesson] = useState([]);
+  const [payments, setPayments] = useState([]);
+  const [user, setUser] = useState('');
+
   const [paymentUrl, setPaymentUrl] = useState('');
   const [enrolled, setEnrolled] = useState(false);
   const navigate = useNavigate();
@@ -39,46 +43,53 @@ export default function Course() {
     }
   }, [course]);
 
-  function checkEnroll(user, courseId) {
-    authApi
-      .checkEnroll({ courseId: courseId, username: user })
-      .then((response) => {
-        return true;
-      })
-      .catch((error) => {
-        return false;
-      });
-  }
-
-  const handleViewLesson = (lessonId) => {
+  useEffect(() => {
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
-      const user = jwtDecode(userString).sub;
-      const params = {
-        courseId: id,
-        username: user,
-      };
+      var deCoded = jwtDecode(userString);
+      setUser(deCoded.sub);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      authApi
+        .getPaymentUser(user)
+        .then((response) => {
+          console.log(response.data); // In ra dữ liệu trả về từ API
+          const paymentArray = (response.data && response.data.listPayment) || [];
+          setPayments(paymentArray);
+        })
+        .catch((error) => {
+          console.error('Error fetching payments by username:', error);
+        });
+    }
+  }, [user]);
+
+  const handleViewLesson = (lessonId) => {
+    const params = {
+      courseId: id,
+      username: user,
+    };
+    if (payments.filter((payment) => payment.courseName === course.name).length !== 0) {
       return navigate(`/viewLesson/${lessonId}`);
-      // if (checkEnroll(user, id)) {
-      //   return navigate(`/viewLesson/${item.id}`);
-      // } else {
-      //   authApi
-      //     .enrollCourse(params)
-      //     .then((response) => {
-      //       const { orderId, urlPayment } = response.data;
-      //       const url = urlPayment;
-      //       const orderID = orderId;
-      //       localStorage.setItem('paymentUrl', url);
-      //       localStorage.setItem('orderID', orderID);
-      //       setPaymentUrl(url);
-      //       setEnrolled(true);
-      //       navigate('/payment');
-      //     })
-      //     .catch((error) => {
-      //       console.error('Error enrolling course:', error);
-      //     });
-      // }
-    } else return navigate('/signin');
+    } else {
+      authApi
+        .enrollCourse(params)
+        .then((response) => {
+          const { orderId, urlPayment } = response.data;
+          const url = urlPayment;
+          const orderID = orderId;
+          localStorage.setItem('paymentUrl', url);
+          localStorage.setItem('orderID', orderID);
+          setPaymentUrl(url);
+          setEnrolled(true);
+          navigate('/payment');
+        })
+        .catch((error) => {
+          console.error('Error enrolling course:', error);
+        });
+    }
   };
   const columns = [
     {
@@ -105,7 +116,7 @@ export default function Course() {
         <h2>{course.name}</h2>
         <img src={course.linkThumnail} alt={course.name} />
         <p>{course.description}</p>
-        <p className="price">Price: {course.price}</p>
+        <p>Price:{course.price}VND</p>
 
         <Table
           columns={columns}

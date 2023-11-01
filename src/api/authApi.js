@@ -274,7 +274,7 @@ const authApi = {
   restoreEntity: (params, str) => {
     const url = `/api/v1/${str}/update-${str}`;
     if (str === 'category' || str === 'course') return axiosClient.post(url, params);
-    else return axiosClient.put(url, params);
+    else return axiosClient.get(url, params);
   },
   getAllUser: () => {
     const url = '/api/v1/user/get-all-user';

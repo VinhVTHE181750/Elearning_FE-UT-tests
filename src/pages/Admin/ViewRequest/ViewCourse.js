@@ -119,10 +119,11 @@ const ViewCourse = () => {
       render: (record) => {
         return (
           <div>
-            <a>{moment(record.createdAt).format('LLLL')}</a>
+            <a>{moment(record.createdAt).format('DD/MM/YYYY, h:mm a')}</a>
           </div>
         );
       },
+      width: '20%',
     },
     {
       title: 'Link Content',
@@ -167,7 +168,9 @@ const ViewCourse = () => {
                   <span className="label">Created:</span> {courseToView.createdAt}
                 </p>
                 <p>
-                  <span className="label">Price:</span> {courseToView.price}
+                  <span className="label">
+                    Price:{courseToView.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
+                  </span>
                 </p>
               </div>
             </div>
@@ -192,8 +195,15 @@ const ViewCourse = () => {
                   },
                   {
                     title: 'Create At',
-                    dataIndex: 'createdAt',
                     align: 'center',
+                    width: '20%',
+                    render: (record) => {
+                      return (
+                        <div>
+                          <a>{moment(record.createdAt).format('DD/MM/YYYY, h:mm a')}</a>
+                        </div>
+                      );
+                    },
                   },
                   {
                     title: 'Actions',
