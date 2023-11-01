@@ -13,16 +13,37 @@ const PaymentVnPaySuccess = () => {
   const [paymentStatus, setPaymentStatus] = useState('');
 
   useEffect(() => {
+    const vnp_Amount = search.get('vnp_Amount');
+    const vnp_BankCode = search.get('vnp_BankCode');
+    const vnp_BankTranNo = search.get('vnp_BankTranNo');
+    const vnp_CardType = search.get('vnp_CardType');
+    const vnp_OrderInfo = search.get('vnp_OrderInfo');
+    const vnp_PayDate = search.get('vnp_PayDate');
     const vnp_ResponseCode = search.get('vnp_ResponseCode');
-    const vnp_TransactionId = search.get('vnp_TransactionNo');
-    console.log(vnp_ResponseCode);
-    console.log(vnp_TransactionId);
+    const vnp_TmnCode = search.get('vnp_TmnCode');
+    const vnp_TransactionNo = search.get('vnp_TransactionNo');
+    const vnp_TransactionStatus = search.get('vnp_TransactionStatus');
+    const vnp_TxnRef = search.get('vnp_TxnRef');
+    const vnp_SecureHash = search.get('vnp_SecureHash');
 
+    console.log(vnp_ResponseCode);
+    // console.log(vnp_TransactionId);
+    console.log(search);
     if (id) {
       const params = {
         orderId: id,
-        transactionId: vnp_TransactionId,
-        responseCode: vnp_ResponseCode,
+        vnp_Amount: vnp_Amount,
+        vnp_BankCode: vnp_BankCode,
+        vnp_BankTranNo: vnp_BankTranNo,
+        vnp_CardType: vnp_CardType,
+        vnp_OrderInfo: vnp_OrderInfo,
+        vnp_PayDate: vnp_PayDate,
+        vnp_ResponseCode: vnp_ResponseCode,
+        vnp_TmnCode: vnp_TmnCode,
+        vnp_TransactionNo: vnp_TransactionNo,
+        vnp_TransactionStatus: vnp_TransactionStatus,
+        vnp_TxnRef: vnp_TxnRef,
+        vnp_SecureHash: vnp_SecureHash,
       };
       console.log(params);
       authApi
@@ -30,12 +51,13 @@ const PaymentVnPaySuccess = () => {
         .then((res) => {
           console.log(res);
           if (vnp_ResponseCode === '00') {
-            setPaymentStatus('Thanh toán thành công khoá học');
+            window.alert('Payment course success!');
           } else {
-            setPaymentStatus('Thanh toán thất bại khoá học');
           }
         })
         .catch((error) => {
+          window.alert(`${error.response.data.message}`);
+          //setPaymentStatus(error.response.data.message);
           console.log('Không tìm thấy dữ liệu thanh toán');
           console.error(error);
         });
@@ -48,7 +70,6 @@ const PaymentVnPaySuccess = () => {
     <>
       <Header />
       <div className="payment-container">
-        <div className="payment-status">{paymentStatus}</div>
         <Link to="/" className="back-button">
           Back to Home
         </Link>

@@ -62,6 +62,7 @@ function App() {
         <Route path="/view-course/:id" element={<Course />} />
         <Route path="/viewLesson/:id" element={<Lesson />} />
         <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/payment/:courseId" element={<PaymentPage />} />
         <Route path="/myLearning" element={<MyLearning />} />
         <Route path="/payment-result" element={<PaymentVnPaySuccess />} />
         <Route path="/paymentResult" element={<PaymentVnPaySuccess />} />
