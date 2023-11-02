@@ -40,7 +40,7 @@ import RecycleBin from './pages/Admin/RecycleBin/RecycleBin';
 import PaymentVnPaySuccess from './pages/PaymentPage/PaymentVnPaySuccess';
 import ManagePayment from './pages/Admin/ManagePayment/ManagePayment';
 import MyPayment from './pages/PaymentPage/MyPayment';
-
+import Blogpage from './pages/Blog/blogpage/Blogpage';
 function PrivateOutlet() {
   const auth = localStorage.getItem('role');
   return auth === 'ADMIN' ? <Outlet /> : <Navigate to="/signin" />;
@@ -67,6 +67,7 @@ function App() {
         <Route path="/payment-result" element={<PaymentVnPaySuccess />} />
         <Route path="/paymentResult" element={<PaymentVnPaySuccess />} />
         <Route path="/myPayment" element={<MyPayment />} />
+        <Route path="/blog" element={<Blogpage />} />
       </Routes>
 
       <ColorModeContext.Provider value={colorMode}>

@@ -87,12 +87,8 @@ export default function ManageCategory() {
       width: '20%',
       align: 'center',
       render: (record) => {
-        if (record.updatedAt !== null)
-          return (
-            <div>
-              <a>{moment(record.updatedAt).format('DD/MM/YYYY, h:mm a')}</a>
-            </div>
-          );
+        const formatDate = moment(record.updatedAt).format('MMMM Do YYYY, h:mm a');
+        if (record.updatedAt !== null) return <a>{formatDate}</a>;
       },
     },
     {

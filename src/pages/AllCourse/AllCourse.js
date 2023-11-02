@@ -169,7 +169,8 @@ export default function AllCourse() {
       title: 'Create At',
       align: 'center',
       render: (record) => {
-        return <a>{(record.createdAt = moment().format('MMMM Do YYYY, h:mm a'))}</a>;
+        const formatDate = moment(record.createdAt).format('MMMM Do YYYY, h:mm a');
+        return <a>{formatDate}</a>;
       },
       sorter: (a, b) => moment(a).diff(moment(b)),
       sortDirections: ['descend', 'ascend'],

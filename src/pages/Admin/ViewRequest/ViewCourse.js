@@ -114,14 +114,10 @@ const ViewCourse = () => {
     },
     {
       title: 'Created At',
-      dataIndex: 'createdAt',
       align: 'center',
       render: (record) => {
-        return (
-          <div>
-            <a>{moment(record.createdAt).format('DD/MM/YYYY, h:mm a')}</a>
-          </div>
-        );
+        const formatDate = moment(record.createdAt).format('MMMM Do YYYY, h:mm a');
+        return <a>{formatDate}</a>;
       },
       width: '20%',
     },
@@ -198,11 +194,8 @@ const ViewCourse = () => {
                     align: 'center',
                     width: '20%',
                     render: (record) => {
-                      return (
-                        <div>
-                          <a>{moment(record.createdAt).format('DD/MM/YYYY, h:mm a')}</a>
-                        </div>
-                      );
+                      const formatDate = moment(record.createdAt).format('MMMM Do YYYY, h:mm a');
+                      return <a>{formatDate}</a>;
                     },
                   },
                   {

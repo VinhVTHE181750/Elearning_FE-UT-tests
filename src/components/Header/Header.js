@@ -48,6 +48,7 @@ export default function Header() {
         {isSignIn ? (
           <>
             <Link to="/myLearning">My learning</Link>
+            <Link to="/blog">Blog</Link>
             <Link to="">
               <img src={user_icon} onClick={handleUserMenuClick} />
               <div className="user-menu" style={{ display: userMenuVisible ? 'flex' : 'none' }}>
