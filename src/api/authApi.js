@@ -308,6 +308,27 @@ const authApi = {
     const url = `/api/v1/payment/get-payment-user?username=${username}`;
     return axiosClient.get(url, username);
   },
+
+  addComments: (params) => {
+    const url = '/api/v1/post/add-post';
+    return axiosClient.post(url, params);
+  },
+  findAllComments: (params) => {
+    const url = '/api/v1/post/find-all-post';
+    return axiosClient.get(url, params);
+  },
+  updateComments: (params) => {
+    const url = '/api/v1/post/update-post';
+    return axiosClient.put(url, params);
+  },
+  getCourseById: (params) => {
+    const url = '/api/v1/course/get-course-by-id';
+    return axiosClient.get(url, params);
+  },
+  deleteComments: (params) => {
+    const url = '/api/v1/post/delete-post';
+    return axiosClient.delete(url, { data: params } );
+  },
 };
 
 export default authApi;

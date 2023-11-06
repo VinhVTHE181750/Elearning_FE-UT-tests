@@ -64,6 +64,11 @@ axiosClient.interceptors.request.use(
       '/api/v1/quiz/get-quiz-by-id',
       '/api/v1/question/get-question-by-id',
       '/api/v1/answer/get-answer-by-id',
+
+      '/api/v1/post/update-post',
+      '/api/v1/post/add-post',
+      '/api/v1/post/find-all-post',
+      '/api/v1/post/delete-post',
     ];
 
     if (!isExistedUrl(urlNoAuth, url)) {

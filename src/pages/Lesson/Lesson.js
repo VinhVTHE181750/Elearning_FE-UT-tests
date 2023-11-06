@@ -7,6 +7,7 @@ import Comment from './Comment/Comment';
 import Iframe from 'react-iframe';
 import { Table, Button } from 'antd';
 import TakeQuiz from './TakeQuiz/TakeQuiz';
+import Post from './Comments/Post'
 
 export default function Lesson() {
   const [listLesson, setListLesson] = useState([]);
@@ -142,6 +143,7 @@ export default function Lesson() {
       <div className="lesson-list-post" style={{ justifyContent: 'left', marginLeft: '10px' }}>
         <p style={{ color: '#000', fontSize: '30px', textAlign: 'justify' }}>Comment</p>
         <Comment lessonId={id} />
+        <Post />
       </div>
 
       <div style={{ marginTop: '250px' }}>
