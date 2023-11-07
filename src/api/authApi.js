@@ -349,6 +349,10 @@ const authApi = {
     const url = '/api/v1/post/delete-post';
     return axiosClient.delete(url, { data: params });
   },
+  getPostByCourseId: (courseId) => {
+    const url = `/api/v1/post/get-post-by-course-id?courseId=${courseId}&deleted=${'false'}`;
+    return axiosClient.get(url, courseId);
+  },
 };
 
 export default authApi;

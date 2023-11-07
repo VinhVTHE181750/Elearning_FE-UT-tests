@@ -54,7 +54,6 @@ export default function Course() {
       authApi
         .getPaymentUser(user)
         .then((response) => {
-          console.log(response.data); // In ra dữ liệu trả về từ API
           const paymentArray = (response.data && response.data.listPayment) || [];
           setPayments(paymentArray);
         })
