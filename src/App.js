@@ -9,9 +9,8 @@ import Profile from './pages/Profile/Profile';
 import AllCourse from './pages/AllCourse/AllCourse';
 import Course from './pages/Course/Course';
 import { ColorModeContext, useMode } from './theme';
-import { CssBaseline, ThemeProvider } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
 import Dashboard from './pages/Admin/Dashboard/Dashboard';
-import Sidebar from './components/Sidebar/Sidebar';
 import ManageUser from './pages/Admin/ManageUser/ManageUser';
 import ManageCourse from './pages/Admin/ManageCourse/ManageCourse';
 import ManageCategory from './pages/Admin/ManageCategory/ManageCategory';
@@ -19,7 +18,6 @@ import ViewUser from './pages/Admin/ViewRequest';
 import ViewCourse from './pages/Admin/ViewRequest/ViewCourse';
 import ViewQuiz from './pages/Admin/ViewRequest/ViewQuiz';
 import ViewAnswer from './pages/Admin/ViewRequest/ViewAnswer';
-import ViewLesson from './pages/Admin/ViewRequest/ViewLesson';
 import AddCourse from './pages/Admin/AddRequest/AddCourse';
 import AddCategory from './pages/Admin/AddRequest/AddCategory';
 import AddLesson from './pages/Admin/AddRequest/AddLesson';
@@ -40,7 +38,7 @@ import RecycleBin from './pages/Admin/RecycleBin/RecycleBin';
 import PaymentVnPaySuccess from './pages/PaymentPage/PaymentVnPaySuccess';
 import ManagePayment from './pages/Admin/ManagePayment/ManagePayment';
 import MyPayment from './pages/PaymentPage/MyPayment';
-import Blogpage from './pages/Blog/blogpage/Blogpage';
+import Blog from './pages/Blog/Blog';
 function PrivateOutlet() {
   const auth = localStorage.getItem('role');
   return auth === 'ADMIN' ? <Outlet /> : <Navigate to="/signin" />;
@@ -67,7 +65,7 @@ function App() {
         <Route path="/payment-result" element={<PaymentVnPaySuccess />} />
         <Route path="/paymentResult" element={<PaymentVnPaySuccess />} />
         <Route path="/myPayment" element={<MyPayment />} />
-        <Route path="/blog" element={<Blogpage />} />
+        <Route path="/blog" element={<Blog />} />
       </Routes>
 
       <ColorModeContext.Provider value={colorMode}>
