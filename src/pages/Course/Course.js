@@ -5,7 +5,8 @@ import './index.css';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import jwtDecode from 'jwt-decode';
-import { Table, Button } from 'antd';
+import { Table } from 'antd';
+import Post from './Post/Post';
 
 export default function Course() {
   const { id } = useParams();
@@ -13,9 +14,6 @@ export default function Course() {
   const [lesson, setLesson] = useState([]);
   const [payments, setPayments] = useState([]);
   const [user, setUser] = useState('');
-
-  const [paymentUrl, setPaymentUrl] = useState('');
-  const [enrolled, setEnrolled] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,10 +65,6 @@ export default function Course() {
   }, [user]);
 
   const handleViewLesson = (lessonId) => {
-    const params = {
-      courseId: id,
-      username: user,
-    };
     if (payments.filter((payment) => payment.courseName === course.name).length !== 0) {
       return navigate(`/viewLesson/${lessonId}`);
     } else {
@@ -98,7 +92,7 @@ export default function Course() {
   return (
     <>
       <Header />
-      <div className="course-details" style={{ marginTop: '50px', marginBottom: '150px' }}>
+      <div className="course-details" style={{ marginTop: '50px' }}>
         <h2>{course.name}</h2>
         <img src={course.linkThumnail} alt={course.name} />
         <p>{course.description}</p>
@@ -112,6 +106,11 @@ export default function Course() {
             onClick: () => handleViewLesson(record.id),
           })}
         />
+      </div>
+
+      <div>
+        <p>Comments</p>
+        <Post courseId={id} />
       </div>
 
       <Footer />
