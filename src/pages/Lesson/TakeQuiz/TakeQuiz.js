@@ -3,7 +3,7 @@ import { List, Table, Button, Card, Radio, Space, Alert, Modal } from 'antd';
 import authApi from '../../../api/authApi';
 import jwtDecode from 'jwt-decode';
 
-export default function TakeQuiz({ quizId, courseID, session }) {
+export default function TakeQuiz({ quizId, courseID, lessonId, session }) {
   const [questionId, setQuestionId] = useState(-1);
   const [listQuestion, setListQuestion] = useState([]);
   const [listAnswer, setListAnswer] = useState([]);
@@ -73,7 +73,7 @@ export default function TakeQuiz({ quizId, courseID, session }) {
 
   const handleClose = () => {
     setShowModal(false);
-    window.location.href = `/viewLesson/${courseID}`;
+    window.location.href = `/viewLesson/${lessonId}`;
   };
 
   return (

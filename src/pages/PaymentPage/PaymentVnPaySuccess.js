@@ -70,7 +70,7 @@ const PaymentVnPaySuccess = () => {
             style={{ paddingBottom: '300px' }}
             extra={[
               <Button type="primary" key="console" onClick={() => (window.location.href = '/myPayment')}>
-                Go to course
+                Go to my payment
               </Button>,
             ]}
           />
