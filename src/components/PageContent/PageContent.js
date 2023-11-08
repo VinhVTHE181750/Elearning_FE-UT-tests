@@ -90,21 +90,7 @@ export default function PageContent() {
       if (payments.filter((payment) => payment.courseName === courseName).length !== 0) {
         return navigate(`/view-course/${courseId}`);
       } else {
-        authApi
-          .enrollCourse(params)
-          .then((response) => {
-            const { orderId, urlPayment } = response.data;
-            const url = urlPayment;
-            const orderID = orderId;
-            localStorage.setItem('paymentUrl', url);
-            localStorage.setItem('orderID', orderID);
-            setPaymentUrl(url);
-            setEnrolled(true);
-            navigate('/payment');
-          })
-          .catch((error) => {
-            console.error('Error enrolling course:', error);
-          });
+        navigate(`/payment/${courseId}`);
       }
     } else return navigate('/signin');
   };

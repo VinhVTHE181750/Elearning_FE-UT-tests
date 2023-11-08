@@ -4,6 +4,7 @@ import { Table, Button } from 'antd';
 import authApi from '../../api/authApi';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import moment from 'moment';
 
 const MyPayment = () => {
   const [user, setUser] = useState('');
@@ -35,8 +36,11 @@ const MyPayment = () => {
   const columns = [
     {
       title: 'Created At',
-      dataIndex: 'createdAt',
       key: 'createdAt',
+      render: (record) => {
+        const formatDate = moment(record.createdAt).format('MMMM Do YYYY, h:mm a');
+        return <a>{formatDate}</a>;
+      },
     },
     {
       title: 'Status',

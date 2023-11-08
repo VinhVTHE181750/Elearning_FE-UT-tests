@@ -103,15 +103,11 @@ export default function ManageCourse() {
     },
     {
       title: 'Updated Date',
-      dataIndex: 'createdAt',
       width: '10%',
       align: 'center',
       render: (record) => {
-        return (
-          <div>
-            <a>{moment(record.createdAt).format('DD/MM/YYYY, h:mm a')}</a>
-          </div>
-        );
+        const formatDate = moment(record.createdAt).format('MMMM Do YYYY, h:mm a');
+        return <a>{formatDate}</a>;
       },
     },
     {

@@ -1,4 +1,3 @@
-import axios, { AxiosHeaders } from 'axios';
 import axiosClient from './axiosClient';
 
 const authApi = {
@@ -112,6 +111,7 @@ const authApi = {
     const url = '/api/v1/category/find-all-category';
     return axiosClient.get(url, params);
   },
+  // eslint-disable-next-line no-dupe-keys
   findAllCourse: (params) => {
     const url = '/api/v1/course/find-all-course';
     return axiosClient.get(url, params);
@@ -288,6 +288,7 @@ const authApi = {
     const url = '/api/v1/user/set-role-user';
     return axiosClient.post(url, params);
   },
+  // eslint-disable-next-line no-dupe-keys
   getUserByEmail: (email) => {
     const url = `/api/v1/user/get-user-by-email?email=${email}`;
     return axiosClient.get(url, email);
@@ -307,6 +308,50 @@ const authApi = {
   getPaymentUser: (username) => {
     const url = `/api/v1/payment/get-payment-user?username=${username}`;
     return axiosClient.get(url, username);
+  },
+  findAllBlog: (params) => {
+    const url = '/api/v1/blog/find-all-blog';
+    return axiosClient.get(url, params);
+  },
+  getBlogById: (id) => {
+    const url = `/api/v1/blog/get-blog-by-id?id={id}`;
+    return axiosClient.get(url, id);
+  },
+  addBlog: (params) => {
+    const url = '/api/v1/blog/add-blog';
+    return axiosClient.post(url, params);
+  },
+  updateBlog: (params) => {
+    const url = '/api/v1/blog/update-blog';
+    return axiosClient.post(url, params);
+  },
+  deleteBlog: (parmas) => {
+    const url = '/api/v1/blog/delete-blog';
+    return axiosClient.put(url, parmas);
+  },
+  findAllPost: (params) => {
+    const url = '/api/v1/post/find-all-post';
+    return axiosClient.get(url, params);
+  },
+  getPostById: (id) => {
+    const url = `/api/v1/post/get-post-by-id?id={id}`;
+    return axiosClient.get(url, id);
+  },
+  addPost: (params) => {
+    const url = '/api/v1/post/add-post';
+    return axiosClient.post(url, params);
+  },
+  updatePost: (params) => {
+    const url = '/api/v1/post/update-post';
+    return axiosClient.put(url, params);
+  },
+  deletePost: (params) => {
+    const url = '/api/v1/post/delete-post';
+    return axiosClient.delete(url, { data: params });
+  },
+  getPostByCourseId: (courseId) => {
+    const url = `/api/v1/post/get-post-by-course-id?courseId=${courseId}&deleted=${'false'}`;
+    return axiosClient.get(url, courseId);
   },
 };
 

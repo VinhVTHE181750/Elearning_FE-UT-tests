@@ -18,15 +18,10 @@ const ManagePayment = () => {
   const columns = [
     {
       title: 'Created At',
-      dataIndex: 'createdAt',
       key: 'createdAt',
       render: (record) => {
-        if (record.updatedAt !== null)
-          return (
-            <div>
-              <a>{moment(record.createdAt).format('DD/MM/YYYY, h:mm a')}</a>
-            </div>
-          );
+        const formatDate = moment(record.createdAt).format('MMMM Do YYYY, h:mm a');
+        if (record.createdAt !== null) return <a>{formatDate}</a>;
       },
     },
     {
