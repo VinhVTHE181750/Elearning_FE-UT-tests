@@ -14,6 +14,7 @@ const ViewQuiz = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState('');
   const [quizName, setQuizName] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const userString = localStorage.getItem('user-access-token');
@@ -143,8 +144,9 @@ const ViewQuiz = () => {
     },
   ];
 
-  const data = questions
+  const filteredData = questions
     .filter((question) => question.quizID === parseInt(quizID))
+    .filter((question) => question.questionName.toLowerCase().includes(searchQuery.toLowerCase()))
     .map((question, index) => ({
       key: index,
       index: index + 1,
@@ -190,7 +192,17 @@ const ViewQuiz = () => {
             <div>Loading quiz details...</div>
           )}
           <h2 style={{ color: 'yellowgreen' }}>List Question</h2>
-          {data.length > 0 ? <Table columns={columns} dataSource={data} /> : <div>No questions available</div>}
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search question by name"
+          />
+          {filteredData.length > 0 ? (
+            <Table columns={columns} dataSource={filteredData} />
+          ) : (
+            <div>No questions available</div>
+          )}
           <Button type="primary" onClick={() => handleAddQuestion(quizID)}>
             Add Question
           </Button>

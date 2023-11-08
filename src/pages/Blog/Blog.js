@@ -160,7 +160,7 @@ const Blog = () => {
   return (
     <div>
       <Header />
-      <div>
+      <div style={{ paddingBottom: '150px' }}>
         <Container>
           <Box sx={{ pt: 8 }}>
             <BoxTitle>

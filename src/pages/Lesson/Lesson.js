@@ -80,7 +80,7 @@ export default function Lesson() {
     const quiz = listQuiz.find((quiz) => quiz.lesson.id === id);
     if (!quiz) {
     }
-    window.alert('Video đã kết thúc');
+    window.alert('Video finish');
   };
 
   return (

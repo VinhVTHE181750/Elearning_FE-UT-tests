@@ -26,10 +26,15 @@ const AddCategory = () => {
         username: user,
         name,
       };
-      authApi.addCategory(params).then((response) => {
-        setMessage('Add Successfully Category');
-        setIsSuccess(true);
-      });
+      authApi
+        .addCategory(params)
+        .then((response) => {
+          setMessage('Add Successfully Category');
+          setIsSuccess(true);
+        })
+        .catch((err) => {
+          window.alert('Category exist!');
+        });
       // Đăng kí thành công
     } else {
       // Đăng kí thất bại

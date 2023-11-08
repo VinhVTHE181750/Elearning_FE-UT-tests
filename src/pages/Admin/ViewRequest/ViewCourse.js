@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './ViewCourse.css';
 import authApi from '../../../api/authApi';
-import { Button, Space, Table } from 'antd';
+import { Button, Space, Table, Input } from 'antd';
 import moment from 'moment';
 import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
@@ -13,6 +13,7 @@ const ViewCourse = () => {
   const [lessons, setLessons] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
   const navigate = useNavigate();
+  const [searchText, setSearchText] = useState('');
 
   const [user, setUser] = useState('');
 
@@ -23,6 +24,7 @@ const ViewCourse = () => {
       setUser(deCoded.sub);
     }
   }, []);
+
   useEffect(() => {
     authApi
       .getCourseById(courseID)
@@ -71,6 +73,7 @@ const ViewCourse = () => {
   const handleEditLesson = (id) => {
     navigate(`/edit-lesson/${id}`);
   };
+
   const handleViewLesson = (id) => {
     navigate(`/viewLesson/${id}`);
   };
@@ -94,9 +97,11 @@ const ViewCourse = () => {
         .catch((error) => {});
     }
   };
+
   const handleViewQuiz = (id) => {
     navigate(`/view-quiz/${id}`);
   };
+
   const handleAddQuiz = (id) => {
     navigate(`/add-quiz/${id}`);
   };
@@ -142,6 +147,12 @@ const ViewCourse = () => {
     },
   ];
 
+  const handleSearch = (value) => {
+    setSearchText(value);
+  };
+
+  const filteredLessons = lessons.filter((lesson) => lesson.name.toLowerCase().includes(searchText.toLowerCase()));
+
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
@@ -175,11 +186,18 @@ const ViewCourse = () => {
           )}
 
           <h2>List Lesson</h2>
-          <button onClick={handleAddLesson}>Add Lesson</button>
-
+          <Button onClick={handleAddLesson} style={{ width: '100px' }}>
+            Add Lesson
+          </Button>
+          <Input.Search
+            placeholder="Search by lesson name"
+            allowClear
+            onSearch={handleSearch}
+            style={{ width: 200, marginBottom: 16 }}
+          />
           <Table
             columns={columns}
-            dataSource={lessons}
+            dataSource={filteredLessons}
             rowKey={(record) => record.id}
             expandable={{
               expandedRowRender: (record) => {

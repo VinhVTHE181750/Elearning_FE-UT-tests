@@ -16,6 +16,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import authApi from '../../api/authApi';
 import moment from 'moment';
 import jwtDecode from 'jwt-decode';
+import { Radio } from 'antd';
 
 export default function SignIn() {
   const [justifyActive, setJustifyActive] = useState('tab1');
@@ -79,7 +80,16 @@ export default function SignIn() {
       gender,
       dateOfBirth: dob,
     };
-    if (email === '' || password === '' || fullName === '' || phone === '' || dob === '') return;
+    if (
+      email === '' ||
+      password === '' ||
+      fullName === '' ||
+      phone === '' ||
+      dob === '' ||
+      gender === '' ||
+      rePassword === ''
+    )
+      return window.alert('Error: Do not leave any blank spaces');
     if (!emailRegex.test(email)) {
       return window.alert('Error: Email invalidate');
     }
@@ -218,39 +228,17 @@ export default function SignIn() {
               <div className="gender-options">
                 <label>Gender</label>
                 <br />
-                <div className="gender-option">
-                  <input
-                    type="radio"
-                    id="male"
-                    name="gender"
-                    value="MALE"
-                    checked={gender === 'MALE'}
-                    onChange={(e) => setGender(e.target.value)}
-                  />
-                  <label htmlFor="male">Male</label>
-                </div>
-                <div className="gender-option">
-                  <input
-                    type="radio"
-                    id="female"
-                    name="gender"
-                    value="FEMALE"
-                    checked={gender === 'FEMALE'}
-                    onChange={(e) => setGender(e.target.value)}
-                  />
-                  <label htmlFor="female">Female</label>
-                </div>
-                <div className="gender-option">
-                  <input
-                    type="radio"
-                    id="other"
-                    name="gender"
-                    value="OTHER"
-                    checked={gender === 'OTHER'}
-                    onChange={(e) => setGender(e.target.value)}
-                  />
-                  <label htmlFor="other">Other</label>
-                </div>
+                <Radio.Group>
+                  <Radio value={'MALE'} onClick={() => setGender('MALE')}>
+                    MALE
+                  </Radio>
+                  <Radio value={'FEMALE'} onClick={() => setGender('MALE')}>
+                    FEMALE
+                  </Radio>
+                  <Radio value={'OTHER'} onClick={() => setGender('MALE')}>
+                    OTHER
+                  </Radio>
+                </Radio.Group>
               </div>
             </MDBCol>
           </MDBRow>

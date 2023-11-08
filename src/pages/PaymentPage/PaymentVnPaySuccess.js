@@ -7,7 +7,7 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 
 const PaymentVnPaySuccess = () => {
-  const id = parseInt(localStorage.getItem('orderID'));
+  const [id, setId] = useState(localStorage.getItem('orderID'));
   const [search] = useSearchParams();
   const [showMessage, setShowMessage] = useState(false);
 
@@ -41,6 +41,7 @@ const PaymentVnPaySuccess = () => {
         vnp_TxnRef: vnp_TxnRef,
         vnp_SecureHash: vnp_SecureHash,
       };
+      console.log('Lap lai');
       authApi
         .confirmPayment(params)
         .then((res) => {
@@ -51,13 +52,12 @@ const PaymentVnPaySuccess = () => {
         })
         .catch((error) => {
           setShowMessage(false);
-          console.log('Không tìm thấy dữ liệu thanh toán');
           console.error(error);
         });
     } else {
       console.log('Không tìm thấy orderId');
     }
-  }, []);
+  }, [id]);
 
   return (
     <>

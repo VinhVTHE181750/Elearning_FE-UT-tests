@@ -172,7 +172,7 @@ export default function MyLearning() {
         return (
           <div>
             <p style={{ color: '#000000e0', fontWeight: 'unset' }}>
-              {record.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
+              {record.price && record.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
             </p>
           </div>
         );

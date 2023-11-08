@@ -50,7 +50,9 @@ const PaymentPage = () => {
       <h2>Your order information</h2>
       <div className="course-details" style={{ marginTop: '50px', marginBottom: '150px' }}>
         <h2>Name Course: {course.name}</h2>
-        <p>Price:{course.price}VND</p>
+        <p style={{ color: '#000000e0', fontWeight: 'unset' }}>
+          Price:{course.price && course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
+        </p>
       </div>
       <p>
         <button onClick={() => handleEnroll()}>Order Now</button>

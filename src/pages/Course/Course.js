@@ -95,7 +95,9 @@ export default function Course() {
         <h2>{course.name}</h2>
         <img src={course.linkThumnail} alt={course.name} />
         <p>{course.description}</p>
-        <p>Price:{course.price}VND</p>
+        <p style={{ color: '#000000e0', fontWeight: 'unset' }}>
+          Price:{course.price && course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
+        </p>
 
         <Table
           columns={columns}
