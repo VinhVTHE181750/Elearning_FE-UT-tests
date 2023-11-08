@@ -39,6 +39,8 @@ import PaymentVnPaySuccess from './pages/PaymentPage/PaymentVnPaySuccess';
 import ManagePayment from './pages/Admin/ManagePayment/ManagePayment';
 import MyPayment from './pages/PaymentPage/MyPayment';
 import Blog from './pages/Blog/Blog';
+import PageNotFound from './pages/PageNotFound/PageNotFound';
+
 function PrivateOutlet() {
   const auth = localStorage.getItem('role');
   return auth === 'ADMIN' ? <Outlet /> : <Navigate to="/signin" />;
@@ -66,6 +68,7 @@ function App() {
         <Route path="/paymentResult" element={<PaymentVnPaySuccess />} />
         <Route path="/myPayment" element={<MyPayment />} />
         <Route path="/blog" element={<Blog />} />
+        {/* <Route path="*" element={<PageNotFound />} /> */}
       </Routes>
 
       <ColorModeContext.Provider value={colorMode}>

@@ -67,7 +67,7 @@ export default function SignIn() {
         }
       })
       .catch((error) => {
-        return window.alert(`Login Failed`);
+        return window.alert('Login Failed');
       });
   };
   const handleSignUp = () => {
@@ -107,7 +107,7 @@ export default function SignIn() {
         }
       })
       .catch((error) => {
-        return window.alert(`Sign Up Error: System Error`);
+        return window.alert('Sign Up Error: System Error');
       });
   };
 
@@ -215,15 +215,42 @@ export default function SignIn() {
           </MDBRow>
           <MDBRow>
             <MDBCol>
-              <div className="select">
-                <select value={gender} onChange={(e) => setGender(e.target.value)}>
-                  <option value="">Select Gender</option>
-                  <option value="MALE">MALE</option>
-                  <option value="FEMALE">FEMALE</option>
-                  <option value="OTHER">OTHER</option>
-                </select>
-                <br />
+              <div className="gender-options">
                 <label>Gender</label>
+                <br />
+                <div className="gender-option">
+                  <input
+                    type="radio"
+                    id="male"
+                    name="gender"
+                    value="MALE"
+                    checked={gender === 'MALE'}
+                    onChange={(e) => setGender(e.target.value)}
+                  />
+                  <label htmlFor="male">Male</label>
+                </div>
+                <div className="gender-option">
+                  <input
+                    type="radio"
+                    id="female"
+                    name="gender"
+                    value="FEMALE"
+                    checked={gender === 'FEMALE'}
+                    onChange={(e) => setGender(e.target.value)}
+                  />
+                  <label htmlFor="female">Female</label>
+                </div>
+                <div className="gender-option">
+                  <input
+                    type="radio"
+                    id="other"
+                    name="gender"
+                    value="OTHER"
+                    checked={gender === 'OTHER'}
+                    onChange={(e) => setGender(e.target.value)}
+                  />
+                  <label htmlFor="other">Other</label>
+                </div>
               </div>
             </MDBCol>
           </MDBRow>

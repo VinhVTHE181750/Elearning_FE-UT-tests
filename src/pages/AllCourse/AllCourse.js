@@ -222,7 +222,7 @@ export default function AllCourse() {
           columns={columns}
           dataSource={courses}
           bordered
-          style={{ margin: '50px 200px 50px 0' }}
+          style={{ margin: '50px 200px 50px 0', minWidth: '900px', minHeight: '500px' }}
           rowKey={(record) => record.id}
           onRow={(record) => ({
             onClick: () => handleViewCourse(record.id),
