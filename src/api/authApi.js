@@ -361,6 +361,10 @@ const authApi = {
     const url = `/api/v1/quiz/get-correct-answers-by-session?sessionId=${sessionId}`;
     return axiosClient.get(url, sessionId);
   },
+  completeLesson: (params) => {
+    const url = '/api/v1/lesson/complete-lesson';
+    return axiosClient.post(url, params);
+  },
 };
 
 export default authApi;

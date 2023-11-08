@@ -65,6 +65,7 @@ const Profile = () => {
   };
 
   const handleSave = async () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     try {
       const params = {
         username: user,

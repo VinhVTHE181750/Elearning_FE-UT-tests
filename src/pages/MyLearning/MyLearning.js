@@ -17,6 +17,7 @@ export default function MyLearning() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       var decoded = jwtDecode(userString);
@@ -25,7 +26,17 @@ export default function MyLearning() {
         .getCourseByUser(username)
         .then((response) => {
           if (response.code === 0) {
-            setCourses(response.data.listCourse);
+            const courseArray = response.data.listCourse;
+            const uniqueCourseNames = {};
+            const filteredCourse = courseArray.filter((course) => {
+              if (uniqueCourseNames[course.name]) {
+                return false;
+              } else {
+                uniqueCourseNames[course.name] = true;
+                return true;
+              }
+            });
+            setCourses(filteredCourse);
           }
         })
         .catch((err) => {
@@ -35,6 +46,7 @@ export default function MyLearning() {
   }, []);
 
   const handleViewCourse = (courseId) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     navigate(`/viewLesson/${courseId}`);
   };
 
@@ -203,7 +215,7 @@ export default function MyLearning() {
             columns={columns}
             dataSource={courses}
             rowKey={(record) => record.id}
-            style={{ minWidth: '800px' }}
+            style={{ minWidth: '800px', cursor: 'pointer' }}
             onRow={(record) => ({
               onClick: () => handleViewCourse(record.id),
             })}

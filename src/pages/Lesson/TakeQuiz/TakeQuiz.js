@@ -35,6 +35,7 @@ export default function TakeQuiz({ quizId, courseID, lessonId, session }) {
   };
 
   const handleSubmit = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     if (listUserChooseAnswer.length !== listQuestion.length) {
       return window.alert('The question is not choose answer!');
     }

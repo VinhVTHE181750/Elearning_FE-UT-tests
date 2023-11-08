@@ -15,6 +15,7 @@ function EditCategory() {
   const [id, setId] = useState(dataCategory);
   const navigate = useNavigate();
   const [user, setUser] = useState('');
+  const [nameExistsError, setNameExistsError] = useState(false);
 
   useEffect(() => {
     const userString = localStorage.getItem('user-access-token');
@@ -23,6 +24,7 @@ function EditCategory() {
       setUser(deCoded.sub);
     }
   }, []);
+
   useEffect(() => {
     const category = dataCategory.find((category) => category.id === parseInt(categoryId));
     setCategoryEdit(category);
@@ -47,6 +49,12 @@ function EditCategory() {
     };
 
     if (name) {
+      const nameExists = dataCategory.some((category) => category.name === name);
+      if (nameExists) {
+        setNameExistsError(true);
+        return;
+      }
+
       authApi
         .updateCategory(params)
         .then((response) => {
@@ -69,6 +77,7 @@ function EditCategory() {
           <h2>Edit Category</h2>
           {successMessage && <div className="success-message">{successMessage}</div>}
           {errorMessage && <div className="error-message">{errorMessage}</div>}
+          {nameExistsError && <div className="error-message">If you cannot edit, the name already exists</div>}
           <form>
             <div>
               <label>ID:</label>

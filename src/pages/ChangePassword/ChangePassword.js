@@ -14,6 +14,8 @@ export default function ChangePassword() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       setUser(userString);
@@ -21,6 +23,8 @@ export default function ChangePassword() {
   }, []);
 
   const handleSubmit = async (e) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     e.preventDefault();
     const data = {
       oldPassword: currentPassword,

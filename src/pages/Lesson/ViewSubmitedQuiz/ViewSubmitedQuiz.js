@@ -6,6 +6,7 @@ import { useState } from 'react';
 import jwtDecode from 'jwt-decode';
 import moment from 'moment';
 import './index.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function ViewSubmitedQuiz({ quizId }) {
   const [quiz, setQuiz] = useState([]);
@@ -17,6 +18,7 @@ export default function ViewSubmitedQuiz({ quizId }) {
   const [listInCorrectAnswer, setListInCorrectAnswer] = useState([]);
   const [questionId, setQuestionId] = useState('');
   const [correct, setCorrect] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     authApi
@@ -70,6 +72,7 @@ export default function ViewSubmitedQuiz({ quizId }) {
   }, [type]);
 
   const handleViewClick = (sessionId, no) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     setType(`Submitted of quiz number ${no}`);
     authApi
       .getCorrectAnswerBySession(sessionId)
@@ -96,7 +99,7 @@ export default function ViewSubmitedQuiz({ quizId }) {
     {
       title: 'Score',
       render: (record) => {
-        return <a>{((record.totalCorrect / record.totalIncorrect) * 100).toFixed(2)}%</a>;
+        return <a>{((record.totalCorrect / (record.totalIncorrect + record.totalCorrect)) * 100).toFixed(2)}%</a>;
       },
     },
     {

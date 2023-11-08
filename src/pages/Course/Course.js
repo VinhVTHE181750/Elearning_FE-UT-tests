@@ -64,6 +64,7 @@ export default function Course() {
   }, [user]);
 
   const handleViewLesson = (lessonId) => {
+    if (!localStorage.getItem('user-access-token')) return navigate('/signin');
     if (payments.filter((payment) => payment.courseName === course.name).length !== 0) {
       return navigate(`/viewLesson/${lessonId}`);
     } else {
@@ -109,7 +110,7 @@ export default function Course() {
         />
       </div>
 
-      <div>
+      <div style={!localStorage.getItem('user-access-token') && { display: 'none' }}>
         <p style={{ color: 'black', fontSize: '30px', fontWeight: 'bold' }}>Comments</p>
         <Posts courseId={id} />
       </div>

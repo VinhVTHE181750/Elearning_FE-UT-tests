@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import authApi from '../../api/authApi';
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
@@ -7,6 +7,7 @@ import { Table, Button } from 'antd';
 import TakeQuiz from './TakeQuiz/TakeQuiz';
 import ReactPlayer from 'react-player';
 import ViewSubmitedQuiz from './ViewSubmitedQuiz/ViewSubmitedQuiz';
+import jwtDecode from 'jwt-decode';
 
 export default function Lesson() {
   const [listLesson, setListLesson] = useState([]);
@@ -18,8 +19,11 @@ export default function Lesson() {
   const [url, setUrl] = useState('');
   const [session, setSession] = useState('');
   const { id } = useParams();
+  const [doneLesson, setDoneLesson] = useState('');
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     authApi
       .getLessonById(id)
       .then((response) => {
@@ -36,6 +40,8 @@ export default function Lesson() {
   }, [id]);
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     if (courseID) {
       authApi
         .getLessonByCourseId(courseID)
@@ -51,6 +57,7 @@ export default function Lesson() {
   const handleDone = (lessonId) => {};
 
   const handleQuiz = (type, quizId) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     authApi
       .startQuiz(quizId)
       .then((response) => {
@@ -77,10 +84,15 @@ export default function Lesson() {
   ];
 
   const handleVideoEnd = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     const quiz = listQuiz.find((quiz) => quiz.lesson.id === id);
     if (!quiz) {
+      window.alert('Video finish');
+      authApi
+        .completeLesson({ username: jwtDecode(localStorage.getItem('user-access-token')).sub, lessonId: id })
+        .then((resp) => {})
+        .catch((err) => {});
     }
-    window.alert('Video finish');
   };
 
   return (

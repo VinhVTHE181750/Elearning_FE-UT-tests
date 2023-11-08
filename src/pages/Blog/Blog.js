@@ -68,6 +68,8 @@ const Blog = () => {
   };
 
   const handleAddBlog = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     authApi
       .addBlog(newBlog)
       .then((response) => {
@@ -79,6 +81,8 @@ const Blog = () => {
   };
 
   const handleDeleteBlog = (blogId) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const deleteData = {
       username: user,
       blogId: blogId,
@@ -94,6 +98,8 @@ const Blog = () => {
   };
 
   const handleEditBlog = (blogId) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     setBlogId(blogId);
     const editData = {
       username: user,

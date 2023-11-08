@@ -12,6 +12,7 @@ const PaymentVnPaySuccess = () => {
   const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     const vnp_Amount = search.get('vnp_Amount');
     const vnp_BankCode = search.get('vnp_BankCode');
     const vnp_BankTranNo = search.get('vnp_BankTranNo');

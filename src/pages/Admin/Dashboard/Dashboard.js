@@ -16,17 +16,27 @@ const Dashboard = () => {
   const colors = tokens(theme.palette.mode);
   const [totalUser, setTotalUser] = useState('');
   const [totalCoure, setTotalCourse] = useState('');
-
+  const [payments, setPayments] = useState([]);
+  const [filteredPayments, setFilteredPayments] = useState([]);
   useEffect(() => {
-    authApi.totalUser().then((response) => {
-      setTotalUser(response.data);
+    authApi.getAllPayment().then((response) => {
+      const paymentArray = response.data.listPayment;
+      console.log(paymentArray);
+      setPayments(paymentArray);
+      setFilteredPayments(paymentArray);
+      console.log(payments);
     });
   }, []);
+
   useEffect(() => {
     authApi.totalCourse().then((response) => {
       setTotalCourse(response.data);
     });
   }, []);
+
+  // Lấy 5 giao dịch gần nhất
+  const recentTransactions = payments.slice(0, 5);
+
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
@@ -35,6 +45,8 @@ const Dashboard = () => {
           {/* HEADER */}
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+
+            <Box></Box>
           </Box>
 
           {/* GRID & CHARTS */}
@@ -48,7 +60,7 @@ const Dashboard = () => {
               justifyContent="center"
             >
               <StatBox
-                title={totalUser.totalUser}
+                title={totalUser}
                 subtitle="Total User"
                 progress="0.75"
                 increase="+14%"
@@ -106,7 +118,7 @@ const Dashboard = () => {
                   Recent Transactions
                 </Typography>
               </Box>
-              {mockTransactions.map((transaction, i) => (
+              {recentTransactions.map((transaction, i) => (
                 <Box
                   key={`${transaction.txId}-${i}`}
                   display="flex"
@@ -116,14 +128,11 @@ const Dashboard = () => {
                   p="15px"
                 >
                   <Box>
-                    <Typography color={colors.greenAccent[500]} variant="h5" fontWeight="600">
-                      {transaction.txId}
-                    </Typography>
-                    <Typography color={colors.grey[100]}>{transaction.user}</Typography>
+                    <Typography color={colors.grey[100]}> {transaction.courseName}</Typography>
                   </Box>
-                  <Box color={colors.grey[100]}>{transaction.date}</Box>
+                  <Box color={colors.grey[100]}>{transaction.createdAt}</Box>
                   <Box backgroundColor={colors.greenAccent[500]} p="5px 10px" borderRadius="4px">
-                    ${transaction.cost}
+                    ${transaction.amount}
                   </Box>
                 </Box>
               ))}

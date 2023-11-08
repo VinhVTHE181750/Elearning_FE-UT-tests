@@ -9,8 +9,11 @@ const PaymentPage = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const [course, setCourse] = useState([]);
+  const [user, setUser] = useState('');
+  const [payments, setPayments] = useState([]);
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     authApi
       .getCourseById(courseId)
       .then((response) => {
@@ -21,7 +24,33 @@ const PaymentPage = () => {
       });
   }, [courseId]);
 
+  useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    const userString = localStorage.getItem('user-access-token');
+    if (userString) {
+      const decoded = jwtDecode(userString);
+      authApi
+        .getPaymentUser(decoded.sub)
+        .then((response) => {
+          console.log(response.data);
+          const paymentArray = (response.data && response.data.listPayment) || [];
+          if (
+            payments.filter((payment) => payment.courseName === course.name).length !== 0 ||
+            decoded.userInfo[0] === 'ADMIN'
+          ) {
+            return navigate(`/view-course/${courseId}`);
+          }
+          setPayments(paymentArray);
+        })
+        .catch((error) => {
+          console.error('Error fetching payments by username:', error);
+        });
+    }
+  }, []);
+
   const handleEnroll = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       const params = {
@@ -29,6 +58,12 @@ const PaymentPage = () => {
         username: jwtDecode(userString).sub,
       };
       console.log(params);
+      if (
+        payments.filter((payment) => payment.courseName === course.name).length !== 0 ||
+        jwtDecode(userString).userInfo[0] === 'ADMIN'
+      ) {
+        return navigate(`/view-course/${courseId}`);
+      }
       authApi
         .enrollCourse(params)
         .then((response) => {
