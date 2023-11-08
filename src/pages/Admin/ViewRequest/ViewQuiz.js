@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
+import { Table, Button, message } from 'antd';
 
 const ViewQuiz = () => {
   const { quizID } = useParams();
@@ -12,6 +13,7 @@ const ViewQuiz = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const [user, setUser] = useState('');
+  const [quizName, setQuizName] = useState('');
 
   useEffect(() => {
     const userString = localStorage.getItem('user-access-token');
@@ -20,6 +22,7 @@ const ViewQuiz = () => {
       setUser(deCoded.sub);
     }
   }, []);
+
   useEffect(() => {
     authApi
       .findAllQuiz()
@@ -55,6 +58,10 @@ const ViewQuiz = () => {
   useEffect(() => {
     console.log('Data của questions:', questions);
   }, [questions]);
+
+  useEffect(() => {
+    setQuizName(quizToView.find((quiz) => quiz.id === parseInt(quizID))?.name || '');
+  }, [quizToView, quizID]);
 
   const handleAddQuestion = (id) => {
     navigate(`/add-question/${id}`);
@@ -96,53 +103,97 @@ const ViewQuiz = () => {
     }
   };
 
+  const columns = [
+    {
+      title: 'STT',
+      dataIndex: 'index',
+      key: 'index',
+      render: (text, record, index) => index + 1,
+    },
+    {
+      title: 'Question Name',
+      dataIndex: 'questionName',
+      key: 'questionName',
+    },
+
+    {
+      title: 'Action',
+      key: 'action',
+      render: (record) => (
+        <div>
+          <Button
+            type="primary"
+            style={{ width: '100px', backgroundColor: 'green' }}
+            size="small"
+            onClick={() => handleEditQuestion(record.id)}
+          >
+            Edit
+          </Button>
+          <Button
+            type="primary"
+            style={{ width: '100px' }}
+            danger
+            size="small"
+            onClick={() => handleDeleteQuestion(record.id)}
+          >
+            Delete
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
+  const data = questions
+    .filter((question) => question.quizID === parseInt(quizID))
+    .map((question, index) => ({
+      key: index,
+      index: index + 1,
+      questionName: question.questionName,
+      id: question.id,
+    }));
+
+  const pagination = {
+    pageSize: 10, // Number of items displayed per page
+    hideOnSinglePage: true, // Hide pagination if there is only one page
+    showSizeChanger: false, // Hide page size changer
+  };
+
   return (
     <div style={{ display: 'flex', color: '#fff' }}>
       <Sidebar />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div>
-          {successMessage && <div className="success-message">{successMessage}</div>}
-          {errorMessage && <div className="error-message">{errorMessage}</div>}
-          {quizToView ? (
-            <div>
-              <h1>Quiz Detail</h1>
-              {quizToView.length > 0 ? (
-                <ul>
-                  {quizToView.map((quiz) => {
-                    if (quiz.id === parseInt(quizID)) {
-                      return <li key={quiz.id}>Name: {quiz.name}</li>;
-                    }
-                  })}
-                </ul>
-              ) : (
-                <div>No quizzes available</div>
-              )}
-            </div>
+          <h1 style={{ color: 'yellowgreen' }}>Quiz Detail</h1>
+          {quizName ? (
+            <Table
+              columns={[
+                {
+                  title: 'QuizID',
+                  dataIndex: 'quizID',
+                  key: 'quizID',
+                },
+                {
+                  title: 'Name',
+                  dataIndex: 'name',
+                  key: 'name',
+                },
+              ]}
+              dataSource={[
+                {
+                  key: quizID,
+                  quizID: quizID,
+                  name: quizName,
+                },
+              ]}
+            />
           ) : (
             <div>Loading quiz details...</div>
           )}
-
-          <h2>List Question</h2>
-          {questions.length > 0 ? (
-            <ul>
-              {questions.map((question) => {
-                if (question.quizID === parseInt(quizID)) {
-                  return (
-                    <li key={question.id}>
-                      {question.questionName} {question.questionType}
-                      <button onClick={() => handleEditQuestion(question.id)}>Edit</button>
-                      <button onClick={() => handleDeleteQuestion(question.id)}>Delete</button>
-                      <button onClick={() => handleViewAnswer(question.id)}>View</button>
-                    </li>
-                  );
-                }
-              })}
-            </ul>
-          ) : (
-            <div>No questions available</div>
-          )}
-
-          <button onClick={() => handleAddQuestion(quizID)}>Add Question</button>
+          <h2 style={{ color: 'yellowgreen' }}>List Question</h2>
+          {data.length > 0 ? <Table columns={columns} dataSource={data} /> : <div>No questions available</div>}
+          <Button type="primary" onClick={() => handleAddQuestion(quizID)}>
+            Add Question
+          </Button>
         </div>
       </div>
     </div>

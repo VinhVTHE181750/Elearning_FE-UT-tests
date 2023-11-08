@@ -4,17 +4,21 @@ import authApi from '../../../api/authApi';
 import './edit.css';
 import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
-
-const EditQuestion = () => {
+import Toast from 'react-bootstrap/Toast';
+import ToastContainer from 'react-bootstrap/ToastContainer';
+import Button from 'react-bootstrap/Button';
+function EditQuestion() {
   const { questionID } = useParams();
   const [questionName, setQuestionName] = useState('');
-  const [questionType, setQuestionType] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
   const [quizID, setQuizID] = useState('');
+
+  const [questionType, setQuestionType] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
   const [answers, setAnswers] = useState([]);
   const [user, setUser] = useState('');
+  const [editStatus, setEditStatus] = useState('');
 
   useEffect(() => {
     const userString = localStorage.getItem('user-access-token');
@@ -43,6 +47,10 @@ const EditQuestion = () => {
         console.log(error);
       });
   }, [questionID]);
+
+  const handleBack = () => {
+    navigate(`/view-quiz/${quizID}`);
+  };
   const handleEditQuestion = () => {
     const params = {
       username: user,
@@ -58,13 +66,15 @@ const EditQuestion = () => {
       .then((response) => {
         if (response.data && response.code === 0) {
           setSuccessMessage('Edit Successfully!');
+          setEditStatus('success');
         } else {
           setErrorMessage('Edit Failed!');
+          setEditStatus('failed');
         }
       })
       .catch((error) => {
         setErrorMessage('Function Edit Failed!');
-        console.log('');
+        console.log(error);
       });
   };
 
@@ -73,8 +83,23 @@ const EditQuestion = () => {
       <Sidebar />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className="container-edit">
-          {successMessage && <div className="success-message">{successMessage}</div>}
-          {errorMessage && <div className="error-message">{errorMessage}</div>}
+          <ToastContainer position="top-end" className="p-3">
+            {successMessage && (
+              <Toast
+                className="d-inline-block m-1"
+                bg={editStatus === 'success' ? 'success' : 'danger'}
+                autohide
+                onClose={() => setSuccessMessage('')}
+              >
+                <Toast.Body className={editStatus === 'success' ? 'text-white' : ''}>{successMessage}</Toast.Body>
+              </Toast>
+            )}
+            {errorMessage && (
+              <Toast className="d-inline-block m-1" bg="danger" autohide onClose={() => setErrorMessage('')}>
+                <Toast.Body className="text-white">{errorMessage}</Toast.Body>
+              </Toast>
+            )}
+          </ToastContainer>
 
           <h1>Edit Question</h1>
           <div>
@@ -86,12 +111,12 @@ const EditQuestion = () => {
             <label>
               Question Type:
               <select value={questionType} onChange={(e) => setQuestionType(e.target.value)}>
-                <option value="">Select Type</option>
+                <option value="">Select Question Type</option>
                 <option value="ONE_CHOICE">One Choice</option>
-                <option value="MUILTPLE_CHOICE">MUILTPLE_CHOICE</option>
               </select>
             </label>
-            {questionType === 'ONE_CHOICE' ? (
+
+            {questionType === 'ONE_CHOICE' && (
               <>
                 {answers?.map((data) => {
                   return (
@@ -149,71 +174,21 @@ const EditQuestion = () => {
                   })}
                 </div>
               </>
-            ) : questionType === 'MUILTPLE_CHOICE' ? (
-              <>
-                {answers?.map((data) => {
-                  return (
-                    <>
-                      <input
-                        type="text"
-                        value={data.answerContent}
-                        onChange={(e) => {
-                          const newAnswers = answers?.map((a) => {
-                            if (a?.id === data?.id) {
-                              return {
-                                ...data,
-                                answerContent: e.target.value,
-                              };
-                            }
-                            return a;
-                          });
-                          setAnswers(newAnswers);
-                        }}
-                      />
-                    </>
-                  );
-                })}
-                <div style={{ display: 'flex' }}>
-                  {answers?.map((data, index) => {
-                    return (
-                      <>
-                        <div style={{ display: 'flex' }}>
-                          <input
-                            type="checkbox"
-                            name="result"
-                            id={index}
-                            value={data.id}
-                            checked={data.correct}
-                            onChange={(e) => {
-                              const newAnswers = answers?.map((a) => {
-                                if (a?.id === data?.id) {
-                                  return {
-                                    ...data,
-                                    correct: true,
-                                  };
-                                }
-                                return a;
-                              });
-                              setAnswers(newAnswers);
-                            }}
-                          />
-                          <label htmlFor={index}>Option {index}</label>
-                        </div>
-                      </>
-                    );
-                  })}
-                </div>
-              </>
-            ) : (
-              <></>
             )}
 
-            <button onClick={handleEditQuestion}>Edit</button>
+            <div className="button-container">
+              <Button variant="primary" onClick={handleEditQuestion}>
+                Edit
+              </Button>
+              <Button variant="primary" onClick={handleBack}>
+                Back
+              </Button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default EditQuestion;

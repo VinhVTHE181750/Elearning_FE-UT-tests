@@ -6,11 +6,11 @@ import authApi from '../../api/authApi';
 import moment from 'moment';
 import './index.css';
 import Footer from '../../components/Footer/Footer';
-import Course from '../Course/Course';
 import Highlighter from 'react-highlight-words';
 import { Button, Input, Space, Table } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useRef } from 'react';
+import imageCourse from '../../assets/slider/slider1.jpg';
 
 export default function MyLearning() {
   const [courses, setCourses] = useState([]);
@@ -33,31 +33,6 @@ export default function MyLearning() {
         });
     }
   }, []);
-
-  //pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage, SetRecordsPerPage] = useState(10);
-  const lastIndex = currentPage * recordsPerPage;
-  const fisttIndex = lastIndex - recordsPerPage;
-  const records = courses.slice(fisttIndex, lastIndex);
-  const npage = Math.ceil(courses.length / recordsPerPage);
-  const numbers = [...Array(npage + 1).keys()].slice(1);
-
-  function prePage() {
-    if (currentPage !== 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  }
-
-  function changeCPage(id) {
-    setCurrentPage(id);
-  }
-
-  function nextPage() {
-    if (currentPage !== npage) {
-      setCurrentPage(currentPage + 1);
-    }
-  }
 
   const handleViewCourse = (courseId) => {
     navigate(`/viewLesson/${courseId}`);
@@ -171,8 +146,8 @@ export default function MyLearning() {
 
   const columns = [
     {
-      title: 'No',
-      dataIndex: 'no',
+      title: '',
+      dataIndex: imageCourse,
       align: 'center',
       width: '3%',
     },
@@ -228,6 +203,7 @@ export default function MyLearning() {
             columns={columns}
             dataSource={courses}
             rowKey={(record) => record.id}
+            style={{ minWidth: '800px' }}
             onRow={(record) => ({
               onClick: () => handleViewCourse(record.id),
             })}

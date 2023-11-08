@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
-import { List, Table, Button, Card, Radio, Space, Alert } from 'antd';
+import { List, Table, Button, Card, Radio, Space, Alert, Modal } from 'antd';
 import authApi from '../../../api/authApi';
 import jwtDecode from 'jwt-decode';
 
-export default function TakeQuiz({ quizId, type, courseID, session }) {
+export default function TakeQuiz({ quizId, courseID, session }) {
   const [questionId, setQuestionId] = useState(-1);
   const [listQuestion, setListQuestion] = useState([]);
   const [listAnswer, setListAnswer] = useState([]);
   const [listUserChooseAnswer, setListUserChooseAnswer] = useState([]);
   const [valueRadio, setValueRadio] = useState('-1');
+  const [showModal, setShowModal] = useState(false);
+  const [resultQuiz, setResultQuiz] = useState([]);
 
   console.log(quizId);
   useEffect(() => {
@@ -28,6 +30,10 @@ export default function TakeQuiz({ quizId, type, courseID, session }) {
     }
   }, [questionId]);
 
+  const showModalFunc = () => {
+    setShowModal(true);
+  };
+
   const handleSubmit = () => {
     if (listUserChooseAnswer.length !== listQuestion.length) {
       return window.alert('The question is not choose answer!');
@@ -42,7 +48,8 @@ export default function TakeQuiz({ quizId, type, courseID, session }) {
     authApi
       .finishQuiz(params)
       .then((response) => {
-        return window.alert(`Total correct: ${response.data.totalCorrect} and mark: ${response.data.percent * 100}`);
+        setResultQuiz(response.data);
+        showModalFunc();
       })
       .catch((err) => {
         console.log(err);
@@ -64,19 +71,23 @@ export default function TakeQuiz({ quizId, type, courseID, session }) {
     setListUserChooseAnswer(currentListUserChooseAnswer);
   };
 
+  const handleClose = () => {
+    setShowModal(false);
+    window.location.href = `/viewLesson/${courseID}`;
+  };
+
   return (
     <div
       className="take-quiz-list-question"
       style={{
         backgroundColor: '#FAFAFA',
-        width: '800px',
+        width: '960px',
         height: '480px',
         marginTop: '20px',
         marginLeft: '30px',
         borderRadius: '10px',
       }}
     >
-      {/* <a style={{ textAlign: 'center', fontWeight: 'bold' }}>Quiz: {nameQuiz}</a> */}
       <List
         pagination={{ pageSize: 1, align: 'center' }}
         dataSource={listQuestion}
@@ -101,6 +112,21 @@ export default function TakeQuiz({ quizId, type, courseID, session }) {
               <Button style={{ marginLeft: '40%' }} onClick={handleSubmit}>
                 Submit
               </Button>
+              <Modal
+                title="Quiz Result"
+                visible={showModal}
+                onOk={() => handleClose()}
+                onCancel={() => handleClose()}
+                footer={[
+                  <Button key="submit" type="primary" style={{ textAlign: 'center' }} onClick={() => handleClose()}>
+                    OK
+                  </Button>,
+                ]}
+              >
+                <p>Total Correct: {resultQuiz.totalCorrect}</p>
+                <p>Total Incorrect: {resultQuiz.totalInCorrect}</p>
+                <p>Score: {resultQuiz.percent * 100}%</p>
+              </Modal>
             </List.Item>
           );
         }}
