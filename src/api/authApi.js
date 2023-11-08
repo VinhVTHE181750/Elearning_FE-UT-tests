@@ -353,6 +353,14 @@ const authApi = {
     const url = `/api/v1/post/get-post-by-course-id?courseId=${courseId}&deleted=${'false'}`;
     return axiosClient.get(url, courseId);
   },
+  getSessionByQuizId: (params) => {
+    const url = `/api/v1/quiz/get-all-session-quiz?username=${params.username}&quizId=${params.quizId}`;
+    return axiosClient.get(url, params);
+  },
+  getCorrectAnswerBySession: (sessionId) => {
+    const url = `/api/v1/quiz/get-correct-answers-by-session?sessionId=${sessionId}`;
+    return axiosClient.get(url, sessionId);
+  },
 };
 
 export default authApi;

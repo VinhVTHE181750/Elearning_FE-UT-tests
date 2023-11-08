@@ -100,9 +100,9 @@ export default function Lesson() {
                 <ReactPlayer url={url} controls width="960px" height="480px" onEnded={() => handleVideoEnd()} />
               </div>
             ) : typeQuiz === 'Start' ? (
-              <TakeQuiz quizId={quizId} courseID={courseID} session={session} />
+              <TakeQuiz quizId={quizId} courseID={courseID} session={session} lessonId={id} />
             ) : (
-              <ViewSubmitedQuiz quizId={quizId} lessonId={id} />
+              <ViewSubmitedQuiz quizId={quizId} />
             )}
           </div>
           <div style={{ position: 'absolute', right: '0' }}>
