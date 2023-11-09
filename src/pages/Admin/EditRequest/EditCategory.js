@@ -40,6 +40,8 @@ function EditCategory() {
   };
 
   const handleSave = (e) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     e.preventDefault();
     const params = {
       username: user,

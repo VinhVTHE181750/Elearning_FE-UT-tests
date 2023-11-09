@@ -36,6 +36,8 @@ const EditQuiz = () => {
   }, [quizID]);
 
   const handleSaveClick = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const params = {
       username: user,
       quizID: quizID,

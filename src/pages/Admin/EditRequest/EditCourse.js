@@ -46,6 +46,8 @@ const EditCourse = () => {
   }, [localStorage.getItem('user-access-token')]);
 
   const handleSaveClick = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const params = {
       username: username,
       courseID: courseID,

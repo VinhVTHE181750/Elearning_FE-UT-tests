@@ -47,6 +47,8 @@ function EditUser() {
   };
 
   const handleSave = (e) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     e.preventDefault();
     negative('/team');
   };

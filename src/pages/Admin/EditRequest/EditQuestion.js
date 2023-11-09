@@ -49,9 +49,12 @@ function EditQuestion() {
   }, [questionID]);
 
   const handleBack = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     navigate(`/view-quiz/${quizID}`);
   };
   const handleEditQuestion = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const params = {
       username: user,
       questionID,
