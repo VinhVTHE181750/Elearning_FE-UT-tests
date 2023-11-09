@@ -365,6 +365,10 @@ const authApi = {
     const url = '/api/v1/lesson/complete-lesson';
     return axiosClient.post(url, params);
   },
+  getCompleteLessonByCourse: (params) => {
+    const url = `/api/v1/lesson/get-lesson-completed-by-course?courseId=${params.courseId}&username=${params.username}`;
+    return axiosClient.get(url, params);
+  },
 };
 
 export default authApi;

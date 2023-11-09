@@ -8,6 +8,7 @@ import TakeQuiz from './TakeQuiz/TakeQuiz';
 import ReactPlayer from 'react-player';
 import ViewSubmitedQuiz from './ViewSubmitedQuiz/ViewSubmitedQuiz';
 import jwtDecode from 'jwt-decode';
+import { CheckOutlined } from '@mui/icons-material';
 
 export default function Lesson() {
   const [listLesson, setListLesson] = useState([]);
@@ -20,6 +21,7 @@ export default function Lesson() {
   const [session, setSession] = useState('');
   const { id } = useParams();
   const [doneLesson, setDoneLesson] = useState('');
+  const [listDone, setListDone] = useState([]);
 
   useEffect(() => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
@@ -41,6 +43,20 @@ export default function Lesson() {
 
   useEffect(() => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    if (courseID)
+      authApi
+        .getCompleteLessonByCourse({
+          username: jwtDecode(localStorage.getItem('user-access-token')).sub,
+          courseId: courseID,
+        })
+        .then((resp) => {
+          setListDone(resp.listLessonId);
+        })
+        .catch((err) => {});
+  }, [courseID]);
+
+  useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     if (courseID) {
       authApi
@@ -53,8 +69,6 @@ export default function Lesson() {
         });
     }
   }, [courseID]);
-
-  const handleDone = (lessonId) => {};
 
   const handleQuiz = (type, quizId) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
@@ -80,6 +94,10 @@ export default function Lesson() {
     },
     {
       title: 'Status',
+      render: (record) => {
+        const check = listDone.find((id) => id === record.id);
+        if (check) return <CheckOutlined />;
+      },
     },
   ];
 
@@ -87,10 +105,11 @@ export default function Lesson() {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     const quiz = listQuiz.find((quiz) => quiz.lesson.id === id);
     if (!quiz) {
-      window.alert('Video finish');
       authApi
         .completeLesson({ username: jwtDecode(localStorage.getItem('user-access-token')).sub, lessonId: id })
-        .then((resp) => {})
+        .then((resp) => {
+          window.location.reload();
+        })
         .catch((err) => {});
     }
   };
@@ -98,7 +117,7 @@ export default function Lesson() {
   return (
     <>
       <Header />
-      <div style={{ backgroundColor: 'RGBA(0,0,87,0.23)', paddingBottom: '150px' }}>
+      <div style={{ backgroundColor: 'RGBA(0,0,87,0.23)', paddingBottom: '350px', paddingTop: '50px' }}>
         <h3 style={{ textAlign: 'center' }}>{courseName}</h3>
         <div className="row" style={{ marginBottom: '20px', marginTop: '30px' }}>
           <div>
@@ -112,7 +131,7 @@ export default function Lesson() {
                 <ReactPlayer url={url} controls width="960px" height="480px" onEnded={() => handleVideoEnd()} />
               </div>
             ) : typeQuiz === 'Start' ? (
-              <TakeQuiz quizId={quizId} courseID={courseID} session={session} lessonId={id} />
+              <TakeQuiz quizId={quizId} courseID={courseID} session={session} />
             ) : (
               <ViewSubmitedQuiz quizId={quizId} />
             )}

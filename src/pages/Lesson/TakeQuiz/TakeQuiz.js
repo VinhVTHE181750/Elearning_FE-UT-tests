@@ -3,7 +3,7 @@ import { List, Table, Button, Card, Radio, Space, Alert, Modal } from 'antd';
 import authApi from '../../../api/authApi';
 import jwtDecode from 'jwt-decode';
 
-export default function TakeQuiz({ quizId, courseID, lessonId, session }) {
+export default function TakeQuiz({ quizId, courseID, session }) {
   const [questionId, setQuestionId] = useState(-1);
   const [listQuestion, setListQuestion] = useState([]);
   const [listAnswer, setListAnswer] = useState([]);
@@ -11,8 +11,17 @@ export default function TakeQuiz({ quizId, courseID, lessonId, session }) {
   const [valueRadio, setValueRadio] = useState('-1');
   const [showModal, setShowModal] = useState(false);
   const [resultQuiz, setResultQuiz] = useState([]);
+  const [lessonId, setLessonId] = useState('');
 
-  console.log(quizId);
+  useEffect(() => {
+    authApi
+      .getQuizById(quizId)
+      .then((resp) => {
+        if (resp.data) setLessonId(resp.data.lesson.id);
+      })
+      .catch((err) => {});
+  }, []);
+
   useEffect(() => {
     authApi.getQuestionByQuizId(quizId).then((response) => {
       setListQuestion(response.data.questionList);
@@ -72,9 +81,19 @@ export default function TakeQuiz({ quizId, courseID, lessonId, session }) {
     setListUserChooseAnswer(currentListUserChooseAnswer);
   };
 
-  const handleClose = () => {
-    setShowModal(false);
-    window.location.href = `/viewLesson/${lessonId}`;
+  const handleClose = (percent) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    if (percent * 100 >= 80) {
+      authApi
+        .completeLesson({ username: jwtDecode(localStorage.getItem('user-access-token')).sub, lessonId })
+        .then((resp) => {
+          return window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    return window.location.reload();
   };
 
   return (
@@ -116,10 +135,15 @@ export default function TakeQuiz({ quizId, courseID, lessonId, session }) {
               <Modal
                 title="Quiz Result"
                 visible={showModal}
-                onOk={() => handleClose()}
-                onCancel={() => handleClose()}
+                onOk={() => handleClose(resultQuiz.percent)}
+                onCancel={() => handleClose(resultQuiz.percent)}
                 footer={[
-                  <Button key="submit" type="primary" style={{ textAlign: 'center' }} onClick={() => handleClose()}>
+                  <Button
+                    key="submit"
+                    type="primary"
+                    style={{ textAlign: 'center' }}
+                    onClick={() => handleClose(resultQuiz.percent)}
+                  >
                     OK
                   </Button>,
                 ]}
