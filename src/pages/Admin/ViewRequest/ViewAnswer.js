@@ -44,10 +44,14 @@ const ViewAnswer = () => {
   }, [answers]);
 
   const handleEditAnswer = (answerID) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     navigate('/edit-answer');
   };
 
   const handleDeleteAnswer = (answerID) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     if (window.confirm('Do you want to delete this answer?')) {
       const params = {
         username: user,
@@ -73,6 +77,8 @@ const ViewAnswer = () => {
   };
 
   const handleAddAnswer = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     navigate('/add-answer');
   };
   const columns = [
