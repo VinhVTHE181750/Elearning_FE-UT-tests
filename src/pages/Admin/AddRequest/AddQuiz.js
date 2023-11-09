@@ -24,6 +24,7 @@ function AddQuiz() {
   }, []);
   console.log('user: ', user);
   const handleSubmit = (e) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     e.preventDefault();
 
     if (lessonID && quizName) {

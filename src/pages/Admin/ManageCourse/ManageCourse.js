@@ -141,32 +141,30 @@ export default function ManageCourse() {
     <div style={{ display: 'flex' }}>
       <Sidebar />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}></div>
-      <Box m="20px">
-        <Header title="Manage Courses" subtitle="List of Course" />
+      <Header title="Manage Courses" subtitle="List of Course" />
 
-        <Button
-          variant="contained"
-          sx={{
-            mb: 2,
-            backgroundColor: '#1F883D',
-            '&:hover': {
-              backgroundColor: '#3D9E53',
-            },
-          }}
-          onClick={handleAddCourseClick}
-        >
-          Add Courses
-        </Button>
+      <Button
+        variant="contained"
+        sx={{
+          mb: 2,
+          backgroundColor: '#1F883D',
+          '&:hover': {
+            backgroundColor: '#3D9E53',
+          },
+        }}
+        onClick={handleAddCourseClick}
+      >
+        Add Courses
+      </Button>
 
-        <Input.Search
-          placeholder="Search by course name"
-          allowClear
-          onSearch={handleSearch}
-          style={{ width: 200, marginBottom: 16 }}
-        />
+      <Input.Search
+        placeholder="Search by course name"
+        allowClear
+        onSearch={handleSearch}
+        style={{ width: 200, marginBottom: 16 }}
+      />
 
-        <Table columns={columns} dataSource={filteredCourses} rowKey={(record) => record.id} />
-      </Box>
+      <Table columns={columns} dataSource={filteredCourses} rowKey={(record) => record.id} />
     </div>
   );
 }

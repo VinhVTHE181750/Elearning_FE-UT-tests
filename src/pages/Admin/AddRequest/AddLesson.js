@@ -24,6 +24,7 @@ function AddLesson() {
   }, [localStorage.getItem('user-access-token')]);
 
   const handleSubmit = (e) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     e.preventDefault();
     if (lessonName && ordNumber && linkContent && description) {
       const params = {
@@ -35,11 +36,14 @@ function AddLesson() {
         description,
       };
       console.log(params);
-      authApi.addLesson(params).then((response) => {
-        setMessage('Add Successfully Lesson');
-        setIsSuccess(true);
-        navigate(`/viewCourse/${courseID}`);
-      });
+      authApi
+        .addLesson(params)
+        .then((response) => {
+          setMessage('Add Successfully Lesson');
+          setIsSuccess(true);
+          navigate(`/viewCourse/${courseID}`);
+        })
+        .catch((err) => {});
     } else {
       setMessage('Add Fail Lesson');
       setIsSuccess(false);

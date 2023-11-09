@@ -30,6 +30,8 @@ function AddQuestion() {
     }
   }, []);
   const handleSubmit = (e) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     e.preventDefault();
 
     if (quizID && questionName && questionType) {
