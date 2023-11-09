@@ -6,7 +6,11 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import jwtDecode from 'jwt-decode';
 import { Table } from 'antd';
+<<<<<<< HEAD
 import Posts from './Post/Posts';
+=======
+import Post from './Post/Post';
+>>>>>>> c2e580a (commit)
 
 export default function Course() {
   const { id } = useParams();
@@ -64,7 +68,10 @@ export default function Course() {
   }, [user]);
 
   const handleViewLesson = (lessonId) => {
+<<<<<<< HEAD
     if (!localStorage.getItem('user-access-token')) return navigate('/signin');
+=======
+>>>>>>> c2e580a (commit)
     if (payments.filter((payment) => payment.courseName === course.name).length !== 0) {
       return navigate(`/viewLesson/${lessonId}`);
     } else {
@@ -110,9 +117,15 @@ export default function Course() {
         />
       </div>
 
+<<<<<<< HEAD
       <div style={!localStorage.getItem('user-access-token') ? { display: 'none' } : {}}>
         <p style={{ color: 'black', fontSize: '30px', fontWeight: 'bold' }}>Comments</p>
         <Posts courseId={id} />
+=======
+      <div>
+        <p>Comments</p>
+        <Post courseId={id} />
+>>>>>>> c2e580a (commit)
       </div>
 
       <Footer />
