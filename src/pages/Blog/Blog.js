@@ -3,11 +3,12 @@ import authApi from '../../api/authApi';
 import jwt_decode from 'jwt-decode';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-import { Box, Button, Container, Grid, Typography, styled } from '@mui/material';
+import { Box, Button, Container, Grid, Typography, styled, Modal, TextField } from '@mui/material';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import BlogCard from './BlogCard';
 import ReactPaginate from 'react-paginate';
 import jwtDecode from 'jwt-decode';
+import { event } from 'jquery';
 
 const Blog = () => {
   const [findAllBlog, setFindAllBlog] = useState([]);
@@ -15,13 +16,7 @@ const Blog = () => {
   const [blogId, setBlogId] = useState('');
   const [blog, setBlog] = useState([]);
   const [role, setRole] = useState('');
-
-  const [newBlog, setNewBlog] = useState({
-    username: '',
-    title: '',
-    content: '',
-    linkThumnail: '',
-  });
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem('user-access-token')) {
@@ -47,74 +42,6 @@ const Blog = () => {
       })
       .catch((err) => {});
   }, [blogId]);
-
-  useEffect(() => {
-    const userString = localStorage.getItem('user-access-token');
-    if (userString) {
-      var deCoded = jwt_decode(userString);
-      setUser(deCoded.sub);
-      setNewBlog((prevState) => ({
-        ...prevState,
-        username: deCoded.sub,
-      }));
-    }
-  }, []);
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setNewBlog((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  const handleAddBlog = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-    authApi
-      .addBlog(newBlog)
-      .then((response) => {
-        // Xử lý phản hồi từ API (nếu cần)
-        console.log(response);
-        window.location.reload();
-      })
-      .catch((err) => {});
-  };
-
-  const handleDeleteBlog = (blogId) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-    const deleteData = {
-      username: user,
-      blogId: blogId,
-    };
-
-    authApi
-      .deleteBlog(deleteData)
-      .then((response) => {
-        console.log(response);
-        window.location.reload();
-      })
-      .catch((err) => {});
-  };
-
-  const handleEditBlog = (blogId) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
-    setBlogId(blogId);
-    const editData = {
-      username: user,
-      blogId: blogId,
-      title: blog.title,
-      content: blog.content,
-      linkThumnail: blog.linkThumnail,
-    };
-    console.log('Edit data: ', editData);
-    authApi
-      .updateBlog(editData)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {});
-  };
 
   const [currentPage, setCurrentPage] = useState(0);
   const postsPerPage = 5;
@@ -162,6 +89,54 @@ const Blog = () => {
     },
   });
 
+  const AddBlogModalContent = styled(Box)({
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '400px',
+    padding: '20px',
+    backgroundColor: 'white',
+    borderRadius: '8px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+    textAlign: 'center',
+  });
+
+  const handleAddBlog = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    setIsAddModalOpen(true);
+  };
+
+  const handleCloseAddModal = () => {
+    setIsAddModalOpen(false);
+  };
+
+  const handleSaveAddBlog = (e) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+
+    const newBlog = {
+      username: jwtDecode(localStorage.getItem('user-access-token')).sub,
+      title: formData.get('title'),
+      content: formData.get('content'),
+      linkThumnail: formData.get('linkThumnail'),
+    };
+
+    authApi
+      .addBlog(newBlog)
+      .then((response) => {
+        console.log(response);
+        setIsAddModalOpen(false);
+        window.location.reload();
+      })
+      .catch((err) => {
+        // Handle errors
+        console.error(err);
+      });
+  };
+
   return (
     <div>
       <Header />
@@ -202,57 +177,23 @@ const Blog = () => {
         </Container>
       </div>
       <Footer />
+
+      <Modal open={isAddModalOpen} onClose={handleCloseAddModal}>
+        <AddBlogModalContent>
+          <Typography variant="h6" gutterBottom>
+            Add New Blog
+          </Typography>
+          <form onSubmit={handleSaveAddBlog}>
+            <TextField label="Title" required fullWidth name="title" id="title" />
+            <TextField label="Content" required fullWidth multiline rows={4} name="content" id="content" />
+            <TextField label="Thumbnail Link" required fullWidth name="linkThumnail" id="linkThumnail" />
+            <Button type="submit">Save</Button>
+            <Button onClick={handleCloseAddModal}>Cancel</Button>
+          </form>
+        </AddBlogModalContent>
+      </Modal>
     </div>
   );
-
-  // return (
-  //   <div>
-  //     <Header />
-  //     <h1>Blog List</h1>
-  //     <div style={{ margin: '20px' }}>
-  //       <List
-  //         grid={{
-  //           gutter: 16,
-  //           column: 4,
-  //         }}
-  //         dataSource={findAllBlog}
-  //         renderItem={(item) => (
-  //           <List.Item>
-  //             <Card title={item.title}>{item.content}</Card>
-  //           </List.Item>
-  //         )}
-  //       />
-  //     </div>
-  //     {/* {findAllBlog.map((blog) => (
-  //       <div key={blog.id}>
-  //         <h2>{blog.title}</h2>
-  //         <p>{blog.content}</p>
-  //         <p>{blog.linkThumnail}</p>
-
-  //         <button onClick={() => handleDeleteBlog(blog.id)}>DELETE</button>
-  //         <button onClick={() => handleEditBlog(blog.id)}>EDIT</button>
-  //       </div>
-  //     ))}
-
-  //     <h2>Thêm Blog mới</h2>
-  //     <input type="text" name="username" value={user} onChange={handleInputChange} placeholder="Username" />
-  //     <br />
-  //     <input type="text" name="title" value={newBlog.title} onChange={handleInputChange} placeholder="Title" />
-  //     <br />
-  //     <input type="text" name="content" value={newBlog.content} onChange={handleInputChange} placeholder="Content" />
-  //     <br />
-  //     <input
-  //       type="text"
-  //       name="linkThumnail"
-  //       value={newBlog.linkThumnail}
-  //       onChange={handleInputChange}
-  //       placeholder="Link Thumnail"
-  //     />
-  //     <br />
-  //     <button onClick={handleAddBlog}>ADD</button> */}
-  //     <Footer />
-  //   </div>
-  // );
 };
 
 export default Blog;

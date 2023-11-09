@@ -1,8 +1,10 @@
-import React, { useContext } from 'react';
-import { Box, Card, Grid, Typography } from '@mui/material';
+import React, { useContext, useState } from 'react';
+import { Box, Button, Card, Grid, Typography, Modal, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import moment from 'moment/moment';
+import jwtDecode from 'jwt-decode';
+import authApi from '../../api/authApi';
 
 const BoxTime = styled(Box)({
   display: 'flex',
@@ -13,6 +15,58 @@ const BoxTime = styled(Box)({
 });
 
 function BlogCard({ blogItem }) {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(blogItem.title);
+  const [editedContent, setEditedContent] = useState(blogItem.content);
+  const [editedLinkThumnail, setEditedLinkThumnail] = useState(blogItem.linkThumnail);
+
+  const handleEditBlog = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const handleSaveEdit = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
+    const editData = {
+      username: jwtDecode(localStorage.getItem('user-access-token')).sub,
+      blogId: blogItem.id,
+      title: editedTitle,
+      content: editedContent,
+      linkThumnail: editedLinkThumnail,
+    };
+    authApi
+      .updateBlog(editData)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {});
+    window.location.reload();
+  };
+
+  const handleDeleteBlog = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    if (window.confirm(`Delete blog: ${blogItem.title}`)) {
+      const deleteData = {
+        username: jwtDecode(localStorage.getItem('user-access-token')).sub,
+        blogId: blogItem.id,
+      };
+      authApi
+        .deleteBlog(deleteData)
+        .then((response) => {
+          console.log(response);
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   const CardBox = styled(Card)({
     padding: '2rem',
     marginBottom: '3rem',
@@ -61,6 +115,41 @@ function BlogCard({ blogItem }) {
               <CalendarMonthIcon fontSize="small" /> {moment(blogItem.createdAt).format('MMMM Do YYYY, h:mm a')}
             </BoxTime>
           </Box>
+          <Box xs={4}>
+            <Button onClick={() => handleEditBlog()}>Edit</Button>
+            <Button onClick={() => handleDeleteBlog()}>Delete</Button>
+          </Box>
+
+          <Modal open={isEditModalOpen} onClose={handleCloseEditModal}>
+            <Card>
+              <Box p={2}>
+                <Typography variant="h6" gutterBottom>
+                  Edit Blog
+                </Typography>
+                <TextField
+                  label="Title"
+                  fullWidth
+                  value={editedTitle}
+                  onChange={(e) => setEditedTitle(e.target.value)}
+                />
+                <TextField
+                  label="Content"
+                  fullWidth
+                  multiline
+                  rows={4}
+                  value={editedContent}
+                  onChange={(e) => setEditedContent(e.target.value)}
+                />
+                <TextField
+                  label="Thumbnail Link"
+                  fullWidth
+                  value={editedLinkThumnail}
+                  onChange={(e) => setEditedLinkThumnail(e.target.value)}
+                />
+                <Button onClick={() => handleSaveEdit()}>Save</Button>
+              </Box>
+            </Card>
+          </Modal>
         </Grid>
       </Grid>
     </CardBox>

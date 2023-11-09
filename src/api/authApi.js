@@ -327,7 +327,7 @@ const authApi = {
   },
   deleteBlog: (parmas) => {
     const url = '/api/v1/blog/delete-blog';
-    return axiosClient.put(url, parmas);
+    return axiosClient.delete(url, { data: parmas });
   },
   findAllPost: (params) => {
     const url = '/api/v1/post/find-all-post';
