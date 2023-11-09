@@ -24,10 +24,14 @@ export default function ManageUser() {
   }, []);
 
   const handleEditClick = (userId) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     negative(`/editUser/${userId}`);
   };
 
   const handleDeleteClick = (userId) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const updatedUsers = [...users];
     const userIndex = updatedUsers.findIndex((user) => user.id === userId);
     if (userIndex !== -1) {
@@ -39,10 +43,14 @@ export default function ManageUser() {
     }
   };
   const handleViewClick = (username) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     negative(`/view/${username}`);
   };
 
   const handleChangeRole = (username) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     if (window.confirm(`Do you want to change the role of username: ${username}`)) {
       authApi
         .changeRoleUser({ username: username, typeRole: 'ADMIN' })

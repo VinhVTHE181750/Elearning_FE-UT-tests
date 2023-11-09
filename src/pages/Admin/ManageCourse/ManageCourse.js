@@ -39,10 +39,14 @@ export default function ManageCourse() {
   }, []);
 
   const handleEditClick = (courseID) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     navigate(`/editCourse/${courseID}`);
   };
 
   const handleDeleteClick = (courseID) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     if (window.confirm('Do you want to delete this course?')) {
       const params = { username: username, courseID: courseID };
       authApi
@@ -63,10 +67,14 @@ export default function ManageCourse() {
   };
 
   const handleViewClick = (courseID) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     navigate(`/viewCourse/${courseID}`);
   };
 
   const handleAddCourseClick = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     navigate('/add-course');
   };
 

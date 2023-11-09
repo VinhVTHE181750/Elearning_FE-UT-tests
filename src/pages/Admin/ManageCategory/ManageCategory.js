@@ -41,12 +41,16 @@ export default function ManageCategory() {
   }, [searchText]);
 
   const handleEditClick = (categoryId) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const categoryEdit = category.find((categorys) => categorys.id === parseInt(categoryId));
     setSelectedCategory(categoryEdit);
     navigate(`/editCategory/${categoryId}`);
   };
 
   const handleDeleteClick = (categoryId) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const categoryToDelete = category.find((category) => category.id === parseInt(categoryId));
     setSelectedCategoryId(categoryToDelete.id);
     if (window.confirm('Do you want to delete this category?')) {
@@ -71,6 +75,8 @@ export default function ManageCategory() {
   };
 
   const handleAddCategoryClick = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     navigate('/add-category');
   };
 
