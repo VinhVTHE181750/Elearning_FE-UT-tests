@@ -3,10 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import authApi from '../../api/authApi';
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
-<<<<<<< HEAD
-=======
-import Iframe from 'react-iframe';
->>>>>>> c2e580a (commit)
 import { Table, Button } from 'antd';
 import TakeQuiz from './TakeQuiz/TakeQuiz';
 import ReactPlayer from 'react-player';
@@ -176,16 +172,7 @@ export default function Lesson() {
         </div>
       </div>
 
-<<<<<<< HEAD
       <div>
-=======
-      {/* <div className="lesson-list-post" style={{ justifyContent: 'left', marginLeft: '10px' }}>
-        <p style={{ color: '#000', fontSize: '30px', textAlign: 'justify' }}>Comment</p>
-        <Comment lessonId={id} />
-      </div> */}
-
-      <div style={{ marginTop: '250px' }}>
->>>>>>> c2e580a (commit)
         <Footer />
       </div>
     </>

@@ -3,24 +3,19 @@ import authApi from '../../api/authApi';
 import jwt_decode from 'jwt-decode';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-<<<<<<< HEAD
 import { Box, Button, Container, Grid, Typography, styled } from '@mui/material';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import BlogCard from './BlogCard';
 import ReactPaginate from 'react-paginate';
 import jwtDecode from 'jwt-decode';
-=======
->>>>>>> c2e580a (commit)
 
 const Blog = () => {
   const [findAllBlog, setFindAllBlog] = useState([]);
   const [user, setUser] = useState('');
   const [blogId, setBlogId] = useState('');
   const [blog, setBlog] = useState([]);
-<<<<<<< HEAD
   const [role, setRole] = useState('');
-=======
->>>>>>> c2e580a (commit)
+
   const [newBlog, setNewBlog] = useState({
     username: '',
     title: '',
@@ -29,7 +24,6 @@ const Blog = () => {
   });
 
   useEffect(() => {
-<<<<<<< HEAD
     if (localStorage.getItem('user-access-token')) {
       const decode = jwtDecode(localStorage.getItem('user-access-token'));
       setRole(decode.userInfo[0]);
@@ -37,8 +31,6 @@ const Blog = () => {
   }, [localStorage.getItem('user-access-token')]);
 
   useEffect(() => {
-=======
->>>>>>> c2e580a (commit)
     authApi
       .findAllBlog()
       .then((response) => {
@@ -77,11 +69,7 @@ const Blog = () => {
   };
 
   const handleAddBlog = () => {
-<<<<<<< HEAD
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
-=======
->>>>>>> c2e580a (commit)
     authApi
       .addBlog(newBlog)
       .then((response) => {
@@ -93,11 +81,7 @@ const Blog = () => {
   };
 
   const handleDeleteBlog = (blogId) => {
-<<<<<<< HEAD
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
-=======
->>>>>>> c2e580a (commit)
     const deleteData = {
       username: user,
       blogId: blogId,
@@ -113,11 +97,8 @@ const Blog = () => {
   };
 
   const handleEditBlog = (blogId) => {
-<<<<<<< HEAD
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
-=======
->>>>>>> c2e580a (commit)
     setBlogId(blogId);
     const editData = {
       username: user,
@@ -135,7 +116,6 @@ const Blog = () => {
       .catch((err) => {});
   };
 
-<<<<<<< HEAD
   const [currentPage, setCurrentPage] = useState(0);
   const postsPerPage = 5;
 
@@ -273,42 +253,6 @@ const Blog = () => {
   //     <Footer />
   //   </div>
   // );
-=======
-  return (
-    <div>
-      <Header />
-      <h1>Danh sách Blog</h1>
-      {findAllBlog.map((blog) => (
-        <div key={blog.id}>
-          <h2>{blog.title}</h2>
-          <p>{blog.content}</p>
-          <p>{blog.linkThumnail}</p>
-
-          <button onClick={() => handleDeleteBlog(blog.id)}>DELETE</button>
-          <button onClick={() => handleEditBlog(blog.id)}>EDIT</button>
-        </div>
-      ))}
-
-      <h2>Thêm Blog mới</h2>
-      <input type="text" name="username" value={user} onChange={handleInputChange} placeholder="Username" />
-      <br />
-      <input type="text" name="title" value={newBlog.title} onChange={handleInputChange} placeholder="Title" />
-      <br />
-      <input type="text" name="content" value={newBlog.content} onChange={handleInputChange} placeholder="Content" />
-      <br />
-      <input
-        type="text"
-        name="linkThumnail"
-        value={newBlog.linkThumnail}
-        onChange={handleInputChange}
-        placeholder="Link Thumnail"
-      />
-      <br />
-      <button onClick={handleAddBlog}>ADD</button>
-      <Footer />
-    </div>
-  );
->>>>>>> c2e580a (commit)
 };
 
 export default Blog;

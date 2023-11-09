@@ -349,7 +349,6 @@ const authApi = {
     const url = '/api/v1/post/delete-post';
     return axiosClient.delete(url, { data: params });
   },
-<<<<<<< HEAD
   getPostByCourseId: (courseId) => {
     const url = `/api/v1/post/get-post-by-course-id?courseId=${courseId}&deleted=${'false'}`;
     return axiosClient.get(url, courseId);
@@ -370,8 +369,6 @@ const authApi = {
     const url = `/api/v1/lesson/get-lesson-completed-by-course?courseId=${params.courseId}&username=${params.username}`;
     return axiosClient.get(url, params);
   },
-=======
->>>>>>> c2e580a (commit)
 };
 
 export default authApi;

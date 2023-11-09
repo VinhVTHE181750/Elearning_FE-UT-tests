@@ -104,6 +104,7 @@ export default function PageContent() {
     }
   }, [user]);
   const handleEnrollCourse = (courseId, courseName) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       handleGetCourseById(courseId);
@@ -148,14 +149,13 @@ export default function PageContent() {
       <div className="homepage-content-course-list">
         {newCourses.map((course) => (
           <div key={course.id} className="course-card">
-            <Link to={`/view-course/${course.id}`} style={{ height: '250px' }}>
-              <img
-                src="https://images.shiksha.com/mediadata/images/articles/1653376864phpNspXVa.jpeg"
-                alt={course.name}
-              />
-              <h3>{course.name}</h3>
-              <p>Price:{course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND</p>
-            </Link>
+            <img
+              src="https://images.shiksha.com/mediadata/images/articles/1653376864phpNspXVa.jpeg"
+              alt={course.name}
+            />
+            <h3>{course.name}</h3>
+            <p>Price:{course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND</p>
+
             <div className="page-content-button">
               <button onClick={() => handleEnrollCourse(course.id, course.name)}>Enroll Course</button>
               <button onClick={() => handleViewCourse(course.id)}>View Course</button>

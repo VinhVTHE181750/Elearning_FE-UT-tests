@@ -40,9 +40,7 @@ function AddLesson() {
         setIsSuccess(true);
         navigate(`/viewCourse/${courseID}`);
       });
-      // Đăng kí thành công
     } else {
-      // Đăng kí thất bại
       setMessage('Add Fail Lesson');
       setIsSuccess(false);
     }
