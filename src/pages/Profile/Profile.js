@@ -4,7 +4,7 @@ import jwt_decode from 'jwt-decode';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import { Alert } from '@mui/material';
-
+import './profile.css';
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState('');
@@ -17,6 +17,8 @@ const Profile = () => {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       const decoded = jwt_decode(userString);
@@ -25,6 +27,8 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const getUserByUsername = async () => {
       if (user) {
         try {
@@ -66,6 +70,7 @@ const Profile = () => {
 
   const handleSave = async () => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     try {
       const params = {
         username: user,
@@ -88,28 +93,18 @@ const Profile = () => {
   }
 
   return (
-    <div>
+    <>
       <Header />
-      <div style={{ paddingTop: '30px', paddingBottom: '150px' }}>
-        {showSuccessAlert && (
-          <Alert variant="filled" severity="success">
-            Change Profile Succesfully!
-          </Alert>
-        )}
-
-        {showErrorAlert && (
-          <Alert variant="filled" severity="error">
-            Change Profile Fail!
-          </Alert>
-        )}
+      <div className="profile-container">
+        {' '}
+        {/* Add className here */}
         <h2>My Profile</h2>
-
+        {showSuccessAlert && <Alert severity="success">Change Profile Successfull!</Alert>}
+        {showErrorAlert && <Alert severity="error">Fail to Change Profile!</Alert>}
         <label>Fullname:</label>
         <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
-
         <label>Phone Number:</label>
         <input type="text" value={phoneNum} onChange={(e) => setPhoneNum(e.target.value)} />
-
         <label>Gender:</label>
         <select value={gender} onChange={(e) => setGender(e.target.value)}>
           <option value="MALE">Male</option>
@@ -117,15 +112,13 @@ const Profile = () => {
           <option value="OTHER">Other</option>
         </select>
         <br />
-
         <label>Date of Birth:</label>
         <input type="date" value={dateOfBirth} onChange={handleDateOfBirthChange} />
         {dobError && <span style={{ color: 'red' }}>{dobError}</span>}
-
         <button onClick={handleSave}>Save</button>
       </div>
       <Footer />
-    </div>
+    </>
   );
 };
 

@@ -4,9 +4,8 @@ import authApi from '../../../api/authApi';
 import './edit.css';
 import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
-import Toast from 'react-bootstrap/Toast';
-import ToastContainer from 'react-bootstrap/ToastContainer';
-import Button from 'react-bootstrap/Button';
+import { Alert } from '@mui/material';
+import { Button } from 'antd';
 function EditQuestion() {
   const { questionID } = useParams();
   const [questionName, setQuestionName] = useState('');
@@ -14,13 +13,14 @@ function EditQuestion() {
 
   const [questionType, setQuestionType] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
   const [answers, setAnswers] = useState([]);
   const [user, setUser] = useState('');
-  const [editStatus, setEditStatus] = useState('');
-
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       var deCoded = jwt_decode(userString);
@@ -50,6 +50,7 @@ function EditQuestion() {
 
   const handleBack = () => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     navigate(`/view-quiz/${quizID}`);
   };
   const handleEditQuestion = () => {
@@ -68,16 +69,16 @@ function EditQuestion() {
       .updateQuestion(params)
       .then((response) => {
         if (response.data && response.code === 0) {
-          setSuccessMessage('Edit Successfully!');
-          setEditStatus('success');
+          setShowSuccessAlert(true);
+          setShowErrorAlert(false);
         } else {
-          setErrorMessage('Edit Failed!');
-          setEditStatus('failed');
+          setShowSuccessAlert(false);
+          setShowErrorAlert(true);
         }
       })
       .catch((error) => {
-        setErrorMessage('Function Edit Failed!');
-        console.log(error);
+        setShowSuccessAlert(false);
+        setShowErrorAlert(true);
       });
   };
 
@@ -86,23 +87,16 @@ function EditQuestion() {
       <Sidebar />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className="container-edit">
-          <ToastContainer position="top-end" className="p-3">
-            {successMessage && (
-              <Toast
-                className="d-inline-block m-1"
-                bg={editStatus === 'success' ? 'success' : 'danger'}
-                autohide
-                onClose={() => setSuccessMessage('')}
-              >
-                <Toast.Body className={editStatus === 'success' ? 'text-white' : ''}>{successMessage}</Toast.Body>
-              </Toast>
-            )}
-            {errorMessage && (
-              <Toast className="d-inline-block m-1" bg="danger" autohide onClose={() => setErrorMessage('')}>
-                <Toast.Body className="text-white">{errorMessage}</Toast.Body>
-              </Toast>
-            )}
-          </ToastContainer>
+          {showSuccessAlert && (
+            <Alert severity="success" sx={{ backgroundColor: 'lightblue', color: 'green' }}>
+              Edit Question Successful!
+            </Alert>
+          )}
+          {showErrorAlert && (
+            <Alert severity="error" sx={{ backgroundColor: 'lightcoral' }}>
+              Fail to Edit Question!
+            </Alert>
+          )}
 
           <h1>Edit Question</h1>
           <div>
@@ -180,10 +174,18 @@ function EditQuestion() {
             )}
 
             <div className="button-container">
-              <Button variant="primary" onClick={handleEditQuestion}>
+              <Button
+                variant="primary"
+                onClick={handleEditQuestion}
+                style={{ width: '100px', backgroundColor: 'gray', color: 'white' }}
+              >
                 Edit
               </Button>
-              <Button variant="primary" onClick={handleBack}>
+              <Button
+                variant="primary"
+                onClick={handleBack}
+                style={{ width: '100px', backgroundColor: 'gray', color: 'white' }}
+              >
                 Back
               </Button>
             </div>

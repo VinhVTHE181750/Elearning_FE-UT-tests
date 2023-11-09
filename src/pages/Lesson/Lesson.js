@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import authApi from '../../api/authApi';
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
-import { Table, Button } from 'antd';
+import { Table, Button, Result } from 'antd';
 import TakeQuiz from './TakeQuiz/TakeQuiz';
 import ReactPlayer from 'react-player';
 import ViewSubmitedQuiz from './ViewSubmitedQuiz/ViewSubmitedQuiz';
@@ -22,6 +22,8 @@ export default function Lesson() {
   const { id } = useParams();
   const [doneLesson, setDoneLesson] = useState('');
   const [listDone, setListDone] = useState([]);
+  const [user, setUser] = useState('');
+  const [payments, setPayments] = useState([]);
 
   useEffect(() => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
@@ -43,7 +45,7 @@ export default function Lesson() {
 
   useEffect(() => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-    if (courseID)
+    if (courseID) {
       authApi
         .getCompleteLessonByCourse({
           username: jwtDecode(localStorage.getItem('user-access-token')).sub,
@@ -53,7 +55,24 @@ export default function Lesson() {
           setListDone(resp.listLessonId);
         })
         .catch((err) => {});
+    }
   }, [courseID]);
+
+  useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
+    const decoded = jwtDecode(localStorage.getItem('user-access-token'));
+    setUser(decoded.userInfo[0]);
+    authApi
+      .getPaymentUser(decoded.sub)
+      .then((response) => {
+        const paymentArray = (response.data && response.data.listPayment) || [];
+        setPayments(paymentArray);
+      })
+      .catch((error) => {
+        console.error('Error fetching payments by username:', error);
+      });
+  }, []);
 
   useEffect(() => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
@@ -117,60 +136,68 @@ export default function Lesson() {
   return (
     <>
       <Header />
-      <div style={{ backgroundColor: 'RGBA(0,0,87,0.23)', paddingBottom: '350px', paddingTop: '50px' }}>
-        <h3 style={{ textAlign: 'center' }}>{courseName}</h3>
-        <div className="row" style={{ marginBottom: '20px', marginTop: '30px' }}>
-          <div>
-            {typeQuiz === 'Video' ? (
-              <div
-                style={{
-                  marginTop: '20px',
-                  marginLeft: '20px',
-                }}
-              >
-                <ReactPlayer url={url} controls width="960px" height="480px" onEnded={() => handleVideoEnd()} />
+      {payments.filter((payment) => payment.courseName === courseName).length !== 0 || user === 'ADMIN' ? (
+        <>
+          <div style={{ backgroundColor: 'RGBA(0,0,87,0.23)', paddingBottom: '350px', paddingTop: '50px' }}>
+            <h3 style={{ textAlign: 'center' }}>{courseName}</h3>
+            <div className="row" style={{ marginBottom: '20px', marginTop: '30px' }}>
+              <div>
+                {typeQuiz === 'Video' ? (
+                  <div
+                    style={{
+                      marginTop: '20px',
+                      marginLeft: '20px',
+                    }}
+                  >
+                    <ReactPlayer url={url} controls width="960px" height="480px" onEnded={() => handleVideoEnd()} />
+                  </div>
+                ) : typeQuiz === 'Start' ? (
+                  <TakeQuiz quizId={quizId} courseID={courseID} session={session} />
+                ) : (
+                  <ViewSubmitedQuiz quizId={quizId} />
+                )}
               </div>
-            ) : typeQuiz === 'Start' ? (
-              <TakeQuiz quizId={quizId} courseID={courseID} session={session} />
-            ) : (
-              <ViewSubmitedQuiz quizId={quizId} />
-            )}
+              <div style={{ position: 'absolute', right: '0' }}>
+                <Table
+                  columns={columns}
+                  rowKey={(record) => record.id}
+                  pagination={{ position: ['bottomCenter'], pageSize: 5 }}
+                  style={{ maxWidth: '500px', cursor: 'pointer' }}
+                  onRow={(record) => ({ onClick: () => (window.location.href = `/viewLesson/${record.id}`) })}
+                  expandable={{
+                    expandedRowRender: (record) => {
+                      const quiz = listQuiz.find((quiz) => quiz.lesson.id === record.id);
+                      return (
+                        <div style={{ alignContent: 'center', justifyContent: 'center', display: 'flex' }}>
+                          <p style={{ textAlign: 'left', color: '#000' }}>
+                            Quiz: {quiz.name}
+                            <br />
+                            <Button
+                              style={{ width: '120px', marginLeft: '10px' }}
+                              onClick={() => handleQuiz('Start', quiz.id)}
+                            >
+                              Start quiz
+                            </Button>
+                            <Button style={{ marginLeft: '10px' }} onClick={() => handleQuiz('View', quiz.id)}>
+                              View submitted quiz history
+                            </Button>
+                          </p>
+                        </div>
+                      );
+                    },
+                    rowExpandable: (record) => listQuiz.find((quiz) => quiz.lesson.id === record.id),
+                  }}
+                  dataSource={listLesson}
+                />
+              </div>
+            </div>
           </div>
-          <div style={{ position: 'absolute', right: '0' }}>
-            <Table
-              columns={columns}
-              rowKey={(record) => record.id}
-              pagination={{ position: ['bottomCenter'], pageSize: 5 }}
-              style={{ maxWidth: '500px', cursor: 'pointer' }}
-              onRow={(record) => ({ onClick: () => (window.location.href = `/viewLesson/${record.id}`) })}
-              expandable={{
-                expandedRowRender: (record) => {
-                  const quiz = listQuiz.find((quiz) => quiz.lesson.id === record.id);
-                  return (
-                    <div style={{ alignContent: 'center', justifyContent: 'center', display: 'flex' }}>
-                      <p style={{ textAlign: 'left', color: '#000' }}>
-                        Quiz: {quiz.name}
-                        <br />
-                        <Button
-                          style={{ width: '120px', marginLeft: '10px' }}
-                          onClick={() => handleQuiz('Start', quiz.id)}
-                        >
-                          Start quiz
-                        </Button>
-                        <Button style={{ marginLeft: '10px' }} onClick={() => handleQuiz('View', quiz.id)}>
-                          View submitted quiz history
-                        </Button>
-                      </p>
-                    </div>
-                  );
-                },
-                rowExpandable: (record) => listQuiz.find((quiz) => quiz.lesson.id === record.id),
-              }}
-              dataSource={listLesson}
-            />
-          </div>
+        </>
+      ) : (
+        <div>
+          <Result status="404" title="404" subTitle="Sorry, the page you visited does not exist." />
         </div>
-      </div>
+      )}
 
       <div>
         <Footer />

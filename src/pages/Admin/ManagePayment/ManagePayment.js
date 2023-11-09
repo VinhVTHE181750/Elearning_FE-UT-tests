@@ -1,21 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import authApi from '../../../api/authApi';
-import { Table, Button } from 'antd';
+import { Table, Button, Input, Pagination } from 'antd';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import { Box } from '@mui/material';
 import moment from 'moment';
 
 const ManagePayment = () => {
   const [payments, setPayments] = useState([]);
+  const [filteredPayments, setFilteredPayments] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10; // Số lượng hàng trên mỗi trang
 
   useEffect(() => {
     authApi.getAllPayment().then((response) => {
       const paymentArray = response.data.listPayment;
+      console.log(paymentArray);
       setPayments(paymentArray);
+      setFilteredPayments(paymentArray);
     });
   }, []);
 
+  const handleSearch = (value) => {
+    const filteredData = payments.filter((payment) => payment.courseName.toLowerCase().includes(value.toLowerCase()));
+    setFilteredPayments(filteredData);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   const columns = [
+    {
+      title: 'STT',
+      dataIndex: 'index',
+      key: 'index',
+      render: (text, record, index) => index + 1 + (currentPage - 1) * pageSize,
+    },
     {
       title: 'Created At',
       key: 'createdAt',
@@ -49,6 +69,11 @@ const ManagePayment = () => {
       key: 'courseName',
     },
   ];
+
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedData = filteredPayments.slice(startIndex, endIndex);
+
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
@@ -56,7 +81,20 @@ const ManagePayment = () => {
         <Box m="20px">
           <div>
             <h1>Manage Payment</h1>
-            <Table columns={columns} dataSource={payments} />
+            <Input.Search
+              placeholder="Search by course name"
+              allowClear
+              onSearch={handleSearch}
+              style={{ marginBottom: 16 }}
+            />
+            <Table columns={columns} dataSource={paginatedData} pagination={false} />
+            <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={filteredPayments.length}
+              onChange={handlePageChange}
+              style={{ marginTop: 16, textAlign: 'right' }}
+            />
           </div>
         </Box>
       </div>

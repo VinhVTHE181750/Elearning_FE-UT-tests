@@ -8,14 +8,29 @@ import moment from 'moment';
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import { Button, DatePicker, Input, Space, Table, Select, Statistic } from 'antd';
+import jwtDecode from 'jwt-decode';
 
 export default function AllCourse() {
   const [categories, setCategories] = useState([]);
   const [allCourse, setAllCourse] = useState([]);
   const [courses, setCourses] = useState([]);
   const [verticalActive, setVerticalActive] = useState(-1);
+  const [listEnrollCourse, setListEnrollCourse] = useState([]);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const userString = localStorage.getItem('user-access-token');
+    if (userString) {
+      var deCoded = jwtDecode(userString);
+      authApi
+        .getCourseByUser(deCoded.sub)
+        .then((resp) => {
+          setListEnrollCourse(resp.data.listCourse);
+        })
+        .catch((err) => {});
+    }
+  }, []);
 
   useEffect(() => {
     authApi
@@ -137,7 +152,7 @@ export default function AllCourse() {
     {
       title: 'Name',
       dataIndex: 'name',
-      width: '45%',
+      width: '55%',
       align: 'center',
       ...getColumnSearchProps('name'),
       sorter: (course1, course2) => course1.name.localeCompare(course2.name),
@@ -174,6 +189,23 @@ export default function AllCourse() {
       },
       sorter: (a, b) => moment(a).diff(moment(b)),
       sortDirections: ['descend', 'ascend'],
+    },
+    {
+      title: 'Action',
+      align: 'center',
+      width: '5%',
+      render: (record) => {
+        if (listEnrollCourse.find((courseEnroll) => courseEnroll.id === record.id)) {
+          return <Button onClick={() => handleViewCourse(record.id)}>Go to course</Button>;
+        } else {
+          return (
+            <div>
+              <Button onClick={() => handleViewCourse(record.id)}>View Course</Button>
+              <Button onClick={() => (window.location.href = `/payment/${record.id}`)}>Enroll Course</Button>
+            </div>
+          );
+        }
+      },
     },
   ];
 
@@ -222,11 +254,8 @@ export default function AllCourse() {
           columns={columns}
           dataSource={courses}
           bordered
-          style={{ margin: '50px 200px 50px 0', minWidth: '900px', minHeight: '500px' }}
+          style={{ margin: '50px 100px 50px 0', width: '1000px', minHeight: '500px' }}
           rowKey={(record) => record.id}
-          onRow={(record) => ({
-            onClick: () => handleViewCourse(record.id),
-          })}
         />
       </div>
       <Footer />

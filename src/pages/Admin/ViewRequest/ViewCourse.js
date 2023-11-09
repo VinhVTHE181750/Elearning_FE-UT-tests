@@ -62,6 +62,7 @@ const ViewCourse = () => {
 
   const handleDeleteLesson = (lessonID) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    console.log(lessonID);
 
     if (window.confirm('Do you want to delete this lesson?')) {
       authApi

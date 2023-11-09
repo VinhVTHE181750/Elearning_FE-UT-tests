@@ -4,7 +4,8 @@ import authApi from '../../../api/authApi';
 import './edit.css';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import jwtDecode from 'jwt-decode';
-
+import { Alert } from '@mui/material';
+import { Button } from 'antd';
 const EditLesson = () => {
   const { lessonID } = useParams();
 
@@ -18,8 +19,11 @@ const EditLesson = () => {
     linkContent: '',
     description: '',
   });
-
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     if (localStorage.getItem('user-access-token')) {
       setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
     }
@@ -43,10 +47,10 @@ const EditLesson = () => {
       });
   }, [lessonID]);
   const navigate = useNavigate();
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
+
   const handleSaveClick = () => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     if (localStorage.getItem('user-access-token')) {
       setEditedLesson({ ...editedLesson, username: jwtDecode(localStorage.getItem('user-access-token')).sub });
     }
@@ -54,10 +58,12 @@ const EditLesson = () => {
     authApi
       .updateLesson(editedLesson)
       .then((response) => {
-        setSuccessMessage('Lesson updated successfully.');
+        setShowSuccessAlert(true);
+        setShowErrorAlert(false);
       })
       .catch((error) => {
-        setErrorMessage('Failed to update lesson.');
+        setShowSuccessAlert(false);
+        setShowErrorAlert(true);
       });
   };
 
@@ -67,6 +73,16 @@ const EditLesson = () => {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className="container-edit">
           <h2>Edit Lesson</h2>
+          {showSuccessAlert && (
+            <Alert severity="success" sx={{ backgroundColor: 'lightblue', color: 'green' }}>
+              Edit Lesson Successful!
+            </Alert>
+          )}
+          {showErrorAlert && (
+            <Alert severity="error" sx={{ backgroundColor: 'lightcoral' }}>
+              Fail to Edit Lesson!
+            </Alert>
+          )}
           <div className="form-group">
             <label className="label">Lesson Name:</label>
             <input
@@ -103,13 +119,22 @@ const EditLesson = () => {
               className="input"
             />
           </div>
-          <button type="submit" onClick={handleSaveClick} className="button">
-            Save
-          </button>{' '}
-          {/* Apply button class */}
-          {successMessage && <div className="success-message">{successMessage}</div>}{' '}
-          {/* Apply success-message class */}
-          {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Apply error-message class */}
+          <div>
+            <Button
+              type="submit"
+              onClick={handleSaveClick}
+              className="button"
+              style={{ width: '100px', backgroundColor: 'gray', color: 'white' }}
+            >
+              Save
+            </Button>
+            <Button
+              onClick={() => (window.location.href = `/viewCourse/${editedLesson.courseID}`)}
+              style={{ width: '100px', backgroundColor: 'gray', color: 'white' }}
+            >
+              Back
+            </Button>
+          </div>
         </div>
       </div>
     </div>

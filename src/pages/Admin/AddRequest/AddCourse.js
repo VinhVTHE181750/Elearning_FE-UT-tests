@@ -3,7 +3,9 @@ import './add.css'; // Import file CSS tùy chỉnh
 import authApi from '../../../api/authApi';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import jwtDecode from 'jwt-decode';
-
+import { useNavigate } from 'react-router-dom';
+import { Alert } from '@mui/material';
+import { Button } from 'antd';
 const AddCourse = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -14,14 +16,21 @@ const AddCourse = () => {
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const [username, setUsername] = useState('');
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     if (localStorage.getItem('user-access-token')) {
       setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
     }
   }, [localStorage.getItem('user-access-token')]);
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     authApi
       .findAllCategory()
       .then((response) => {
@@ -64,25 +73,40 @@ const AddCourse = () => {
           setPrice('');
           setLinkThumnail('');
           setCategory('');
+          setShowSuccessAlert(true);
+          setShowErrorAlert(false);
         })
         .catch((error) => {
           // Handle the error response
-          setMessage('Fail Add course');
-          setIsSuccess(false);
+          setShowSuccessAlert(false);
+          setShowErrorAlert(true);
         });
     } else {
-      setMessage('Đăng ký không thành công');
-      setIsSuccess(false);
+      setShowSuccessAlert(false);
+      setShowErrorAlert(true);
     }
   };
-  console.log(category);
+  const handleBackClick = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
+    navigate('/manageCourse');
+  };
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className="add-course-container">
           <h2>Add Course</h2>
-          {message && <p className={`message ${isSuccess ? 'success' : 'error'}`}>{message}</p>}
+          {showSuccessAlert && (
+            <Alert severity="success" sx={{ backgroundColor: 'lightblue', color: 'green' }}>
+              Add Course Successful!
+            </Alert>
+          )}
+          {showErrorAlert && (
+            <Alert severity="error" sx={{ backgroundColor: 'lightcoral' }}>
+              Fail to Add Course!
+            </Alert>
+          )}
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="name">Name:</label>
@@ -121,7 +145,22 @@ const AddCourse = () => {
                 onChange={(e) => setDescription(e.target.value)}
               ></textarea>
             </div>
-            <button type="submit">Add Course</button>
+            <div>
+              <Button
+                type="submit"
+                onClick={handleSubmit}
+                style={{ width: '100px', backgroundColor: 'gray', color: 'white' }}
+              >
+                Add Course
+              </Button>
+              <Button
+                type="button"
+                onClick={handleBackClick}
+                style={{ width: '100px', backgroundColor: 'gray', color: 'white' }}
+              >
+                Back
+              </Button>
+            </div>
           </form>
         </div>
       </div>

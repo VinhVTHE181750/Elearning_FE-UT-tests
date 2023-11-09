@@ -5,16 +5,23 @@ import './edit.css';
 import jwtDecode from 'jwt-decode';
 import { Box } from '@mui/material';
 import Sidebar from '../../../components/Sidebar/Sidebar';
+import { Button } from 'antd';
+import { Alert } from '@mui/material';
 
 const EditCourse = () => {
   const { courseID } = useParams();
   const navigate = useNavigate();
   const [course, setCourse] = useState([]);
+  const [courses, setCourses] = useState([]);
+
   const [username, setUsername] = useState('');
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState('');
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [nameExistsError, setNameExistsError] = useState(false);
+
+  // get course by id
   useEffect(() => {
     authApi
       .getCourseById(courseID)
@@ -25,12 +32,29 @@ const EditCourse = () => {
       })
       .catch((err) => {});
   }, [courseID]);
+
+  // find all course
+  useEffect(() => {
+    authApi
+      .findAllCourse()
+      .then((response) => {
+        const courseArray = (response.data && response.data.listCourse) || [];
+        console.log(courseArray);
+        setCourses(courseArray);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
+  // find all category
   useEffect(() => {
     authApi
       .findAllCategory()
       .then((response) => {
         console.log('data: ', response.data);
         const categoryArray = (response.data && response.data.categoryList) || [];
+        console.log('Category: ', categoryArray);
         setCategories(categoryArray);
         console.log('Category state after update:', categoryArray);
       })
@@ -40,6 +64,8 @@ const EditCourse = () => {
   }, []);
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     if (localStorage.getItem('user-access-token')) {
       setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
     }
@@ -57,23 +83,54 @@ const EditCourse = () => {
       link_thumnail: course.linkThumail,
       categoryID: course.category.id,
     };
+
+    if (course.name) {
+      const check = courses.find(
+        (c) => c.category.id === params.categoryID && c.name === params.name && c.courseID !== params.courseID,
+      );
+
+      if (check) {
+        setNameExistsError(true);
+        return;
+      }
+    }
+
     authApi
       .updateCourse(params)
       .then((response) => {
-        setSuccessMessage('Course updated successfully.');
-        setErrorMessage(null);
+        setShowSuccessAlert(true);
+        setShowErrorAlert(false);
       })
       .catch((error) => {
-        setErrorMessage('Error updating course.');
-        setSuccessMessage(null);
-        console.error('Error updating course:', error);
+        setShowSuccessAlert(false);
+        setShowErrorAlert(true);
       });
+  };
+  const handleBackClick = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
+    navigate('/manageCourse');
   };
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className="container-edit">
+          {showSuccessAlert && (
+            <Alert severity="success" sx={{ backgroundColor: 'lightblue', color: 'green' }}>
+              Edit Course Successful!
+            </Alert>
+          )}
+          {showErrorAlert && (
+            <Alert severity="error" sx={{ backgroundColor: 'lightcoral' }}>
+              Fail to Edit Course!
+            </Alert>
+          )}
+          {nameExistsError && (
+            <div className="error-message" style={{ color: 'red' }}>
+              If you cannot edit, the name already exists
+            </div>
+          )}
           <h2>Edit Course</h2>
           {course && (
             <div className="form-container" style={{ maxWidth: '400px' }}>
@@ -134,11 +191,23 @@ const EditCourse = () => {
                 </select>
               </div>
               {/* Các trường thông tin khác */}
-              {successMessage && <div className="success-message">{successMessage}</div>}
-              {errorMessage && <div className="error-message">{errorMessage}</div>}
-              <button type="submit" className="btn btn-primary" onClick={handleSaveClick}>
-                Save
-              </button>
+
+              <div>
+                <Button
+                  type="submit"
+                  style={{ width: '100px', backgroundColor: 'gray', color: 'white' }}
+                  onClick={handleSaveClick}
+                >
+                  Save
+                </Button>
+                <Button
+                  type="button"
+                  onClick={handleBackClick}
+                  style={{ width: '100px', backgroundColor: 'gray', color: 'white' }}
+                >
+                  Back
+                </Button>
+              </div>
             </div>
           )}
         </div>
