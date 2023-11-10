@@ -11,6 +11,7 @@ const MyPayment = () => {
   const [payments, setPayments] = useState([]);
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       var deCoded = jwt_decode(userString);
@@ -19,13 +20,25 @@ const MyPayment = () => {
   }, []);
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     if (user) {
       authApi
         .getPaymentUser(user)
         .then((response) => {
           console.log(response.data); // In ra dữ liệu trả về từ API
           const paymentArray = (response.data && response.data.listPayment) || [];
-          setPayments(paymentArray);
+          const uniqueCourseNames = {};
+
+          const filteredPayments = paymentArray.filter((payment) => {
+            if (uniqueCourseNames[payment.courseName]) {
+              return false;
+            } else {
+              uniqueCourseNames[payment.courseName] = true;
+              return true;
+            }
+          });
+          setPayments(filteredPayments);
         })
         .catch((error) => {
           console.error('Error fetching payments by username:', error);
@@ -36,7 +49,6 @@ const MyPayment = () => {
   const columns = [
     {
       title: 'Created At',
-      key: 'createdAt',
       render: (record) => {
         const formatDate = moment(record.createdAt).format('MMMM Do YYYY, h:mm a');
         return <a>{formatDate}</a>;
@@ -45,12 +57,18 @@ const MyPayment = () => {
     {
       title: 'Status',
       dataIndex: 'status',
-      key: 'status',
     },
     {
       title: 'Amount',
-      dataIndex: 'amount',
-      key: 'amount',
+      render: (record) => {
+        return (
+          <div>
+            <a style={{ color: '#000000e0', fontWeight: 'unset' }}>
+              {record.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
+            </a>
+          </div>
+        );
+      },
     },
     {
       title: 'Course Name',
@@ -63,7 +81,12 @@ const MyPayment = () => {
     <div>
       <Header />
       <h1>My Payment</h1>
-      <Table columns={columns} dataSource={payments} />
+      <Table
+        columns={columns}
+        dataSource={payments}
+        rowKey={(record) => record.id}
+        style={{ paddingBottom: '150px' }}
+      />
       <Footer />
     </div>
   );

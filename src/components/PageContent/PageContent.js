@@ -4,10 +4,7 @@ import jwt_decode from 'jwt-decode';
 import './index.css';
 import authApi from '../../api/authApi';
 import PaymentPage from '../../pages/PaymentPage/PaymentPage';
-import { error } from 'jquery';
-import moment from 'moment';
-import { Statistic } from 'antd';
-
+import { Button } from 'antd';
 export default function PageContent() {
   const [allCourses, setAllCourses] = useState([]);
   const [newCourses, setNewCourses] = useState([]);
@@ -15,10 +12,36 @@ export default function PageContent() {
   const [paymentUrl, setPaymentUrl] = useState('');
   const [payments, setPayments] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
-  const [enrolled, setEnrolled] = useState(false);
-  const [checkEnroll, setCheckEnroll] = useState(-1);
+  const [listEnrollCourse, setListEnrollCourse] = useState([]);
+
+  const [email, setEmail] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [phoneNum, setPhoneNum] = useState('');
+  const [gender, setGender] = useState('MALE');
+  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [userRole, setUserRole] = useState('');
 
   const navigate = useNavigate();
+  useEffect(() => {
+    const getUserByUsername = async () => {
+      if (user) {
+        try {
+          const response = await authApi.getUserByUserName(user);
+          const userData = response.data.user;
+          setEmail(userData.email);
+          setFullName(userData.fullName);
+          setPhoneNum(userData.phone);
+          setGender(userData.gender);
+          setDateOfBirth(userData.date_of_birth);
+          setUserRole(userData.role); // Lưu trữ vai trò của người dùng
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+
+    getUserByUsername();
+  }, [user]);
 
   useEffect(() => {
     authApi
@@ -51,6 +74,12 @@ export default function PageContent() {
     if (userString) {
       var deCoded = jwt_decode(userString);
       setUser(deCoded.sub);
+      authApi
+        .getCourseByUser(deCoded.sub)
+        .then((resp) => {
+          setListEnrollCourse(resp.data.listCourse);
+        })
+        .catch((err) => {});
     }
   }, []);
 
@@ -80,14 +109,11 @@ export default function PageContent() {
     }
   }, [user]);
   const handleEnrollCourse = (courseId, courseName) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       handleGetCourseById(courseId);
-      const params = {
-        courseId: courseId,
-        username: user,
-      };
-      if (payments.filter((payment) => payment.courseName === courseName).length !== 0) {
+      if (payments.filter((payment) => payment.courseName === courseName).length !== 0 || userRole === 'ADMIN') {
         return navigate(`/view-course/${courseId}`);
       } else {
         navigate(`/payment/${courseId}`);
@@ -105,18 +131,23 @@ export default function PageContent() {
       <div className="homepage-content-course-list">
         {allCourses.map((course) => (
           <div key={course.id} className="course-card">
-            <Link to={`/vew-course/${course.id}`} style={{ height: '250px' }}>
-              <img
-                src="https://images.shiksha.com/mediadata/images/articles/1653376864phpNspXVa.jpeg"
-                alt={course.name}
-              />
-              <h3>{course.name}</h3>
-              <p>Price:{course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND</p>
-            </Link>
-            <div className="page-content-button">
-              <button onClick={() => handleEnrollCourse(course.id, course.name)}>Enroll Course</button>
-              <button onClick={() => handleViewCourse(course.id)}>View Course</button>
-            </div>
+            <img
+              src="https://images.shiksha.com/mediadata/images/articles/1653376864phpNspXVa.jpeg"
+              alt={course.name}
+            />
+            <h3>{course.name}</h3>
+            <p>Price:{course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND</p>
+
+            {!listEnrollCourse.find((courseEnroll) => courseEnroll.id === course.id) ? (
+              <div className="page-content-button">
+                <button onClick={() => handleEnrollCourse(course.id, course.name)}>Enroll Course</button>
+                <button onClick={() => handleViewCourse(course.id)}>View Course</button>
+              </div>
+            ) : (
+              <div>
+                <Button onClick={() => handleViewCourse(course.id)}>Go to course</Button>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -125,18 +156,23 @@ export default function PageContent() {
       <div className="homepage-content-course-list">
         {newCourses.map((course) => (
           <div key={course.id} className="course-card">
-            <Link to={`/view-course/${course.id}`} style={{ height: '250px' }}>
-              <img
-                src="https://images.shiksha.com/mediadata/images/articles/1653376864phpNspXVa.jpeg"
-                alt={course.name}
-              />
-              <h3>{course.name}</h3>
-              <p>Price:{course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND</p>
-            </Link>
-            <div className="page-content-button">
-              <button onClick={() => handleEnrollCourse(course.id, course.name)}>Enroll Course</button>
-              <button onClick={() => handleViewCourse(course.id)}>View Course</button>
-            </div>
+            <img
+              src="https://images.shiksha.com/mediadata/images/articles/1653376864phpNspXVa.jpeg"
+              alt={course.name}
+            />
+            <h3>{course.name}</h3>
+            <p>Price:{course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND</p>
+
+            {!listEnrollCourse.find((courseEnroll) => courseEnroll.id === course.id) ? (
+              <div className="page-content-button">
+                <button onClick={() => handleEnrollCourse(course.id, course.name)}>Enroll Course</button>
+                <button onClick={() => handleViewCourse(course.id)}>View Course</button>
+              </div>
+            ) : (
+              <div>
+                <Button onClick={() => handleViewCourse(course.id)}>Go to course</Button>
+              </div>
+            )}
           </div>
         ))}
       </div>

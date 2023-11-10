@@ -1,16 +1,27 @@
 import { useEffect, useState } from 'react';
-import { List, Table, Button, Card, Radio, Space, Alert } from 'antd';
+import { List, Table, Button, Card, Radio, Space, Alert, Modal } from 'antd';
 import authApi from '../../../api/authApi';
 import jwtDecode from 'jwt-decode';
 
-export default function TakeQuiz({ quizId, type, courseID, session }) {
+export default function TakeQuiz({ quizId, courseID, session }) {
   const [questionId, setQuestionId] = useState(-1);
   const [listQuestion, setListQuestion] = useState([]);
   const [listAnswer, setListAnswer] = useState([]);
   const [listUserChooseAnswer, setListUserChooseAnswer] = useState([]);
   const [valueRadio, setValueRadio] = useState('-1');
+  const [showModal, setShowModal] = useState(false);
+  const [resultQuiz, setResultQuiz] = useState([]);
+  const [lessonId, setLessonId] = useState('');
 
-  console.log(quizId);
+  useEffect(() => {
+    authApi
+      .getQuizById(quizId)
+      .then((resp) => {
+        if (resp.data) setLessonId(resp.data.lesson.id);
+      })
+      .catch((err) => {});
+  }, []);
+
   useEffect(() => {
     authApi.getQuestionByQuizId(quizId).then((response) => {
       setListQuestion(response.data.questionList);
@@ -28,7 +39,12 @@ export default function TakeQuiz({ quizId, type, courseID, session }) {
     }
   }, [questionId]);
 
+  const showModalFunc = () => {
+    setShowModal(true);
+  };
+
   const handleSubmit = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     if (listUserChooseAnswer.length !== listQuestion.length) {
       return window.alert('The question is not choose answer!');
     }
@@ -42,7 +58,8 @@ export default function TakeQuiz({ quizId, type, courseID, session }) {
     authApi
       .finishQuiz(params)
       .then((response) => {
-        return window.alert(`Total correct: ${response.data.totalCorrect} and mark: ${response.data.percent * 100}`);
+        setResultQuiz(response.data);
+        showModalFunc();
       })
       .catch((err) => {
         console.log(err);
@@ -64,19 +81,33 @@ export default function TakeQuiz({ quizId, type, courseID, session }) {
     setListUserChooseAnswer(currentListUserChooseAnswer);
   };
 
+  const handleClose = (percent) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    if (percent * 100 >= 80) {
+      authApi
+        .completeLesson({ username: jwtDecode(localStorage.getItem('user-access-token')).sub, lessonId })
+        .then((resp) => {
+          return window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    return window.location.reload();
+  };
+
   return (
     <div
       className="take-quiz-list-question"
       style={{
         backgroundColor: '#FAFAFA',
-        width: '800px',
+        width: '960px',
         height: '480px',
         marginTop: '20px',
         marginLeft: '30px',
         borderRadius: '10px',
       }}
     >
-      {/* <a style={{ textAlign: 'center', fontWeight: 'bold' }}>Quiz: {nameQuiz}</a> */}
       <List
         pagination={{ pageSize: 1, align: 'center' }}
         dataSource={listQuestion}
@@ -101,6 +132,26 @@ export default function TakeQuiz({ quizId, type, courseID, session }) {
               <Button style={{ marginLeft: '40%' }} onClick={handleSubmit}>
                 Submit
               </Button>
+              <Modal
+                title="Quiz Result"
+                visible={showModal}
+                onOk={() => handleClose(resultQuiz.percent)}
+                onCancel={() => handleClose(resultQuiz.percent)}
+                footer={[
+                  <Button
+                    key="submit"
+                    type="primary"
+                    style={{ textAlign: 'center' }}
+                    onClick={() => handleClose(resultQuiz.percent)}
+                  >
+                    OK
+                  </Button>,
+                ]}
+              >
+                <p>Total Correct: {resultQuiz.totalCorrect}</p>
+                <p>Total Incorrect: {resultQuiz.totalInCorrect}</p>
+                <p>Score: {resultQuiz.percent * 100}%</p>
+              </Modal>
             </List.Item>
           );
         }}

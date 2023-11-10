@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './add.css';
 import authApi from '../../../api/authApi';
 import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
-
+import { Alert } from '@mui/material';
+import { Button } from 'antd';
 function AddQuestion() {
   const { quizID } = useParams();
   const [questionName, setQuestionName] = useState('');
@@ -17,12 +18,15 @@ function AddQuestion() {
   const [optionD, setOptionD] = useState('');
   const [choose, setChoose] = useState('');
   const [select, setSelect] = useState([]);
-
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
   console.log('Quiz ID:', quizID);
 
   const [user, setUser] = useState('');
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       var deCoded = jwt_decode(userString);
@@ -30,6 +34,8 @@ function AddQuestion() {
     }
   }, []);
   const handleSubmit = (e) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     e.preventDefault();
 
     if (quizID && questionName && questionType) {
@@ -83,16 +89,16 @@ function AddQuestion() {
       authApi
         .addQuestion(params)
         .then((response) => {
-          setMessage('Question Added Successfully');
-          setIsSuccess(true);
+          setShowSuccessAlert(true);
+          setShowErrorAlert(false);
         })
         .catch((error) => {
-          setMessage('Failed to Add Question');
-          setIsSuccess(false);
+          setShowSuccessAlert(false);
+          setShowErrorAlert(true);
         });
     } else {
-      setMessage('Failed to Add Question');
-      setIsSuccess(false);
+      setShowSuccessAlert(false);
+      setShowErrorAlert(true);
     }
 
     setQuestionName('');
@@ -105,12 +111,23 @@ function AddQuestion() {
     setSelect([]);
   };
   const addSelect = (value) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const newSelect = [...select, value];
     setSelect(newSelect);
   };
   const removeSelect = (value) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const newSelect = select?.filter((data) => data !== value);
     setSelect(newSelect);
+  };
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
+    navigate(`/view-quiz/${quizID}`);
   };
 
   return (
@@ -119,7 +136,16 @@ function AddQuestion() {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className="add-question-container">
           <h1>Add Question</h1>
-          {message && <p className={isSuccess ? 'success-message' : 'error-message'}>{message}</p>}
+          {showSuccessAlert && (
+            <Alert severity="success" sx={{ backgroundColor: 'lightblue', color: 'green' }}>
+              Add Question Successful!
+            </Alert>
+          )}
+          {showErrorAlert && (
+            <Alert severity="error" sx={{ backgroundColor: 'lightcoral' }}>
+              Fail to Add Question!
+            </Alert>
+          )}
           <form onSubmit={handleSubmit}>
             <label>
               Question Name:
@@ -328,9 +354,22 @@ function AddQuestion() {
               <></>
             )}
 
-            <button type="submit" onClick={handleSubmit}>
-              Add Question
-            </button>
+            <div>
+              <Button
+                type="submit"
+                onClick={handleSubmit}
+                style={{ width: '100px', backgroundColor: 'gray', color: 'white' }}
+              >
+                Add Question
+              </Button>
+              <Button
+                type="button"
+                onClick={handleBack}
+                style={{ width: '100px', backgroundColor: 'gray', color: 'white' }}
+              >
+                Back
+              </Button>
+            </div>
           </form>
         </div>
       </div>

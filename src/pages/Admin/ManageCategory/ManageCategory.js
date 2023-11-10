@@ -14,6 +14,7 @@ export default function ManageCategory() {
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [searchText, setSearchText] = useState('');
   const navigate = useNavigate();
 
   const [user, setUser] = useState('');
@@ -25,23 +26,31 @@ export default function ManageCategory() {
       setUser(deCoded.sub);
     }
   }, []);
+
   useEffect(() => {
     authApi
       .findAllCategory()
       .then((response) => {
         const categoryArray = (response.data && response.data.categoryList) || [];
-        setCategory(categoryArray);
+        const filteredCategories = categoryArray.filter((category) =>
+          category.name.toLowerCase().includes(searchText.toLowerCase()),
+        );
+        setCategory(filteredCategories);
       })
       .catch((error) => {});
-  }, []);
+  }, [searchText]);
 
   const handleEditClick = (categoryId) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const categoryEdit = category.find((categorys) => categorys.id === parseInt(categoryId));
     setSelectedCategory(categoryEdit);
     navigate(`/editCategory/${categoryId}`);
   };
 
   const handleDeleteClick = (categoryId) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const categoryToDelete = category.find((category) => category.id === parseInt(categoryId));
     setSelectedCategoryId(categoryToDelete.id);
     if (window.confirm('Do you want to delete this category?')) {
@@ -66,6 +75,8 @@ export default function ManageCategory() {
   };
 
   const handleAddCategoryClick = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     navigate('/add-category');
   };
 
@@ -81,15 +92,19 @@ export default function ManageCategory() {
       dataIndex: 'name',
       width: '40%',
       align: 'center',
-    },
-    {
-      title: 'Updated Date',
-      width: '20%',
-      align: 'center',
-      render: (record) => {
-        const formatDate = moment(record.updatedAt).format('MMMM Do YYYY, h:mm a');
-        if (record.updatedAt !== null) return <a>{formatDate}</a>;
-      },
+      filterDropdown: () => (
+        <div style={{ padding: 8 }}>
+          <input
+            type="text"
+            placeholder="Search name"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            style={{ width: 188, marginBottom: 8, display: 'block' }}
+          />
+        </div>
+      ),
+      filterIcon: () => null,
+      onFilter: (value, record) => record.name.toLowerCase().includes(value.toLowerCase()),
     },
     {
       title: 'Actions',
@@ -113,19 +128,28 @@ export default function ManageCategory() {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Box m="20px">
           <Header title="Category" subtitle="List of Category" />
-          <Button
-            variant="contained"
-            sx={{
-              mb: 2,
-              backgroundColor: '#1F883D',
-              '&:hover': {
-                backgroundColor: '#3D9E53',
-              },
-            }}
-            onClick={handleAddCategoryClick}
-          >
-            Add Category
-          </Button>
+          <div style={{ marginBottom: '20px' }}>
+            <input
+              type="text"
+              placeholder="Search by name"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              style={{ marginRight: '10px', width: '200px' }}
+            />
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: '#1F883D',
+                '&:hover': {
+                  backgroundColor: '#3D9E53',
+                },
+              }}
+              style={{ width: '120px' }}
+              onClick={handleAddCategoryClick}
+            >
+              Add Category
+            </Button>
+          </div>
           <Table columns={columns} dataSource={category} rowKey={(record) => record.id} />
         </Box>
       </div>

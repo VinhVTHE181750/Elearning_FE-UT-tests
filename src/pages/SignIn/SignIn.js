@@ -16,6 +16,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import authApi from '../../api/authApi';
 import moment from 'moment';
 import jwtDecode from 'jwt-decode';
+import { Radio } from 'antd';
 
 export default function SignIn() {
   const [justifyActive, setJustifyActive] = useState('tab1');
@@ -67,7 +68,7 @@ export default function SignIn() {
         }
       })
       .catch((error) => {
-        return window.alert(`Login Failed`);
+        return window.alert('Login Failed');
       });
   };
   const handleSignUp = () => {
@@ -79,7 +80,16 @@ export default function SignIn() {
       gender,
       dateOfBirth: dob,
     };
-    if (email === '' || password === '' || fullName === '' || phone === '' || dob === '') return;
+    if (
+      email === '' ||
+      password === '' ||
+      fullName === '' ||
+      phone === '' ||
+      dob === '' ||
+      gender === '' ||
+      rePassword === ''
+    )
+      return window.alert('Error: Do not leave any blank spaces');
     if (!emailRegex.test(email)) {
       return window.alert('Error: Email invalidate');
     }
@@ -107,7 +117,7 @@ export default function SignIn() {
         }
       })
       .catch((error) => {
-        return window.alert(`Sign Up Error: System Error`);
+        return window.alert('Sign Up Error: System Error');
       });
   };
 
@@ -215,15 +225,20 @@ export default function SignIn() {
           </MDBRow>
           <MDBRow>
             <MDBCol>
-              <div className="select">
-                <select value={gender} onChange={(e) => setGender(e.target.value)}>
-                  <option value="">Select Gender</option>
-                  <option value="MALE">MALE</option>
-                  <option value="FEMALE">FEMALE</option>
-                  <option value="OTHER">OTHER</option>
-                </select>
-                <br />
+              <div className="gender-options">
                 <label>Gender</label>
+                <br />
+                <Radio.Group>
+                  <Radio value={'MALE'} onClick={() => setGender('MALE')}>
+                    MALE
+                  </Radio>
+                  <Radio value={'FEMALE'} onClick={() => setGender('MALE')}>
+                    FEMALE
+                  </Radio>
+                  <Radio value={'OTHER'} onClick={() => setGender('MALE')}>
+                    OTHER
+                  </Radio>
+                </Radio.Group>
               </div>
             </MDBCol>
           </MDBRow>

@@ -5,7 +5,7 @@ import authApi from '../../../api/authApi';
 const Post = ({ courseId }) => {
   const [user, setUser] = useState('');
   const [content, setContent] = useState('');
-  const [listPost, setListPost] = useState('');
+  const [findAllPost, setFindAllPost] = useState([]);
 
   useEffect(() => {
     const userString = localStorage.getItem('user-access-token');
@@ -15,48 +15,50 @@ const Post = ({ courseId }) => {
     }
 
     authApi
-      .getPostByCourseId(courseId)
+      .findAllPost()
       .then((response) => {
-        setListPost(response.data.postList);
+        setFindAllPost(response.data.findAllPost);
       })
-      .catch((err) => {});
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
-  const handleAddPost = () => {
+  const handleAddPost = (courseId) => {
     const params = {
       username: user,
       courseId: courseId,
       content: content,
     };
+    console.log('add parram: ', params);
     authApi
       .addPost(params)
       .then((response) => {
         console.log(response);
         setContent('');
-        window.location.reload();
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  const handleDeletePost = () => {
+  const handleDeletePost = (courseId) => {
     const params = {
       username: user,
       courseId: courseId,
     };
+    console.log('params: ', params);
     authApi
       .deletePost(params)
       .then((response) => {
         console.log(response);
-        window.location.reload();
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  const handleEditPost = (newContent) => {
+  const handleEditPost = (courseId, newContent) => {
     const params = {
       username: user,
       courseId: courseId,
@@ -67,7 +69,6 @@ const Post = ({ courseId }) => {
       .updatePost(params)
       .then((response) => {
         console.log(response);
-        window.location.reload();
       })
       .catch((error) => {
         console.error(error);
@@ -77,27 +78,18 @@ const Post = ({ courseId }) => {
   return (
     <div>
       <input type="text" value={content} placeholder="Add a comment" onChange={(e) => setContent(e.target.value)} />
-      <button onClick={() => handleAddPost()}>Add</button>
+      <button onClick={() => handleAddPost(0)}>Add</button>
 
-      <h2>List comment:</h2>
+      <h2>All Posts:</h2>
       <ul>
-        {Array.isArray(listPost) ? (
-          listPost.map((post) => (
-            <li key={post.courseId}>
-              <p>Username: {post.user.username}</p>
-              {post.user.username === user ? (
-                <input type="text" value={post.content}></input>
-              ) : (
-                <p>Content: {post.content}</p>
-              )}
-              <p>Content: {post.content}</p>
-              <button onClick={() => handleEditPost('New Content')}>Edit</button>
-              <button onClick={() => handleDeletePost()}>Delete</button>
-            </li>
-          ))
-        ) : (
-          <p>listPost is not an array</p>
-        )}
+        {findAllPost.map((post) => (
+          <li key={post.courseId}>
+            <p>Username: {post.user.username}</p>
+            <p>Content: {post.content}</p>
+            <button onClick={() => handleEditPost(post.courseId, 'New Content')}>Edit</button>
+            <button onClick={() => handleDeletePost(post.courseId)}>Delete</button>
+          </li>
+        ))}
       </ul>
     </div>
   );
