@@ -151,6 +151,11 @@ export default function AllCourse() {
       ),
   });
 
+  const handleEnrollCourse = (courseId) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    window.location.href = `/payment/${courseId}`;
+  };
+
   const columns = [
     {
       title: 'Name',
@@ -186,11 +191,12 @@ export default function AllCourse() {
     {
       title: 'Create At',
       align: 'center',
+      width: '5%',
       render: (record) => {
         const formatDate = moment(record.createdAt).format('MMMM Do YYYY, h:mm a');
         return <a>{formatDate}</a>;
       },
-      sorter: (a, b) => moment(a).diff(moment(b)),
+      sorter: (a, b) => moment(a.createdAt).diff(moment(b.createdAt)),
       sortDirections: ['descend', 'ascend'],
     },
     {
@@ -204,7 +210,7 @@ export default function AllCourse() {
           return (
             <div>
               <Button onClick={() => handleViewCourse(record.id)}>View Course</Button>
-              <Button onClick={() => (window.location.href = `/payment/${record.id}`)}>Enroll Course</Button>
+              <Button onClick={() => handleEnrollCourse(record.id)}>Enroll Course</Button>
             </div>
           );
         }

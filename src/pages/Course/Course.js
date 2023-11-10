@@ -106,20 +106,17 @@ export default function Course() {
           columns={columns}
           dataSource={lesson}
           rowKey={(record) => record.id}
+          style={{ cursor: 'pointer' }}
           onRow={(record) => ({
             onClick: () => handleViewLesson(record.id),
           })}
         />
       </div>
 
-      {localStorage.getItem('user-access-token') ? (
-        <div>
-          <p style={{ color: 'black', fontSize: '30px', fontWeight: 'bold' }}>Comments</p>
-          <Posts courseId={id} courseName={course.name} />
-        </div>
-      ) : (
-        <></>
-      )}
+      <div>
+        <p style={{ color: 'black', fontSize: '30px', fontWeight: 'bold' }}>Comments</p>
+        <Posts courseId={id} courseName={course.name} />
+      </div>
 
       <Footer />
     </>
