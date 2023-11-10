@@ -13,11 +13,13 @@ const Posts = ({ courseId, courseName }) => {
   const [editedContent, setEditedContent] = useState('');
   const [addContent, setAddContent] = useState('');
   const [payments, setPayments] = useState([]);
+  const [role, setRole] = useState('');
 
   useEffect(() => {
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       const deCoded = jwt_decode(userString);
+      setRole(deCoded.userInfo[0]);
       setUser(deCoded.sub);
     }
 
@@ -112,29 +114,34 @@ const Posts = ({ courseId, courseName }) => {
 
   return (
     <div style={{ margin: '20px' }}>
-      <div style={!payments.find((course) => course.courseName === courseName) && { display: 'none' }}>
-        <div style={{ borderBottom: '1px solid blue' }}>
-          <List.Item.Meta
-            title={<a>Me</a>}
-            description={
-              <div>
-                <TextArea
-                  style={{ width: '900px', height: '60px' }}
-                  value={addContent}
-                  placeholder="Add a comment"
-                  onChange={(e) => setAddContent(e.target.value)}
-                />
-                <br />
+      {payments.find((course) => course.courseName === courseName) || role === 'ADMIN' ? (
+        <>
+          <div style={{ borderBottom: '1px solid blue' }}>
+            <List.Item.Meta
+              title={<a>Me</a>}
+              description={
                 <div>
-                  <Button key="list-loadmore-save" type="primary" onClick={() => handleAddPost()}>
-                    Comment
-                  </Button>
+                  <TextArea
+                    style={{ width: '900px', height: '60px' }}
+                    value={addContent}
+                    placeholder="Add a comment"
+                    onChange={(e) => setAddContent(e.target.value)}
+                  />
+                  <br />
+                  <div>
+                    <Button key="list-loadmore-save" type="primary" onClick={() => handleAddPost()}>
+                      Comment
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            }
-          />
-        </div>
-      </div>
+              }
+            />
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
+
       <List
         className="demo-loadmore-list"
         itemLayout="horizontal"
@@ -166,7 +173,7 @@ const Posts = ({ courseId, courseName }) => {
                 title={
                   <div>
                     <div>
-                      <a>{item.user.username === user ? `${item.user.username + '(Me)'}` : item.user.username}</a>
+                      <a>{item.user.username === user ? `${item.user.fullName + '(Me)'}` : item.user.fullName}</a>
                     </div>
                     <div>
                       <a>Create: {moment(item.createdAt).format('MMMM Do YYYY, h:mm a')}</a>

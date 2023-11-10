@@ -104,7 +104,13 @@ function BlogCard({ blogItem }) {
       <Grid container columnSpacing={3} rowSpacing={3}>
         <Grid item md={3}>
           <div className="card-image">
-            <img className="img-hover" src={blogItem.linkThumnail} />
+            <img
+              className="img-hover"
+              src={
+                'https://png.pngtree.com/png-vector/20230304/ourmid/pngtree-colorful-blog-speech-bubble-vector-png-image_6633021.png'
+              }
+            />
+            {/* <img className="img-hover" src={blogItem.linkThumnail} /> */}
           </div>
         </Grid>
         <Grid item md={7}>

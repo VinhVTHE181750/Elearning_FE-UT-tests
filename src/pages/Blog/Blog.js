@@ -123,6 +123,7 @@ const Blog = () => {
       content: formData.get('content'),
       linkThumnail: formData.get('linkThumnail'),
     };
+    console.log(newBlog);
 
     authApi
       .addBlog(newBlog)
@@ -132,7 +133,6 @@ const Blog = () => {
         window.location.reload();
       })
       .catch((err) => {
-        // Handle errors
         console.error(err);
       });
   };

@@ -16,6 +16,7 @@ export default function AllCourse() {
   const [courses, setCourses] = useState([]);
   const [verticalActive, setVerticalActive] = useState(-1);
   const [listEnrollCourse, setListEnrollCourse] = useState([]);
+  const [role, setRole] = useState('');
 
   const navigate = useNavigate();
 
@@ -23,6 +24,8 @@ export default function AllCourse() {
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       var deCoded = jwtDecode(userString);
+      console.log(deCoded);
+      setRole(deCoded.userInfo[0]);
       authApi
         .getCourseByUser(deCoded.sub)
         .then((resp) => {
@@ -195,7 +198,7 @@ export default function AllCourse() {
       align: 'center',
       width: '5%',
       render: (record) => {
-        if (listEnrollCourse.find((courseEnroll) => courseEnroll.id === record.id)) {
+        if (listEnrollCourse.find((courseEnroll) => courseEnroll.id === record.id) || role === 'ADMIN') {
           return <Button onClick={() => handleViewCourse(record.id)}>Go to course</Button>;
         } else {
           return (

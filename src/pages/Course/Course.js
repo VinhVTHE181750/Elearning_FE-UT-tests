@@ -14,6 +14,7 @@ export default function Course() {
   const [lesson, setLesson] = useState([]);
   const [payments, setPayments] = useState([]);
   const [user, setUser] = useState('');
+  const [role, setRole] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,6 +46,7 @@ export default function Course() {
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       var deCoded = jwtDecode(userString);
+      setRole(deCoded.userInfo[0]);
       setUser(deCoded.sub);
     }
   }, []);
@@ -65,7 +67,7 @@ export default function Course() {
 
   const handleViewLesson = (lessonId) => {
     if (!localStorage.getItem('user-access-token')) return navigate('/signin');
-    if (payments.filter((payment) => payment.courseName === course.name).length !== 0) {
+    if (payments.filter((payment) => payment.courseName === course.name).length !== 0 || role === 'ADMIN') {
       return navigate(`/viewLesson/${lessonId}`);
     } else {
       navigate(`/payment/${id}`);
@@ -92,7 +94,7 @@ export default function Course() {
   return (
     <>
       <Header />
-      <div className="course-details" style={{ marginTop: '50px' }}>
+      <div className="course-details" style={{ marginTop: 50 }}>
         <h2>{course.name}</h2>
         <img src={course.linkThumnail} alt={course.name} />
         <p>{course.description}</p>
@@ -110,10 +112,14 @@ export default function Course() {
         />
       </div>
 
-      <div style={!localStorage.getItem('user-access-token') ? { display: 'none' } : {}}>
-        <p style={{ color: 'black', fontSize: '30px', fontWeight: 'bold' }}>Comments</p>
-        <Posts courseId={id} courseName={course.name} />
-      </div>
+      {localStorage.getItem('user-access-token') ? (
+        <div>
+          <p style={{ color: 'black', fontSize: '30px', fontWeight: 'bold' }}>Comments</p>
+          <Posts courseId={id} courseName={course.name} />
+        </div>
+      ) : (
+        <></>
+      )}
 
       <Footer />
     </>
