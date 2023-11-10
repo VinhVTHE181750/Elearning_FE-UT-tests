@@ -5,13 +5,14 @@ import { Button, Input, List, Skeleton } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import moment from 'moment/moment';
 
-const Posts = ({ courseId }) => {
+const Posts = ({ courseId, courseName }) => {
   const [user, setUser] = useState('');
   const [content, setContent] = useState('');
   const [listPost, setListPost] = useState([]);
   const [editMode, setEditMode] = useState(null);
   const [editedContent, setEditedContent] = useState('');
   const [addContent, setAddContent] = useState('');
+  const [payments, setPayments] = useState([]);
 
   useEffect(() => {
     const userString = localStorage.getItem('user-access-token');
@@ -30,6 +31,20 @@ const Posts = ({ courseId }) => {
       })
       .catch((err) => {});
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      authApi
+        .getPaymentUser(user)
+        .then((response) => {
+          const paymentArray = (response.data && response.data.listPayment) || [];
+          setPayments(paymentArray);
+        })
+        .catch((error) => {
+          console.error('Error fetching payments by username:', error);
+        });
+    }
+  }, [user]);
 
   const handleAddPost = () => {
     const params = {
@@ -97,26 +112,28 @@ const Posts = ({ courseId }) => {
 
   return (
     <div style={{ margin: '20px' }}>
-      <div style={{ borderBottom: '1px solid blue' }}>
-        <List.Item.Meta
-          title={<a>Me</a>}
-          description={
-            <div>
-              <TextArea
-                style={{ width: '900px', height: '60px' }}
-                value={addContent}
-                placeholder="Add a comment"
-                onChange={(e) => setAddContent(e.target.value)}
-              />
-              <br />
+      <div style={!payments.find((course) => course.courseName === courseName) && { display: 'none' }}>
+        <div style={{ borderBottom: '1px solid blue' }}>
+          <List.Item.Meta
+            title={<a>Me</a>}
+            description={
               <div>
-                <Button key="list-loadmore-save" type="primary" onClick={() => handleAddPost()}>
-                  Comment
-                </Button>
+                <TextArea
+                  style={{ width: '900px', height: '60px' }}
+                  value={addContent}
+                  placeholder="Add a comment"
+                  onChange={(e) => setAddContent(e.target.value)}
+                />
+                <br />
+                <div>
+                  <Button key="list-loadmore-save" type="primary" onClick={() => handleAddPost()}>
+                    Comment
+                  </Button>
+                </div>
               </div>
-            </div>
-          }
-        />
+            }
+          />
+        </div>
       </div>
       <List
         className="demo-loadmore-list"

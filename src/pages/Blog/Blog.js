@@ -176,7 +176,9 @@ const Blog = () => {
           </Grid>
         </Container>
       </div>
-      <Footer />
+      <div style={{ marginTop: '150px' }}>
+        <Footer />
+      </div>
 
       <Modal open={isAddModalOpen} onClose={handleCloseAddModal}>
         <AddBlogModalContent>

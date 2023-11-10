@@ -112,7 +112,7 @@ export default function Course() {
 
       <div style={!localStorage.getItem('user-access-token') ? { display: 'none' } : {}}>
         <p style={{ color: 'black', fontSize: '30px', fontWeight: 'bold' }}>Comments</p>
-        <Posts courseId={id} />
+        <Posts courseId={id} courseName={course.name} />
       </div>
 
       <Footer />
