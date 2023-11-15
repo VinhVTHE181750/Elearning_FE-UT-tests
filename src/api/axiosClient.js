@@ -82,7 +82,6 @@ const isExistedUrl = (array, url) => {
       return true;
     }
   }
-
   return false;
 };
 

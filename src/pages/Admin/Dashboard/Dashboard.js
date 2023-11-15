@@ -137,7 +137,7 @@ const Dashboard = () => {
                     Revenue Generated
                   </Typography>
                   <Typography variant="h3" fontWeight="bold" color={colors.greenAccent[500]}>
-                    {totalTransactionValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
+                    {(totalTransactionValue / 2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
                   </Typography>
                 </Box>
               </Box>
