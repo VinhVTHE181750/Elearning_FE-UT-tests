@@ -42,7 +42,7 @@ import Blog from './pages/Blog/Blog';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 import { useEffect, useState } from 'react';
 import MaintenancePage from './pages/MaintenancePage/MaintenancePage';
-
+import Chatgpt from './pages/ChatGPT/Chatgpt';
 function PrivateOutlet() {
   const auth = localStorage.getItem('role');
   return auth === 'ADMIN' ? <Outlet /> : <Navigate to="/signin" />;
@@ -86,6 +86,8 @@ function App() {
           <Route path="/paymentResult" element={<PaymentVnPaySuccess />} />
           <Route path="/myPayment" element={<MyPayment />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/chatgpt" element={<Chatgpt />} />
+
           {/* <Route path="*" element={<PageNotFound />} /> */}
         </Routes>
 
