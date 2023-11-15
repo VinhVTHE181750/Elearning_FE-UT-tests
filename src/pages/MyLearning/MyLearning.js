@@ -208,7 +208,7 @@ export default function MyLearning() {
   return (
     <>
       <Header />
-      <div style={{ marginBottom: '150px' }}>
+      <div style={{ marginBottom: '150px', paddingBottom: '150px' }}>
         <div className="course-list">
           <h4 style={{ textAlign: 'center', marginTop: '40px' }}>My learning</h4>
           <Table
