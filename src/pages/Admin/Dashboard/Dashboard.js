@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import authApi from '../../../api/authApi';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import Charts from './Charts/Charts';
+import { BarChart } from '@mui/icons-material';
 
 const Dashboard = () => {
   const theme = useTheme();

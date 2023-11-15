@@ -1,15 +1,14 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Button, Result } from 'antd';
+import { Button, Result, Spin } from 'antd'; // Import Spin from Ant Design
 import authApi from '../../api/authApi';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 
 const PaymentVnPaySuccess = () => {
-  const [id, setId] = useState(localStorage.getItem('orderID'));
   const [search] = useSearchParams();
   const [showMessage, setShowMessage] = useState(false);
+  const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
@@ -26,9 +25,9 @@ const PaymentVnPaySuccess = () => {
     const vnp_TxnRef = search.get('vnp_TxnRef');
     const vnp_SecureHash = search.get('vnp_SecureHash');
 
-    if (id) {
+    if (localStorage.getItem('orderID')) {
       const params = {
-        orderId: id,
+        orderId: localStorage.getItem('orderID'),
         vnp_Amount: vnp_Amount,
         vnp_BankCode: vnp_BankCode,
         vnp_BankTranNo: vnp_BankTranNo,
@@ -42,29 +41,40 @@ const PaymentVnPaySuccess = () => {
         vnp_TxnRef: vnp_TxnRef,
         vnp_SecureHash: vnp_SecureHash,
       };
-      console.log('Lap lai');
+
       authApi
         .confirmPayment(params)
         .then((res) => {
           if (vnp_ResponseCode === '00') {
             setShowMessage(true);
           } else {
+            // Handle other cases if needed
           }
         })
         .catch((error) => {
           setShowMessage(false);
           console.error(error);
+        })
+        .finally(() => {
+          setLoading(false); // Set loading to false regardless of success or failure
         });
     } else {
       console.log('Không tìm thấy orderId');
+      setLoading(false); // Set loading to false if there is no orderId
     }
-  }, [id]);
+  }, []);
 
   return (
     <>
       <Header />
       <div className="payment-container">
-        {showMessage ? (
+        {loading ? (
+          <Spin tip="Loading...">
+            {' '}
+            {/* Show a loading spinner while loading */}
+            <div style={{ height: '300px' }}></div> {/* Placeholder for the spinner */}
+          </Spin>
+        ) : showMessage ? (
           <Result
             status="success"
             title="Congratulations, you have successfully paid for the course!"
@@ -90,7 +100,6 @@ const PaymentVnPaySuccess = () => {
           ></Result>
         )}
       </div>
-
       <Footer />
     </>
   );
