@@ -67,7 +67,7 @@ const PaymentPage = () => {
 
           localStorage.setItem('paymentUrl', urlPayment);
           localStorage.setItem('orderID', orderId);
-          window.location.replace(urlPayment);
+          return window.location.replace(urlPayment);
         })
         .catch((error) => {
           console.error('Error enrolling course:', error);

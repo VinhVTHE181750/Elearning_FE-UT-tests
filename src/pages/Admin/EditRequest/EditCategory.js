@@ -37,18 +37,19 @@ function EditCategory() {
       .catch((error) => {});
   }, []);
   useEffect(() => {
-    authApi
-      .getCategoryById(categoryId)
-      .then((response) => {
-        const category = response.data;
-        console.log('category: ', category);
-        setCategoryEdit(category);
-        setName(category.name);
-      })
-      .catch((error) => {
-        console.log(error);
-        setCategoryEdit(null);
-      });
+    if (categoryId)
+      authApi
+        .getCategoryById({ id: categoryId })
+        .then((response) => {
+          const category = response.data;
+          console.log('category: ', category);
+          setCategoryEdit(category);
+          setName(category.name);
+        })
+        .catch((error) => {
+          console.log(error);
+          setCategoryEdit(null);
+        });
   }, [categoryId]);
   if (!categoryEdit) {
     return <div>Category not found</div>;

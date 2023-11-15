@@ -44,7 +44,6 @@ export default function ManageCategory() {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const categoryEdit = category.find((categorys) => categorys.id === parseInt(categoryId));
-    setSelectedCategory(categoryEdit);
     navigate(`/editCategory/${categoryId}`);
   };
 

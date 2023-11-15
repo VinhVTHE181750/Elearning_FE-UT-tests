@@ -54,6 +54,7 @@
     "react-router-dom": "^6.17.0",
     "react-scripts": "5.0.1",
     "react-slideshow-image": "^4.3.0",
+    "react-use": "^17.4.0",
     "reactstrap": "^9.2.0",
     "recharts": "^2.9.3",
     "stream": "^0.0.2",

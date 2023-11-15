@@ -103,8 +103,7 @@ export default function Lesson() {
       authApi
         .startQuiz(quizId)
         .then((response) => {
-          setSession(response.data.sessionId);
-          // navigate(`/takeQuiz/${quizId}/${courseID}/${session}`);
+          return navigate(`/takeQuiz/${quizId}/${courseID}/${id}/${response.data.sessionId}`);
         })
         .catch((err) => {});
     }
@@ -183,12 +182,21 @@ export default function Lesson() {
                         <p style={{ textAlign: 'left', color: '#000' }}>
                           Quiz: {quiz.name}
                           <br />
-                          <Button
-                            style={{ width: '120px', marginLeft: '10px' }}
-                            onClick={() => handleQuiz('Start', quiz.id, quiz.finalQuiz, quiz.lesson.id)}
-                          >
-                            Start quiz
-                          </Button>
+                          {quiz.finalQuiz && listDone.find((item) => item === quiz.lesson.id) ? (
+                            <>
+                              <p>{quiz.finalQuiz && listDone.find((item) => item === quiz.id)}</p>
+                              <Button style={{ width: '120px', marginLeft: '10px' }}>You done</Button>
+                            </>
+                          ) : (
+                            <>
+                              <Button
+                                style={{ width: '120px', marginLeft: '10px' }}
+                                onClick={() => handleQuiz('Start', quiz.id, quiz.finalQuiz, quiz.lesson.id)}
+                              >
+                                Start quiz
+                              </Button>
+                            </>
+                          )}
                           <Button
                             style={{ marginLeft: '10px' }}
                             onClick={() => handleQuiz('View', quiz.id, quiz.finalQuiz, quiz.lesson.id)}
