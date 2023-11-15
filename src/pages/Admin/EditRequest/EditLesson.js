@@ -11,7 +11,6 @@ const EditLesson = () => {
 
   const [username, setUsername] = useState('');
   const [editedLesson, setEditedLesson] = useState({
-    username: username,
     lessonID: lessonID,
     lessonName: '',
     ordNumber: '',
@@ -51,12 +50,11 @@ const EditLesson = () => {
   const handleSaveClick = () => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
-    if (localStorage.getItem('user-access-token')) {
-      setEditedLesson({ ...editedLesson, username: jwtDecode(localStorage.getItem('user-access-token')).sub });
-    }
     console.log(editedLesson);
+    const params = { ...editedLesson, username: jwtDecode(localStorage.getItem('user-access-token')).sub };
+    console.log(params);
     authApi
-      .updateLesson(editedLesson)
+      .updateLesson(params)
       .then((response) => {
         setShowSuccessAlert(true);
         setShowErrorAlert(false);

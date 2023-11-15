@@ -374,7 +374,7 @@ const authApi = {
     return axiosClient.get(url, params);
   },
   getPaymentByCourse: (params) => {
-    const url = '/api/v1/payment/get-payment-by-course';
+    const url = `/api/v1/payment/get-payment-by-course?courseId=${params.courseId}&month=${''}&year=${params.year}`;
     return axiosClient.get(url, params);
   },
 };
