@@ -91,14 +91,23 @@ export default function Lesson() {
     }
   }, [courseID]);
 
-  const handleQuiz = (type, quizId) => {
+  const handleQuiz = (type, quizId, isFinal, quizLessonId) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-    authApi
-      .startQuiz(quizId)
-      .then((response) => {
-        setSession(response.data.sessionId);
-      })
-      .catch((err) => {});
+    if (type === 'Start') {
+      if (isFinal) {
+        const listComplete = listDone.filter((item) => item !== quizLessonId);
+        if (listComplete.length !== listLesson.length - 1) {
+          return window.alert('You have not finished learning all the lessons. You cannot take this quiz');
+        }
+      }
+      authApi
+        .startQuiz(quizId)
+        .then((response) => {
+          setSession(response.data.sessionId);
+          // navigate(`/takeQuiz/${quizId}/${courseID}/${session}`);
+        })
+        .catch((err) => {});
+    }
     setTypeQuiz(type);
     setQuizId(quizId);
   };
@@ -165,7 +174,7 @@ export default function Lesson() {
                 rowKey={(record) => record.id}
                 pagination={{ position: ['bottomCenter'], pageSize: 5 }}
                 style={{ maxWidth: '500px', cursor: 'pointer' }}
-                onRow={(record) => ({ onClick: () => navigate(`/viewLesson/${record.id}`) })}
+                onRow={(record) => ({ onClick: () => (window.location.href = `/viewLesson/${record.id}`) })}
                 expandable={{
                   expandedRowRender: (record) => {
                     const quiz = listQuiz.find((quiz) => quiz.lesson.id === record.id);
@@ -176,11 +185,14 @@ export default function Lesson() {
                           <br />
                           <Button
                             style={{ width: '120px', marginLeft: '10px' }}
-                            onClick={() => handleQuiz('Start', quiz.id)}
+                            onClick={() => handleQuiz('Start', quiz.id, quiz.finalQuiz, quiz.lesson.id)}
                           >
                             Start quiz
                           </Button>
-                          <Button style={{ marginLeft: '10px' }} onClick={() => handleQuiz('View', quiz.id)}>
+                          <Button
+                            style={{ marginLeft: '10px' }}
+                            onClick={() => handleQuiz('View', quiz.id, quiz.finalQuiz, quiz.lesson.id)}
+                          >
                             View submitted quiz history
                           </Button>
                         </p>

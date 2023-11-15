@@ -99,11 +99,11 @@ function Chatgpt() {
   }
 
   return (
-    <div className="App">
+    <div className="chatgpt">
       <Header />
-      <div style={{ position: 'relative', height: '800px', width: '700px' }}>
+      <div style={{ position: 'relative', height: '800px', width: '100%' }}>
         <MainContainer>
-          <ChatContainer>
+          <ChatContainer style={{ height: '100%', overflowY: 'hidden' }}>
             <MessageList
               scrollBehavior="smooth"
               typingIndicator={isTyping ? <TypingIndicator content="ChatGPT is typing" /> : null}
