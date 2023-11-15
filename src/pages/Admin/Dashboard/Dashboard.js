@@ -39,10 +39,14 @@ const Dashboard = () => {
       .findAllCourse()
       .then((resp) => {
         setListCourse(resp.data.listCourse);
-        const newListSelectCourse = resp.data.listCourse.map((course) => ({
-          value: course.id,
-          label: course.name,
-        }));
+        const allCourseOption = { value: -1, label: 'All Course' };
+        const newListSelectCourse = [
+          allCourseOption,
+          ...resp.data.listCourse.map((course) => ({
+            value: course.id,
+            label: course.name,
+          })),
+        ];
         setListSelectCourse(newListSelectCourse);
       })
       .catch((err) => {});
@@ -80,7 +84,9 @@ const Dashboard = () => {
   };
 
   const handleCourseChange = (value) => {
-    setSelectedCourse(value);
+    if (value === -1) {
+      setSelectedCourse('');
+    } else setSelectedCourse(value);
   };
 
   return (
@@ -157,7 +163,7 @@ const Dashboard = () => {
                   </label>
                   <Select
                     showSearch
-                    placeholder="Select a course"
+                    placeholder="All Course"
                     optionFilterProp="children"
                     onChange={handleCourseChange}
                     onClear
