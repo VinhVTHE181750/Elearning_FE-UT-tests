@@ -6,10 +6,13 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TrafficIcon from '@mui/icons-material/Traffic';
 import Header from '../../../components/Admin/Header/Header';
 import LineChart from '../../../components/Admin/LineChart';
+import BarChart from '../../../components/Admin/BarChart';
+
 import StatBox from '../../../components/Admin/StatBox';
 import { useEffect, useState } from 'react';
 import authApi from '../../../api/authApi';
 import Sidebar from '../../../components/Sidebar/Sidebar';
+import BarcharPage from '../../../components/Admin/BarcharPage';
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -95,14 +98,9 @@ const Dashboard = () => {
                     $5900
                   </Typography>
                 </Box>
-                <Box>
-                  <IconButton>
-                    <DownloadOutlinedIcon sx={{ fontSize: '26px', color: colors.greenAccent[500] }} />
-                  </IconButton>
-                </Box>
               </Box>
               <Box height="250px" m="-20px 0 0 0">
-                <LineChart isDashboard={true} />
+                <BarcharPage isDashboard={true} />
               </Box>
             </Box>
             <Box gridColumn="span 4" gridRow="span 2" backgroundColor={colors.primary[400]} overflow="auto">
