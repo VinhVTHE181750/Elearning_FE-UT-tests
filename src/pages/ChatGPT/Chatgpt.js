@@ -9,6 +9,7 @@ import {
   MessageInput,
   TypingIndicator,
 } from '@chatscope/chat-ui-kit-react';
+import Header from '../../components/Header/Header';
 
 const API_KEY = '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';
 // "Explain things like you would to a 10 year old learning how to code."
@@ -99,6 +100,7 @@ function Chatgpt() {
 
   return (
     <div className="App">
+      <Header />
       <div style={{ position: 'relative', height: '800px', width: '700px' }}>
         <MainContainer>
           <ChatContainer>
