@@ -8,6 +8,7 @@ const AddAnswer = () => {
   const [correct, setCorrect] = useState(true);
 
   const handleSaveAnswer = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     const params = {
       questionID: 0,
       answerName: answerContent,

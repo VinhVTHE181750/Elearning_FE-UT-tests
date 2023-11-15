@@ -327,7 +327,7 @@ const authApi = {
   },
   deleteBlog: (parmas) => {
     const url = '/api/v1/blog/delete-blog';
-    return axiosClient.put(url, parmas);
+    return axiosClient.delete(url, { data: parmas });
   },
   findAllPost: (params) => {
     const url = '/api/v1/post/find-all-post';
@@ -352,6 +352,22 @@ const authApi = {
   getPostByCourseId: (courseId) => {
     const url = `/api/v1/post/get-post-by-course-id?courseId=${courseId}&deleted=${'false'}`;
     return axiosClient.get(url, courseId);
+  },
+  getSessionByQuizId: (params) => {
+    const url = `/api/v1/quiz/get-all-session-quiz?username=${params.username}&quizId=${params.quizId}`;
+    return axiosClient.get(url, params);
+  },
+  getCorrectAnswerBySession: (sessionId) => {
+    const url = `/api/v1/quiz/get-correct-answers-by-session?sessionId=${sessionId}`;
+    return axiosClient.get(url, sessionId);
+  },
+  completeLesson: (params) => {
+    const url = '/api/v1/lesson/complete-lesson';
+    return axiosClient.post(url, params);
+  },
+  getCompleteLessonByCourse: (params) => {
+    const url = `/api/v1/lesson/get-lesson-completed-by-course?courseId=${params.courseId}&username=${params.username}`;
+    return axiosClient.get(url, params);
   },
 };
 

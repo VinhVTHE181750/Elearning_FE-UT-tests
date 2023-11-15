@@ -6,7 +6,7 @@ import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import jwtDecode from 'jwt-decode';
 import { Table } from 'antd';
-import Post from './Post/Post';
+import Posts from './Post/Posts';
 
 export default function Course() {
   const { id } = useParams();
@@ -64,6 +64,7 @@ export default function Course() {
   }, [user]);
 
   const handleViewLesson = (lessonId) => {
+    if (!localStorage.getItem('user-access-token')) return navigate('/signin');
     if (payments.filter((payment) => payment.courseName === course.name).length !== 0) {
       return navigate(`/viewLesson/${lessonId}`);
     } else {
@@ -95,7 +96,9 @@ export default function Course() {
         <h2>{course.name}</h2>
         <img src={course.linkThumnail} alt={course.name} />
         <p>{course.description}</p>
-        <p>Price:{course.price}VND</p>
+        <p style={{ color: '#000000e0', fontWeight: 'unset' }}>
+          Price:{course.price && course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
+        </p>
 
         <Table
           columns={columns}
@@ -107,9 +110,9 @@ export default function Course() {
         />
       </div>
 
-      <div>
-        <p>Comments</p>
-        <Post courseId={id} />
+      <div style={!localStorage.getItem('user-access-token') ? { display: 'none' } : {}}>
+        <p style={{ color: 'black', fontSize: '30px', fontWeight: 'bold' }}>Comments</p>
+        <Posts courseId={id} />
       </div>
 
       <Footer />

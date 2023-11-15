@@ -3,7 +3,7 @@ import Header from '../../../components/Admin/Header/Header';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import authApi from '../../../api/authApi';
-import { Table, Button, Space } from 'antd';
+import { Table, Button, Space, Input } from 'antd';
 import moment from 'moment';
 import Sidebar from '../../../components/Sidebar/Sidebar';
 import jwtDecode from 'jwt-decode';
@@ -16,6 +16,7 @@ export default function ManageCourse() {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
+  const [searchText, setSearchText] = useState('');
 
   useEffect(() => {
     if (localStorage.getItem('user-access-token')) {
@@ -38,10 +39,14 @@ export default function ManageCourse() {
   }, []);
 
   const handleEditClick = (courseID) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     navigate(`/editCourse/${courseID}`);
   };
 
   const handleDeleteClick = (courseID) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     if (window.confirm('Do you want to delete this course?')) {
       const params = { username: username, courseID: courseID };
       authApi
@@ -62,11 +67,22 @@ export default function ManageCourse() {
   };
 
   const handleViewClick = (courseID) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     navigate(`/viewCourse/${courseID}`);
   };
+
   const handleAddCourseClick = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     navigate('/add-course');
   };
+
+  const handleSearch = (value) => {
+    setSearchText(value);
+  };
+
+  const filteredCourses = courses.filter((course) => course.name.toLowerCase().includes(searchText.toLowerCase()));
 
   const columns = [
     {
@@ -134,7 +150,7 @@ export default function ManageCourse() {
       <Sidebar />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}></div>
       <Box m="20px">
-        <Header title="Courses" subtitle="List of Course" />
+        <Header title="Manage Courses" subtitle="List of Course" />
 
         <Button
           variant="contained"
@@ -150,7 +166,14 @@ export default function ManageCourse() {
           Add Courses
         </Button>
 
-        <Table columns={columns} dataSource={courses} rowKey={(record) => record.id} />
+        <Input.Search
+          placeholder="Search by course name"
+          allowClear
+          onSearch={handleSearch}
+          style={{ width: 200, marginBottom: 16 }}
+        />
+
+        <Table columns={columns} dataSource={filteredCourses} rowKey={(record) => record.id} />
       </Box>
     </div>
   );

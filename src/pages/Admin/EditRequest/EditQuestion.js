@@ -4,19 +4,23 @@ import authApi from '../../../api/authApi';
 import './edit.css';
 import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
-
-const EditQuestion = () => {
+import { Alert } from '@mui/material';
+import { Button } from 'antd';
+function EditQuestion() {
   const { questionID } = useParams();
   const [questionName, setQuestionName] = useState('');
-  const [questionType, setQuestionType] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
   const [quizID, setQuizID] = useState('');
+
+  const [questionType, setQuestionType] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const [answers, setAnswers] = useState([]);
   const [user, setUser] = useState('');
-
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       var deCoded = jwt_decode(userString);
@@ -43,7 +47,15 @@ const EditQuestion = () => {
         console.log(error);
       });
   }, [questionID]);
+
+  const handleBack = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
+    navigate(`/view-quiz/${quizID}`);
+  };
   const handleEditQuestion = () => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+
     const params = {
       username: user,
       questionID,
@@ -57,14 +69,16 @@ const EditQuestion = () => {
       .updateQuestion(params)
       .then((response) => {
         if (response.data && response.code === 0) {
-          setSuccessMessage('Edit Successfully!');
+          setShowSuccessAlert(true);
+          setShowErrorAlert(false);
         } else {
-          setErrorMessage('Edit Failed!');
+          setShowSuccessAlert(false);
+          setShowErrorAlert(true);
         }
       })
       .catch((error) => {
-        setErrorMessage('Function Edit Failed!');
-        console.log('');
+        setShowSuccessAlert(false);
+        setShowErrorAlert(true);
       });
   };
 
@@ -73,8 +87,16 @@ const EditQuestion = () => {
       <Sidebar />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className="container-edit">
-          {successMessage && <div className="success-message">{successMessage}</div>}
-          {errorMessage && <div className="error-message">{errorMessage}</div>}
+          {showSuccessAlert && (
+            <Alert severity="success" sx={{ backgroundColor: 'lightblue', color: 'green' }}>
+              Edit Question Successful!
+            </Alert>
+          )}
+          {showErrorAlert && (
+            <Alert severity="error" sx={{ backgroundColor: 'lightcoral' }}>
+              Fail to Edit Question!
+            </Alert>
+          )}
 
           <h1>Edit Question</h1>
           <div>
@@ -86,12 +108,12 @@ const EditQuestion = () => {
             <label>
               Question Type:
               <select value={questionType} onChange={(e) => setQuestionType(e.target.value)}>
-                <option value="">Select Type</option>
+                <option value="">Select Question Type</option>
                 <option value="ONE_CHOICE">One Choice</option>
-                <option value="MUILTPLE_CHOICE">MUILTPLE_CHOICE</option>
               </select>
             </label>
-            {questionType === 'ONE_CHOICE' ? (
+
+            {questionType === 'ONE_CHOICE' && (
               <>
                 {answers?.map((data) => {
                   return (
@@ -149,71 +171,29 @@ const EditQuestion = () => {
                   })}
                 </div>
               </>
-            ) : questionType === 'MUILTPLE_CHOICE' ? (
-              <>
-                {answers?.map((data) => {
-                  return (
-                    <>
-                      <input
-                        type="text"
-                        value={data.answerContent}
-                        onChange={(e) => {
-                          const newAnswers = answers?.map((a) => {
-                            if (a?.id === data?.id) {
-                              return {
-                                ...data,
-                                answerContent: e.target.value,
-                              };
-                            }
-                            return a;
-                          });
-                          setAnswers(newAnswers);
-                        }}
-                      />
-                    </>
-                  );
-                })}
-                <div style={{ display: 'flex' }}>
-                  {answers?.map((data, index) => {
-                    return (
-                      <>
-                        <div style={{ display: 'flex' }}>
-                          <input
-                            type="checkbox"
-                            name="result"
-                            id={index}
-                            value={data.id}
-                            checked={data.correct}
-                            onChange={(e) => {
-                              const newAnswers = answers?.map((a) => {
-                                if (a?.id === data?.id) {
-                                  return {
-                                    ...data,
-                                    correct: true,
-                                  };
-                                }
-                                return a;
-                              });
-                              setAnswers(newAnswers);
-                            }}
-                          />
-                          <label htmlFor={index}>Option {index}</label>
-                        </div>
-                      </>
-                    );
-                  })}
-                </div>
-              </>
-            ) : (
-              <></>
             )}
 
-            <button onClick={handleEditQuestion}>Edit</button>
+            <div className="button-container">
+              <Button
+                variant="primary"
+                onClick={handleEditQuestion}
+                style={{ width: '100px', backgroundColor: 'gray', color: 'white' }}
+              >
+                Edit
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleBack}
+                style={{ width: '100px', backgroundColor: 'gray', color: 'white' }}
+              >
+                Back
+              </Button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default EditQuestion;

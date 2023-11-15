@@ -54,9 +54,6 @@ const Sidebar = () => {
           if (title === 'Home') {
             document.body.style.backgroundColor = null;
             navigate('/');
-            // document.body.style.removeProperty
-            // document.body.style.backgroundColor
-            // turn off
           }
         }}
         icon={icon}
@@ -190,17 +187,6 @@ const Sidebar = () => {
               icon={
                 <IconButton>
                   <DeleteForever />
-                </IconButton>
-              }
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Profile"
-              to=""
-              icon={
-                <IconButton>
-                  <PersonOutlinedIcon />
                 </IconButton>
               }
               selected={selected}

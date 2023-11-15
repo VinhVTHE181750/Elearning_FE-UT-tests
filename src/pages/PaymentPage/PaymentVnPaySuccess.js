@@ -1,18 +1,18 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { Button, Result } from 'antd';
 import authApi from '../../api/authApi';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 
 const PaymentVnPaySuccess = () => {
-  const id = parseInt(localStorage.getItem('orderID'));
-  console.log('orderId', id);
+  const [id, setId] = useState(localStorage.getItem('orderID'));
   const [search] = useSearchParams();
-  const [paymentStatus, setPaymentStatus] = useState('');
+  const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     const vnp_Amount = search.get('vnp_Amount');
     const vnp_BankCode = search.get('vnp_BankCode');
     const vnp_BankTranNo = search.get('vnp_BankTranNo');
@@ -26,9 +26,6 @@ const PaymentVnPaySuccess = () => {
     const vnp_TxnRef = search.get('vnp_TxnRef');
     const vnp_SecureHash = search.get('vnp_SecureHash');
 
-    console.log(vnp_ResponseCode);
-    // console.log(vnp_TransactionId);
-    console.log(search);
     if (id) {
       const params = {
         orderId: id,
@@ -45,35 +42,55 @@ const PaymentVnPaySuccess = () => {
         vnp_TxnRef: vnp_TxnRef,
         vnp_SecureHash: vnp_SecureHash,
       };
-      console.log(params);
+      console.log('Lap lai');
       authApi
         .confirmPayment(params)
         .then((res) => {
-          console.log(res);
           if (vnp_ResponseCode === '00') {
-            window.alert('Payment course success!');
+            setShowMessage(true);
           } else {
           }
         })
         .catch((error) => {
-          window.alert(`${error.response.data.message}`);
-          //setPaymentStatus(error.response.data.message);
-          console.log('Không tìm thấy dữ liệu thanh toán');
+          setShowMessage(false);
           console.error(error);
         });
     } else {
       console.log('Không tìm thấy orderId');
     }
-  }, []);
+  }, [id]);
 
   return (
     <>
       <Header />
       <div className="payment-container">
-        <Link to="/" className="back-button">
-          Back to Home
-        </Link>
+        {showMessage ? (
+          <Result
+            status="success"
+            title="Congratulations, you have successfully paid for the course!"
+            style={{ paddingBottom: '300px' }}
+            extra={[
+              <Button type="primary" key="console" onClick={() => (window.location.href = '/myPayment')}>
+                Go to my payment
+              </Button>,
+            ]}
+          />
+        ) : (
+          <Result
+            status="error"
+            title="Course payment failed, Please try again!!"
+            style={{ paddingBottom: '300px' }}
+            extra={
+              [
+                // <Button type="primary" key="console" onClick={() => (window.location.href = '')}>
+                //   Try Again
+                // </Button>,
+              ]
+            }
+          ></Result>
+        )}
       </div>
+
       <Footer />
     </>
   );

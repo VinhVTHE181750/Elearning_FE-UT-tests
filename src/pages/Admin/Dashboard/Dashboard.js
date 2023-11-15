@@ -10,23 +10,43 @@ import StatBox from '../../../components/Admin/StatBox';
 import { useEffect, useState } from 'react';
 import authApi from '../../../api/authApi';
 import Sidebar from '../../../components/Sidebar/Sidebar';
+import Charts from './Charts/Charts';
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [totalUser, setTotalUser] = useState('');
   const [totalCoure, setTotalCourse] = useState('');
-
+  const [payments, setPayments] = useState([]);
+  const [filteredPayments, setFilteredPayments] = useState([]);
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('2023');
+  const [transaction, setTranscation] = useState([]);
   useEffect(() => {
-    authApi.totalUser().then((response) => {
-      setTotalUser(response.data);
+    authApi.getAllPayment().then((response) => {
+      const paymentArray = response.data.listPayment;
+      setPayments(paymentArray);
+      setFilteredPayments(paymentArray);
     });
   }, []);
+
   useEffect(() => {
     authApi.totalCourse().then((response) => {
       setTotalCourse(response.data);
     });
   }, []);
+
+  useEffect(() => {
+    authApi
+      .getPaymentByMonthYear({ month, year })
+      .then((resp) => {
+        setTranscation(resp.data.revenueForMonth);
+      })
+      .catch((err) => {});
+  }, []);
+
+  const recentTransactions = payments.slice(0, 5);
+
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
@@ -36,20 +56,7 @@ const Dashboard = () => {
           <Box display="flex" justifyContent="space-between" alignItems="center">
             <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
 
-            <Box>
-              <Button
-                sx={{
-                  backgroundColor: colors.blueAccent[700],
-                  color: colors.grey[100],
-                  fontSize: '14px',
-                  fontWeight: 'bold',
-                  padding: '10px 20px',
-                }}
-              >
-                <DownloadOutlinedIcon sx={{ mr: '10px' }} />
-                Download Reports
-              </Button>
-            </Box>
+            <Box></Box>
           </Box>
 
           {/* GRID & CHARTS */}
@@ -63,7 +70,7 @@ const Dashboard = () => {
               justifyContent="center"
             >
               <StatBox
-                title={totalUser.totalUser}
+                title={totalUser}
                 subtitle="Total User"
                 progress="0.75"
                 increase="+14%"
@@ -98,16 +105,13 @@ const Dashboard = () => {
                     $5900
                   </Typography>
                 </Box>
-                <Box>
-                  <IconButton>
-                    <DownloadOutlinedIcon sx={{ fontSize: '26px', color: colors.greenAccent[500] }} />
-                  </IconButton>
-                </Box>
               </Box>
               <Box height="250px" m="-20px 0 0 0">
-                <LineChart isDashboard={true} />
+                {/* <LineChart isDashboard={true} /> */}
+                <Charts list={transaction} />
               </Box>
             </Box>
+
             <Box gridColumn="span 4" gridRow="span 2" backgroundColor={colors.primary[400]} overflow="auto">
               <Box
                 display="flex"
@@ -121,7 +125,7 @@ const Dashboard = () => {
                   Recent Transactions
                 </Typography>
               </Box>
-              {mockTransactions.map((transaction, i) => (
+              {recentTransactions.map((transaction, i) => (
                 <Box
                   key={`${transaction.txId}-${i}`}
                   display="flex"
@@ -131,14 +135,11 @@ const Dashboard = () => {
                   p="15px"
                 >
                   <Box>
-                    <Typography color={colors.greenAccent[500]} variant="h5" fontWeight="600">
-                      {transaction.txId}
-                    </Typography>
-                    <Typography color={colors.grey[100]}>{transaction.user}</Typography>
+                    <Typography color={colors.grey[100]}> {transaction.courseName}</Typography>
                   </Box>
-                  <Box color={colors.grey[100]}>{transaction.date}</Box>
+                  <Box color={colors.grey[100]}>{transaction.createdAt}</Box>
                   <Box backgroundColor={colors.greenAccent[500]} p="5px 10px" borderRadius="4px">
-                    ${transaction.cost}
+                    ${transaction.amount}
                   </Box>
                 </Box>
               ))}
