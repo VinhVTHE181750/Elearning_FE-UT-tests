@@ -12,6 +12,7 @@ function AddQuiz() {
   const [quizName, setQuizName] = useState('');
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isFinal, setIsFinal] = useState(false);
   const [checkFinalQuiz, setCheckFinalQuiz] = useState(false);
 
   const [user, setUser] = useState('');
@@ -36,6 +37,7 @@ function AddQuiz() {
         .getLessonByCourseId(courseID)
         .then((resp) => {
           const listLesson = resp.data.lessonList;
+          var check = false;
           if (listLesson.length && listLesson[listLesson.length - 1].id === lessonID) setCheckFinalQuiz(true);
         })
         .catch((err) => {});
@@ -51,9 +53,9 @@ function AddQuiz() {
         username: user,
         lessonID: lessonID,
         quizName,
-        finalQuiz: checkFinalQuiz,
+        finalQuiz: isFinal, // Use the updated state variable
       };
-      console.log(params);
+
       authApi
         .addQuiz(params)
         .then((response) => {
@@ -80,11 +82,17 @@ function AddQuiz() {
           <h1>Add Quiz</h1>
           {message && <p className={isSuccess ? 'success-message' : 'error-message'}>{message}</p>}
           <form onSubmit={handleSubmit}>
-            <label>
-              Quiz Name:
-              <input type="text" value={quizName} onChange={(e) => setQuizName(e.target.value)} />
-            </label>
-
+            <div>
+              <label>
+                Quiz Name:
+                <input type="text" value={quizName} onChange={(e) => setQuizName(e.target.value)} />
+              </label>
+            </div>
+            <div>
+              <label>
+                Is Final Quiz: <input type="checkbox" checked={isFinal} onChange={() => setIsFinal(!isFinal)} />
+              </label>
+            </div>
             <button type="submit" onClick={handleSubmit}>
               Add Quiz
             </button>

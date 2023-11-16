@@ -58,10 +58,10 @@ const AddCourse = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (name && description && price && link_thumnail && category) {
+    if (name.trim() && description && price && link_thumnail && category) {
       const params = {
         username: username,
-        name,
+        name: name.trim(),
         price,
         link_thumnail,
         category,

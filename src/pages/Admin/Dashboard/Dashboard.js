@@ -36,6 +36,13 @@ const Dashboard = () => {
       .catch((err) => {});
 
     authApi
+      .totalUser()
+      .then((resp) => {
+        setTotalUser(resp.data.totalUser);
+      })
+      .catch((err) => {});
+
+    authApi
       .findAllCourse()
       .then((resp) => {
         setListCourse(resp.data.listCourse);
