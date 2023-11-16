@@ -100,12 +100,10 @@ function Chatgpt() {
 
   return (
     <div className="chatgpt">
-    <div className="chatgpt">
       <Header />
-      <div style={{ position: 'relative', height: '800px', width: '100%' }}>
+
       <div style={{ position: 'relative', height: '800px', width: '100%' }}>
         <MainContainer>
-          <ChatContainer style={{ height: '100%', overflowY: 'hidden' }}>
           <ChatContainer style={{ height: '100%', overflowY: 'hidden' }}>
             <MessageList
               scrollBehavior="smooth"

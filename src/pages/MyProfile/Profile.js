@@ -68,9 +68,11 @@ const Profile = () => {
     }
   };
   const isValidFullName = (name) => {
-    const pattern = '/^[a-zA-Zs]+$/'; // Biểu thức chính quy để kiểm tra tên đầy đủ
+    const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/; // Biểu thức chính quy để kiểm tra tên đầy đủ
     return pattern.test(name);
   };
+  const phoneRegex = /^0\d{9}$/;
+
   const handleSave = async () => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
@@ -78,6 +80,9 @@ const Profile = () => {
       // Hiển thị thông báo lỗi nếu tên đầy đủ không hợp lệ
       setShowErrorAlert(true);
       return window.alert('Please enter a valid full name');
+    }
+    if (!phoneRegex.test(phoneNum)) {
+      return window.alert('Error: Phone is a 10-digit number sequence that starts with 0');
     }
 
     try {
@@ -110,7 +115,6 @@ const Profile = () => {
         {/* Add className here */}
         <h2>My Profile</h2>
         {showSuccessAlert && <Alert severity="success">Change Profile Successfull!</Alert>}
-        {showErrorAlert && <Alert severity="error">Fail to Change Profile!</Alert>}
         <label>Fullname:</label>
         <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
         <label>Phone Number:</label>
