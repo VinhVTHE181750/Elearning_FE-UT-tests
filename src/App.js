@@ -42,7 +42,7 @@ import Blog from './pages/Blog/Blog';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 import { useEffect, useState } from 'react';
 import MaintenancePage from './pages/MaintenancePage/MaintenancePage';
-import Chatgpt from './pages/ChatGPT/Chatgpt';
+import Chatgpt from './pages/TotalPage/MyChatGPT/Chatgpt';
 import TakeQuiz from './pages/Lesson/TakeQuiz/TakeQuiz';
 import authApi from './api/authApi';
 
