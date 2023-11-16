@@ -9,9 +9,11 @@ import BlogCard from './BlogCard';
 import ReactPaginate from 'react-paginate';
 import jwtDecode from 'jwt-decode';
 import { event } from 'jquery';
+import { Input } from 'antd';
 
 const Blog = () => {
   const [findAllBlog, setFindAllBlog] = useState([]);
+  const [searchBlog, setSearchBlog] = useState([]);
   const [user, setUser] = useState('');
   const [blogId, setBlogId] = useState('');
   const [blog, setBlog] = useState([]);
@@ -30,6 +32,7 @@ const Blog = () => {
       .findAllBlog()
       .then((response) => {
         setFindAllBlog(response.data.blogList);
+        setSearchBlog(response.data.blogList);
       })
       .catch((err) => {});
   }, []);
@@ -48,9 +51,9 @@ const Blog = () => {
 
   const indexOfLastPost = (currentPage + 1) * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = findAllBlog.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = searchBlog.slice(indexOfFirstPost, indexOfLastPost);
 
-  const pageCount = Math.ceil(findAllBlog.length / postsPerPage);
+  const pageCount = Math.ceil(searchBlog.length / postsPerPage);
 
   const handlePageClick = (data) => {
     const selectedPage = data.selected;
@@ -137,12 +140,22 @@ const Blog = () => {
       });
   };
 
+  const handleSearch = (value) => {
+    setSearchBlog(findAllBlog.filter((item) => item.title.toLowerCase().includes(value.toLowerCase())));
+  };
+
   return (
     <div>
       <Header />
       <div style={{ paddingBottom: '150px' }}>
         <Container>
           <Box sx={{ pt: 8 }}>
+            <Input.Search
+              placeholder="Search by username"
+              allowClear
+              onSearch={handleSearch}
+              style={{ marginBottom: 16 }}
+            />
             <BoxTitle>
               <TextTitle>List Blogs</TextTitle>
               {role === 'ADMIN' && (

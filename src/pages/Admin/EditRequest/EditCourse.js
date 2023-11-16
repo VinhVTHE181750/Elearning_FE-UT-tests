@@ -26,7 +26,6 @@ const EditCourse = () => {
     authApi
       .getCourseById(courseID)
       .then((response) => {
-        console.log(response);
         setCategory({ categoryId: response.data.category.id, categoryName: response.data.category.name });
         setCourse(response.data);
       })
@@ -39,7 +38,6 @@ const EditCourse = () => {
       .findAllCourse()
       .then((response) => {
         const courseArray = (response.data && response.data.listCourse) || [];
-        console.log(courseArray);
         setCourses(courseArray);
       })
       .catch((error) => {
@@ -52,11 +50,8 @@ const EditCourse = () => {
     authApi
       .findAllCategory()
       .then((response) => {
-        console.log('data: ', response.data);
         const categoryArray = (response.data && response.data.categoryList) || [];
-        console.log('Category: ', categoryArray);
         setCategories(categoryArray);
-        console.log('Category state after update:', categoryArray);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -83,13 +78,13 @@ const EditCourse = () => {
       link_thumnail: course.linkThumail,
       categoryID: course.category.id,
     };
-
     if (course.name) {
       const check = courses.find(
-        (c) => c.category.id === params.categoryID && c.name === params.name && c.courseID !== params.courseID,
+        (c) =>
+          c.category.id === params.categoryID && c.name === params.name && parseInt(c.id) !== parseInt(params.courseID),
       );
-
       if (check) {
+        console.log('abc');
         setNameExistsError(true);
         return;
       }

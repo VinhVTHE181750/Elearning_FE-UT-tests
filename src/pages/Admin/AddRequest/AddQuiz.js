@@ -8,10 +8,12 @@ import Sidebar from '../../../components/Sidebar/Sidebar';
 
 function AddQuiz() {
   const { lessonID } = useParams();
+  const [courseID, setCourseID] = useState('');
   const [quizName, setQuizName] = useState('');
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
-  console.log('Lesson ID:', lessonID);
+  const [isFinal, setIsFinal] = useState(false);
+  const [checkFinalQuiz, setCheckFinalQuiz] = useState(false);
 
   const [user, setUser] = useState('');
 
@@ -20,9 +22,28 @@ function AddQuiz() {
     if (userString) {
       var deCoded = jwt_decode(userString);
       setUser(deCoded.sub);
+      authApi
+        .getLessonById(lessonID)
+        .then((resp) => {
+          setCourseID(resp.data.course.id);
+        })
+        .catch((err) => {});
     }
   }, []);
-  console.log('user: ', user);
+
+  useEffect(() => {
+    if (courseID) {
+      authApi
+        .getLessonByCourseId(courseID)
+        .then((resp) => {
+          const listLesson = resp.data.lessonList;
+          var check = false;
+          if (listLesson.length && listLesson[listLesson.length - 1].id === lessonID) setCheckFinalQuiz(true);
+        })
+        .catch((err) => {});
+    }
+  }, [courseID]);
+
   const handleSubmit = (e) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     e.preventDefault();
@@ -61,11 +82,17 @@ function AddQuiz() {
           <h1>Add Quiz</h1>
           {message && <p className={isSuccess ? 'success-message' : 'error-message'}>{message}</p>}
           <form onSubmit={handleSubmit}>
-            <label>
-              Quiz Name:
-              <input type="text" value={quizName} onChange={(e) => setQuizName(e.target.value)} />
-            </label>
-
+            <div>
+              <label>
+                Quiz Name:
+                <input type="text" value={quizName} onChange={(e) => setQuizName(e.target.value)} />
+              </label>
+            </div>
+            <div>
+              <label>
+                Is Final Quiz: <input type="checkbox" checked={isFinal} onChange={() => setIsFinal(!isFinal)} />
+              </label>
+            </div>
             <button type="submit" onClick={handleSubmit}>
               Add Quiz
             </button>

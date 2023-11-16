@@ -151,208 +151,90 @@ function AddQuestion() {
               Question Name:
               <input type="text" value={questionName} onChange={(e) => setQuestionName(e.target.value)} />
             </label>
-
-            <label>
-              Question Type:
-              <select value={questionType} onChange={(e) => setQuestionType(e.target.value)}>
-                <option value="">Select Type</option>
-                <option value="ONE_CHOICE">One Choice</option>
-                <option value="MUILTPLE_CHOICE">MUILTPLE_CHOICE</option>
-              </select>
-            </label>
-            {questionType === 'ONE_CHOICE' ? (
-              <>
-                <input
-                  type="text"
-                  placeholder="Answer A"
-                  name="a"
-                  onChange={(e) => setOptionA(e.target.value)}
-                  value={optionA}
-                />
-                <input
-                  type="text"
-                  placeholder="Answer B"
-                  name="b"
-                  onChange={(e) => setOptionB(e.target.value)}
-                  value={optionB}
-                />
-                <input
-                  type="text"
-                  placeholder="Answer C"
-                  name="c"
-                  onChange={(e) => setOptionC(e.target.value)}
-                  value={optionC}
-                />
-                <input
-                  type="text"
-                  placeholder="Answer D"
-                  name="d"
-                  onChange={(e) => setOptionD(e.target.value)}
-                  value={optionD}
-                />
+            <>
+              <input
+                type="text"
+                placeholder="Answer A"
+                name="a"
+                onChange={(e) => setOptionA(e.target.value)}
+                value={optionA}
+              />
+              <input
+                type="text"
+                placeholder="Answer B"
+                name="b"
+                onChange={(e) => setOptionB(e.target.value)}
+                value={optionB}
+              />
+              <input
+                type="text"
+                placeholder="Answer C"
+                name="c"
+                onChange={(e) => setOptionC(e.target.value)}
+                value={optionC}
+              />
+              <input
+                type="text"
+                placeholder="Answer D"
+                name="d"
+                onChange={(e) => setOptionD(e.target.value)}
+                value={optionD}
+              />
+              <div style={{ display: 'flex' }}>
                 <div style={{ display: 'flex' }}>
-                  <div style={{ display: 'flex' }}>
-                    <input
-                      type="radio"
-                      name="result"
-                      id="A"
-                      value={'A'}
-                      onChange={(e) => {
-                        console.log(e.target.value);
-                        setChoose(e.target.value);
-                      }}
-                    />
-                    <label htmlFor="A">A</label>
-                  </div>
-                  <div style={{ display: 'flex' }}>
-                    <input
-                      type="radio"
-                      name="result"
-                      id="B"
-                      value={'B'}
-                      onChange={(e) => {
-                        console.log(e.target.value);
-                        setChoose(e.target.value);
-                      }}
-                    />
-                    <label htmlFor="B">B</label>
-                  </div>
-                  <div style={{ display: 'flex' }}>
-                    <input
-                      type="radio"
-                      name="result"
-                      id="C"
-                      value={'C'}
-                      onChange={(e) => {
-                        console.log(e.target.value);
-                        setChoose(e.target.value);
-                      }}
-                    />
-                    <label htmlFor="C">C</label>
-                  </div>
-                  <div style={{ display: 'flex' }}>
-                    <input
-                      type="radio"
-                      name="result"
-                      id="D"
-                      value={'D'}
-                      onChange={(e) => {
-                        console.log(e.target.value);
-                        setChoose(e.target.value);
-                      }}
-                    />
-                    <label htmlFor="D">D</label>
-                  </div>
+                  <input
+                    type="radio"
+                    name="result"
+                    id="A"
+                    value={'A'}
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                      setChoose(e.target.value);
+                    }}
+                  />
+                  <label htmlFor="A">A</label>
                 </div>
-              </>
-            ) : questionType === 'MUILTPLE_CHOICE' ? (
-              <>
-                <input
-                  type="text"
-                  placeholder="Answer A"
-                  name="a"
-                  onChange={(e) => setOptionA(e.target.value)}
-                  value={optionA}
-                />
-                <input
-                  type="text"
-                  placeholder="Answer B"
-                  name="b"
-                  onChange={(e) => setOptionB(e.target.value)}
-                  value={optionB}
-                />
-                <input
-                  type="text"
-                  placeholder="Answer C"
-                  name="c"
-                  onChange={(e) => setOptionC(e.target.value)}
-                  value={optionC}
-                />
-                <input
-                  type="text"
-                  placeholder="Answer D"
-                  name="d"
-                  onChange={(e) => setOptionD(e.target.value)}
-                  value={optionD}
-                />
                 <div style={{ display: 'flex' }}>
-                  <div style={{ display: 'flex' }}>
-                    <input
-                      type="checkbox"
-                      name="result"
-                      id="A"
-                      value={'A'}
-                      onChange={(e) => {
-                        console.log(e.target.checked);
-                        const check = e.target.checked;
-                        if (check) {
-                          addSelect(e.target.value);
-                        } else {
-                          removeSelect(e.target.value);
-                        }
-                      }}
-                    />
-                    <label htmlFor="A">A</label>
-                  </div>
-                  <div style={{ display: 'flex' }}>
-                    <input
-                      type="checkbox"
-                      name="result"
-                      id="B"
-                      value={'B'}
-                      onChange={(e) => {
-                        console.log(e.target.checked);
-                        const check = e.target.checked;
-                        if (check) {
-                          addSelect(e.target.value);
-                        } else {
-                          removeSelect(e.target.value);
-                        }
-                      }}
-                    />
-                    <label htmlFor="B">B</label>
-                  </div>
-                  <div style={{ display: 'flex' }}>
-                    <input
-                      type="checkbox"
-                      name="result"
-                      id="C"
-                      value={'C'}
-                      onChange={(e) => {
-                        console.log(e.target.checked);
-                        const check = e.target.checked;
-                        if (check) {
-                          addSelect(e.target.value);
-                        } else {
-                          removeSelect(e.target.value);
-                        }
-                      }}
-                    />
-                    <label htmlFor="C">C</label>
-                  </div>
-                  <div style={{ display: 'flex' }}>
-                    <input
-                      type="checkbox"
-                      name="result"
-                      id="D"
-                      value={'D'}
-                      onChange={(e) => {
-                        console.log(e.target.checked);
-                        const check = e.target.checked;
-                        if (check) {
-                          addSelect(e.target.value);
-                        } else {
-                          removeSelect(e.target.value);
-                        }
-                      }}
-                    />
-                    <label htmlFor="D">D</label>
-                  </div>
+                  <input
+                    type="radio"
+                    name="result"
+                    id="B"
+                    value={'B'}
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                      setChoose(e.target.value);
+                    }}
+                  />
+                  <label htmlFor="B">B</label>
                 </div>
-              </>
-            ) : (
-              <></>
-            )}
+                <div style={{ display: 'flex' }}>
+                  <input
+                    type="radio"
+                    name="result"
+                    id="C"
+                    value={'C'}
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                      setChoose(e.target.value);
+                    }}
+                  />
+                  <label htmlFor="C">C</label>
+                </div>
+                <div style={{ display: 'flex' }}>
+                  <input
+                    type="radio"
+                    name="result"
+                    id="D"
+                    value={'D'}
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                      setChoose(e.target.value);
+                    }}
+                  />
+                  <label htmlFor="D">D</label>
+                </div>
+              </div>
+            </>
 
             <div>
               <Button

@@ -4,6 +4,7 @@ import authApi from '../../api/authApi';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import { MDBBtn, MDBContainer, MDBInput, MDBTabs, MDBTabsContent, MDBTabsItem, MDBTabsLink } from 'mdb-react-ui-kit';
+import Footer from '../../components/Footer/Footer';
 
 export default function ChangePassword() {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -92,6 +93,7 @@ export default function ChangePassword() {
         </MDBTabsContent>
         <MDBBtn onClick={handleSubmit}>Change Password</MDBBtn>
       </MDBContainer>
+      <Footer />
     </div>
   );
 }

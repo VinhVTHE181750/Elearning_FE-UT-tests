@@ -8,25 +8,27 @@ import moment from 'moment';
 const ManagePayment = () => {
   const [payments, setPayments] = useState([]);
   const [filteredPayments, setFilteredPayments] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 10; // Số lượng hàng trên mỗi trang
 
   useEffect(() => {
-    authApi.getAllPayment().then((response) => {
-      const paymentArray = response.data.listPayment;
-      console.log(paymentArray);
-      setPayments(paymentArray);
-      setFilteredPayments(paymentArray);
-    });
+    authApi
+      .getAllPayment()
+      .then((response) => {
+        const paymentArray = response.data.listPayment.map((payment, index) => ({
+          ...payment,
+          index: index + 1,
+        }));
+        console.log(paymentArray);
+        setPayments(response.data.listPayment);
+        setFilteredPayments(paymentArray);
+      })
+      .catch((err) => {});
   }, []);
 
   const handleSearch = (value) => {
-    const filteredData = payments.filter((payment) => payment.courseName.toLowerCase().includes(value.toLowerCase()));
+    const filteredData = payments
+      .filter((payment) => payment.username.toLowerCase().includes(value.toLowerCase()))
+      .map((payment, index) => ({ ...payment, index: index + 1 }));
     setFilteredPayments(filteredData);
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
   };
 
   const columns = [
@@ -34,7 +36,10 @@ const ManagePayment = () => {
       title: 'STT',
       dataIndex: 'index',
       key: 'index',
-      render: (text, record, index) => index + 1 + (currentPage - 1) * pageSize,
+    },
+    {
+      title: 'User',
+      dataIndex: 'username',
     },
     {
       title: 'Created At',
@@ -70,10 +75,6 @@ const ManagePayment = () => {
     },
   ];
 
-  const startIndex = (currentPage - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-  const paginatedData = filteredPayments.slice(startIndex, endIndex);
-
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
@@ -82,19 +83,12 @@ const ManagePayment = () => {
           <div>
             <h1>Manage Payment</h1>
             <Input.Search
-              placeholder="Search by course name"
+              placeholder="Search by username"
               allowClear
               onSearch={handleSearch}
               style={{ marginBottom: 16 }}
             />
-            <Table columns={columns} dataSource={paginatedData} pagination={false} />
-            <Pagination
-              current={currentPage}
-              pageSize={pageSize}
-              total={filteredPayments.length}
-              onChange={handlePageChange}
-              style={{ marginTop: 16, textAlign: 'right' }}
-            />
+            <Table columns={columns} dataSource={filteredPayments} />
           </div>
         </Box>
       </div>

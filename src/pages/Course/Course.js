@@ -73,6 +73,7 @@ export default function Course() {
       navigate(`/payment/${id}`);
     }
   };
+
   const columns = [
     {
       title: 'No',

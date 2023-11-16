@@ -5,7 +5,7 @@ import Footer from '../../components/Footer/Footer';
 import jwtDecode from 'jwt-decode';
 import authApi from '../../api/authApi';
 import { Button, Result } from 'antd';
-
+import './payment.css';
 const PaymentPage = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
@@ -67,7 +67,7 @@ const PaymentPage = () => {
 
           localStorage.setItem('paymentUrl', urlPayment);
           localStorage.setItem('orderID', orderId);
-          window.location.replace(urlPayment);
+          return window.location.replace(urlPayment);
         })
         .catch((error) => {
           console.error('Error enrolling course:', error);
@@ -76,38 +76,41 @@ const PaymentPage = () => {
   };
 
   return (
-    <div>
+    <>
+      {' '}
       <Header />
-      {payments.filter((payment) => payment.courseName === course.name).length !== 0 || user === 'ADMIN' ? (
-        <>
-          <Result
-            title="You have already registered for this course"
-            extra={
-              <Button type="primary" key="console" onClick={() => (window.location.href = `/view-course/${courseId}`)}>
-                Go to course
-              </Button>
-            }
-          />
-        </>
-      ) : (
-        <>
-          <h2>Your order information</h2>
-          <div className="course-details" style={{ marginTop: '50px', marginBottom: '150px' }}>
-            <h2>Name Course: {course.name}</h2>
-            <p style={{ color: '#000000e0', fontWeight: 'unset' }}>
-              Price:{course.price && course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
-            </p>
+      <div className="receipt">
+        <h2 className="name">Your order information</h2>
+        <hr />
+        {/* Details */}
+        <div className="details">
+          <div className="product">
+            <img
+              className="img-Product"
+              src="https://images.shiksha.com/mediadata/images/articles/1653376864phpNspXVa.jpeg"
+              alt=""
+            />
+            <div className="info">
+              <h4>Name Course: {course.name}</h4>
+            </div>
           </div>
-          <p>
-            <button onClick={() => handleEnroll()}>Order Now</button>
+        </div>
+        <div className="totalprice">
+          <p className="del"></p>
+          <hr />
+          <p className="tot">
+            Price <span> {course.price && course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND</span>
           </p>
-        </>
-      )}
+        </div>
 
-      <div style={{ position: 'fixed', bottom: '0', left: '0', zIndex: '1000', width: '100%', margin: '0' }}>
-        <Footer />
+        {/* Footer */}
+        <footer>
+          {' '}
+          <button onClick={() => handleEnroll()}>Order Now</button>
+        </footer>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

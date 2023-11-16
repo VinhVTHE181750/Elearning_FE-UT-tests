@@ -27,6 +27,8 @@ export default function Lesson() {
 
   const navigate = useNavigate();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
@@ -91,6 +93,7 @@ export default function Lesson() {
     }
   }, [courseID]);
 
+  const handleQuiz = (type, quizId, isFinal, quizLessonId) => {
   const handleQuiz = (type, quizId, isFinal, quizLessonId) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     if (type === 'Start') {
@@ -211,6 +214,7 @@ export default function Lesson() {
         <div>
           <Result status="404" title="404" subTitle="Sorry, the page you visited does not exist." />
         </div>
+      )} */}
       )} */}
 
       <div>
