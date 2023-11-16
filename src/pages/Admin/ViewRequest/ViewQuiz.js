@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import authApi from '../../../api/authApi';
+import authApi from '../../api/authApi';
 import jwt_decode from 'jwt-decode';
-import Sidebar from '../../../components/Sidebar/Sidebar';
+import Sidebar from '../../components/Sidebar/Sidebar';
 import { Table, Button, message } from 'antd';
 
 const ViewQuiz = () => {
