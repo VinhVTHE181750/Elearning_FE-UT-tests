@@ -132,7 +132,7 @@ export default function PageContent() {
         {allCourses.map((course) => (
           <div key={course.id} className="course-card">
             <img
-              src="https://images.shiksha.com/mediadata/images/articles/1653376864phpNspXVa.jpeg"
+              src="https://firebasestorage.googleapis.com/v0/b/swp391elearningapplication.appspot.com/o/python-logo-4k-i6-3840x2160.jpg?alt=media&token=967ba490-fb8e-40b0-9e75-ce91b729f024"
               alt={course.name}
             />
             <h3>{course.name}</h3>

@@ -33,10 +33,10 @@ function AddLesson() {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     e.preventDefault();
-    if (lessonName && ordNumber && linkContent && description) {
+    if (lessonName.trim() && ordNumber && linkContent && description) {
       const params = {
         username: username,
-        lessonName,
+        lessonName: lessonName.trim(),
         ordNumber,
         courseID: courseID,
         linkContent,

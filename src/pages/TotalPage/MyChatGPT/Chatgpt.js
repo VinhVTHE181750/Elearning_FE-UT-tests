@@ -9,7 +9,7 @@ import {
   MessageInput,
   TypingIndicator,
 } from '@chatscope/chat-ui-kit-react';
-import Header from '../../components/Header/Header';
+import Header from '../../../components/Header/Header';
 
 const API_KEY = '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';
 // "Explain things like you would to a 10 year old learning how to code."
