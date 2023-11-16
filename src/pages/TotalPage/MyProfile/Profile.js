@@ -75,12 +75,13 @@ const Profile = () => {
 
   const handleSave = async () => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
+    // check vaid fullname
     if (!isValidFullName(fullName)) {
       // Hiển thị thông báo lỗi nếu tên đầy đủ không hợp lệ
       setShowErrorAlert(true);
       return window.alert('Please enter a valid full name');
     }
+    // check vaid phone number
     if (!phoneRegex.test(phoneNum)) {
       return window.alert('Error: Phone is a 10-digit number sequence that starts with 0');
     }
