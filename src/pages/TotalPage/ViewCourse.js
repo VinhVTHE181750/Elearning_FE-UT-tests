@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './ViewCourse.css';
-import authApi from '../../api/authApi';
+
 import { Button, Space, Table, Input } from 'antd';
 import moment from 'moment';
 import jwt_decode from 'jwt-decode';
 import Sidebar from '../../components/Sidebar/Sidebar';
+import authApi from '../../api/authApi';
 import jwtDecode from 'jwt-decode';
 
 const ViewCourse = () => {

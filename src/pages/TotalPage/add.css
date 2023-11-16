@@ -1,0 +1,336 @@
+.add-course-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black;
+}
+
+.add-course-container h2 {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+#description {
+  padding-bottom: 50px;
+}
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: black;
+}
+
+input[type='text'],
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button[type='submit'] {
+  padding: 10px 20px;
+  background-color: #1f883d;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[type='submit']:hover {
+  background-color: #3d9e53;
+}
+.message {
+  font-weight: bold;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.success {
+  background-color: #3d9e53;
+  color: white;
+}
+
+.error {
+  background-color: #e53935;
+  color: white;
+}
+.add-category-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-category-container h2 {
+  margin-bottom: 20px;
+  color: black;
+}
+
+.add-category-container .form-group {
+  margin-bottom: 10px;
+}
+
+.add-category-container label {
+  display: block;
+  font-weight: bold;
+}
+
+.add-category-container input[type='text'] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-category-container button[type='submit'] {
+  padding: 10px 20px;
+  background-color: #3d9e53;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-category-container button[type='submit']:hover {
+  background-color: #358c4c;
+}
+
+.add-category-container .message {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.add-category-container .message.success {
+  background-color: #dff0d8;
+  color: #3c763d;
+}
+
+.add-category-container .message.error {
+  background-color: #f2dede;
+  color: #a94442;
+}
+.add-lesson-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black;
+}
+
+.add-lesson-container h1 {
+  margin-bottom: 20px;
+}
+
+.add-lesson-container form {
+  margin-bottom: 20px;
+}
+
+.add-lesson-container label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: black;
+}
+
+.add-lesson-container input[type='text'],
+.add-lesson-container input[type='number'],
+.add-lesson-container textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-lesson-container button[type='submit'] {
+  padding: 10px 20px;
+  background-color: #1f883d;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-lesson-container button[type='submit']:hover {
+  background-color: #3d9e53;
+}
+.success-message {
+  color: green;
+}
+
+.error-message {
+  color: red;
+}
+.add-quiz-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black;
+}
+.add-quiz-container h1 {
+  margin-bottom: 20px;
+}
+.add-quiz-container form {
+  margin-bottom: 20px;
+}
+.add-quiz-container label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: black;
+}
+.add-quiz-container input[type='text'] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.add-quiz-container button[type='submit'] {
+  padding: 10px 20px;
+  background-color: #1f883d;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.add-quiz-container button[type='submit']:hover {
+  background-color: #3d9e53;
+}
+.success-message {
+  color: green;
+}
+.error-message {
+  color: red;
+}
+.add-question-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black;
+}
+
+.add-question-container h1 {
+  margin-bottom: 20px;
+}
+
+.add-question-container form {
+  margin-bottom: 20px;
+}
+
+.add-question-container label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: black;
+}
+
+.add-question-container input[type='text'] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-question-container select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-question-container button[type='submit'] {
+  padding: 10px 20px;
+  background-color: #1f883d;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-question-container button[type='submit']:hover {
+  background-color: #3d9e53;
+}
+
+.success-message {
+  color: green;
+}
+
+.error-message {
+  color: red;
+}
+.add-answer-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black;
+}
+
+.add-answer-container h1 {
+  margin-bottom: 20px;
+}
+
+.add-answer-container form {
+  margin-bottom: 20px;
+}
+
+.add-answer-container label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: black;
+}
+
+.add-answer-containerinput[type='text'] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-answer-container select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-answer-container button[type='submit'] {
+  padding: 10px 20px;
+  background-color: #1f883d;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-answer-containerbutton[type='submit']:hover {
+  background-color: #3d9e53;
+}
+
+.success-message {
+  color: green;
+}
+
+.error-message {
+  color: red;
+}
