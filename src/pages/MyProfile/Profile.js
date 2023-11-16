@@ -72,9 +72,10 @@ const Profile = () => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     try {
+      const trimmedFullName = fullName.trim(); // Loại bỏ khoảng trắng không cần thiết
       const params = {
         username: user,
-        fullName: fullName,
+        fullName: trimmedFullName,
         phoneNum: phoneNum,
         gender: gender,
         dateOfBirth: dateOfBirth,
