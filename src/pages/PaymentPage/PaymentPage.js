@@ -36,12 +36,6 @@ const PaymentPage = () => {
         .then((response) => {
           console.log(response.data);
           const paymentArray = (response.data && response.data.listPayment) || [];
-          if (
-            payments.filter((payment) => payment.courseName === course.name).length !== 0 ||
-            decoded.userInfo[0] === 'ADMIN'
-          ) {
-            return navigate(`/view-course/${courseId}`);
-          }
           setPayments(paymentArray);
         })
         .catch((error) => {

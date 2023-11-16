@@ -32,6 +32,7 @@ function AddQuiz() {
         username: user,
         lessonID: lessonID,
         quizName,
+        finalQuiz: false,
       };
 
       authApi

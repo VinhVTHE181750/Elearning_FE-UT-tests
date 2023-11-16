@@ -105,21 +105,32 @@ function BlogCard({ blogItem }) {
       <Grid container columnSpacing={3} rowSpacing={3}>
         <Grid item md={3}>
           <div className="card-image">
-            <img className="img-hover" src={blogItem.linkThumnail} />
+            <img
+              className="img-hover"
+              src={
+                'https://png.pngtree.com/png-vector/20230304/ourmid/pngtree-colorful-blog-speech-bubble-vector-png-image_6633021.png'
+              }
+            />
+            {/* <img className="img-hover" src={blogItem.linkThumnail} /> */}
           </div>
         </Grid>
         <Grid item md={7}>
           <Box>
-            <Title>{blogItem.title}</Title>
+            <Title style={{ textDecoration: 'none' }}>{blogItem.title}</Title>
             <Paragraph>{blogItem.content}</Paragraph>
             <BoxTime>
               <CalendarMonthIcon fontSize="small" /> {moment(blogItem.createdAt).format('MMMM Do YYYY, h:mm a')}
             </BoxTime>
           </Box>
-          <Box xs={4}>
-            <Button onClick={() => handleEditBlog()}>Edit</Button>
-            <Button onClick={() => handleDeleteBlog()}>Delete</Button>
-          </Box>
+          {localStorage.getItem('user-access-token') &&
+            jwtDecode(localStorage.getItem('user-access-token')).userInfo[0] === 'ADMIN' && (
+              <>
+                <Box xs={4}>
+                  <Button onClick={() => handleEditBlog()}>Edit</Button>
+                  <Button onClick={() => handleDeleteBlog()}>Delete</Button>
+                </Box>
+              </>
+            )}
 
           <Modal open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
             <Card>

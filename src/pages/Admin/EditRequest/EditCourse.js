@@ -133,7 +133,7 @@ const EditCourse = () => {
           )}
           <h2>Edit Course</h2>
           {course && (
-            <div className="form-container" style={{ maxWidth: '400px' }}>
+            <div className="form-container" style={{ width: '100%', maxWidth: '600px', margin: 'auto' }}>
               <div className="form-group">
                 <label htmlFor="name">Name:</label>
                 <input
@@ -169,10 +169,15 @@ const EditCourse = () => {
                 <input
                   id="link_thumnail"
                   type="text"
-                  value={course.linkThumail} // Thay đổi tên trường thành linkThumnail
-                  onChange={(e) => setCourse({ ...course, linkThumail: e.target.value })} // Thay đổi tên trường thành linkThumnail
-                  margin="normal"
+                  value={course.linkThumail}
+                  onChange={(e) => setCourse({ ...course, linkThumail: e.target.value })}
+                  className="form-control"
                 />
+              </div>
+              <div className="thumbnail-preview">
+                {course.linkThumail && (
+                  <img src={course.linkThumail} alt="Thumbnail" style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                )}
               </div>
               <div className="form-group">
                 <label htmlFor="category">Category:</label>

@@ -6,6 +6,7 @@ import jwtDecode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { Alert } from '@mui/material';
 import { Button } from 'antd';
+
 const AddCourse = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -18,6 +19,7 @@ const AddCourse = () => {
   const [username, setUsername] = useState('');
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const AddCourse = () => {
     if (localStorage.getItem('user-access-token')) {
       setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
     }
-  }, [localStorage.getItem('user-access-token')]);
+  }, []);
 
   useEffect(() => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
@@ -45,29 +47,31 @@ const AddCourse = () => {
       });
   }, []);
 
-  const handleSubmit = (e) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+  const handleThumbnailChange = (e) => {
+    setLinkThumnail(e.target.value);
+  };
 
+  const handleThumbnailBlur = () => {
+    setThumbnailPreview(link_thumnail);
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (name && description && price && link_thumnail && category) {
+    if (name.trim() && description && price && link_thumnail && category) {
       const params = {
         username: username,
-        name,
+        name: name.trim(),
         price,
         link_thumnail,
-        category, // Use the category state directly
+        category,
         description,
       };
-      console.log(params);
       authApi
         .addCourse(params)
         .then((response) => {
-          // Handle the success response
           setMessage('Add Course Successful');
           setIsSuccess(true);
-          console.log(response);
-          // Reset the form fields
           setName('');
           setDescription('');
           setPrice('');
@@ -77,7 +81,6 @@ const AddCourse = () => {
           setShowErrorAlert(false);
         })
         .catch((error) => {
-          // Handle the error response
           setShowSuccessAlert(false);
           setShowErrorAlert(true);
         });
@@ -86,11 +89,11 @@ const AddCourse = () => {
       setShowErrorAlert(true);
     }
   };
-  const handleBackClick = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
+  const handleBackClick = () => {
     navigate('/manageCourse');
   };
+
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
@@ -123,9 +126,11 @@ const AddCourse = () => {
                 type="text"
                 id="link_thumbnail"
                 value={link_thumnail}
-                onChange={(e) => setLinkThumnail(e.target.value)}
+                onChange={handleThumbnailChange}
+                onBlur={handleThumbnailBlur}
               />
             </div>
+            {thumbnailPreview && <img src={thumbnailPreview} alt="Thumbnail Preview" />}
             <div className="form-group">
               <label htmlFor="category">Category:</label>
               <select id="category" value={category} onChange={(e) => setCategory(e.target.value)}>

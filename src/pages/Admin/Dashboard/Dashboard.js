@@ -5,14 +5,12 @@ import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TrafficIcon from '@mui/icons-material/Traffic';
 import Header from '../../../components/Admin/Header/Header';
-import LineChart from '../../../components/Admin/LineChart';
-import BarChart from '../../../components/Admin/BarChart';
 
 import StatBox from '../../../components/Admin/StatBox';
 import { useEffect, useState } from 'react';
 import authApi from '../../../api/authApi';
 import Sidebar from '../../../components/Sidebar/Sidebar';
-import BarcharPage from '../../../components/Admin/BarcharPage';
+import Charts from './Charts/Charts';
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -21,13 +19,14 @@ const Dashboard = () => {
   const [totalCoure, setTotalCourse] = useState('');
   const [payments, setPayments] = useState([]);
   const [filteredPayments, setFilteredPayments] = useState([]);
+  const [month, setMonth] = useState('');
+  const [year, setYear] = useState('2023');
+  const [transaction, setTranscation] = useState([]);
   useEffect(() => {
     authApi.getAllPayment().then((response) => {
       const paymentArray = response.data.listPayment;
-      console.log(paymentArray);
       setPayments(paymentArray);
       setFilteredPayments(paymentArray);
-      console.log(payments);
     });
   }, []);
 
@@ -37,7 +36,16 @@ const Dashboard = () => {
     });
   }, []);
 
-  // Lấy 5 giao dịch gần nhất
+  useEffect(() => {
+    authApi
+      .getPaymentByMonthYear({ month, year })
+      .then((resp) => {
+        console.log(resp.data.revenueForMonth);
+        setTranscation(resp.data.revenueForMonth);
+      })
+      .catch((err) => {});
+  }, []);
+
   const recentTransactions = payments.slice(0, 5);
 
   return (
@@ -100,9 +108,10 @@ const Dashboard = () => {
                 </Box>
               </Box>
               <Box height="250px" m="-20px 0 0 0">
-                <BarcharPage isDashboard={true} />
+                <Charts list={transaction} />
               </Box>
             </Box>
+
             <Box gridColumn="span 4" gridRow="span 2" backgroundColor={colors.primary[400]} overflow="auto">
               <Box
                 display="flex"
