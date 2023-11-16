@@ -369,6 +369,18 @@ const authApi = {
     const url = `/api/v1/lesson/get-lesson-completed-by-course?courseId=${params.courseId}&username=${params.username}`;
     return axiosClient.get(url, params);
   },
+  getPaymentByMonthYear: (params) => {
+    const url = `/api/v1/payment/get-payment-by-month-year?year=${params.year}`;
+    return axiosClient.get(url, params);
+  },
+  getPaymentByCourse: (params) => {
+    const url = `/api/v1/payment/get-payment-by-course?courseId=${params.courseId}&month=${''}&year=${params.year}`;
+    return axiosClient.get(url, params);
+  },
+  getCategoryById: (params) => {
+    const url = `/api/v1/category/get-category-by-id?id=${params.id}`;
+    return axiosClient.get(url, params);
+  },
 };
 
 export default authApi;

@@ -2,8 +2,13 @@ import { useEffect, useState } from 'react';
 import { List, Table, Button, Card, Radio, Space, Alert, Modal } from 'antd';
 import authApi from '../../../api/authApi';
 import jwtDecode from 'jwt-decode';
+import { useParams } from 'react-router-dom';
 
-export default function TakeQuiz({ quizId, courseID, session }) {
+export default function TakeQuiz() {
+  const { quizId } = useParams();
+  const { courseID } = useParams();
+  const { session } = useParams();
+  const { lessonID } = useParams();
   const [questionId, setQuestionId] = useState(-1);
   const [listQuestion, setListQuestion] = useState([]);
   const [listAnswer, setListAnswer] = useState([]);
@@ -12,20 +17,33 @@ export default function TakeQuiz({ quizId, courseID, session }) {
   const [showModal, setShowModal] = useState(false);
   const [resultQuiz, setResultQuiz] = useState([]);
   const [lessonId, setLessonId] = useState('');
+  const [checkChangeTab, setCheckChangeTab] = useState(false);
 
   useEffect(() => {
-    authApi
-      .getQuizById(quizId)
-      .then((resp) => {
-        if (resp.data) setLessonId(resp.data.lesson.id);
-      })
-      .catch((err) => {});
+    document.addEventListener('visibilitychange', () => {
+      document.title = document.visibilityState;
+      if (document.visibilityState !== 'visible') {
+        setCheckChangeTab(true);
+        showModalFunc();
+      }
+    });
   }, []);
 
   useEffect(() => {
-    authApi.getQuestionByQuizId(quizId).then((response) => {
-      setListQuestion(response.data.questionList);
-    });
+    if (quizId)
+      authApi
+        .getQuizById(quizId)
+        .then((resp) => {
+          if (resp.data) setLessonId(resp.data.lesson.id);
+        })
+        .catch((err) => {});
+  }, []);
+
+  useEffect(() => {
+    if (session)
+      authApi.getQuestionByQuizId(quizId).then((response) => {
+        setListQuestion(response.data.questionList);
+      });
   }, [session]);
 
   useEffect(() => {
@@ -35,7 +53,9 @@ export default function TakeQuiz({ quizId, courseID, session }) {
         .then((response) => {
           setListAnswer(response.data);
         })
-        .catch((err) => {});
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [questionId]);
 
@@ -83,17 +103,20 @@ export default function TakeQuiz({ quizId, courseID, session }) {
 
   const handleClose = (percent) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    if (checkChangeTab) {
+      return (window.location.href = `/viewLesson/${lessonID}`);
+    }
     if (percent * 100 >= 80) {
       authApi
         .completeLesson({ username: jwtDecode(localStorage.getItem('user-access-token')).sub, lessonId })
         .then((resp) => {
-          return window.location.reload();
+          return (window.location.href = `/viewLesson/${lessonID}`);
         })
         .catch((err) => {
           console.log(err);
         });
     }
-    return window.location.reload();
+    return (window.location.href = `/viewLesson/${lessonID}`);
   };
 
   return (
@@ -103,11 +126,15 @@ export default function TakeQuiz({ quizId, courseID, session }) {
         backgroundColor: '#FAFAFA',
         width: '960px',
         height: '480px',
-        marginTop: '20px',
-        marginLeft: '30px',
+        margin: 'auto',
         borderRadius: '10px',
       }}
     >
+      <h2>Exam Rules</h2>
+      <ul>
+        <li>Do not switch tabs during the quiz.</li>
+        <li>If you leave the quiz tab, your session will be canceled.</li>
+      </ul>
       <List
         pagination={{ pageSize: 1, align: 'center' }}
         dataSource={listQuestion}
@@ -148,9 +175,17 @@ export default function TakeQuiz({ quizId, courseID, session }) {
                   </Button>,
                 ]}
               >
-                <p>Total Correct: {resultQuiz.totalCorrect}</p>
-                <p>Total Incorrect: {resultQuiz.totalInCorrect}</p>
-                <p>Score: {resultQuiz.percent * 100}%</p>
+                {checkChangeTab ? (
+                  <>
+                    <p>You switched tabs, and your answers have been canceled.</p>
+                  </>
+                ) : (
+                  <>
+                    <p>Total Correct: {resultQuiz.totalCorrect}</p>
+                    <p>Total Incorrect: {resultQuiz.totalInCorrect}</p>
+                    <p>Score: {resultQuiz.percent * 100}%</p>
+                  </>
+                )}
               </Modal>
             </List.Item>
           );

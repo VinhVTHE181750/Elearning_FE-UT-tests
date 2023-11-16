@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { Box, Button, Card, Grid, Typography, Modal, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -16,9 +16,9 @@ const BoxTime = styled(Box)({
 
 function BlogCard({ blogItem }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(blogItem.title);
-  const [editedContent, setEditedContent] = useState(blogItem.content);
-  const [editedLinkThumnail, setEditedLinkThumnail] = useState(blogItem.linkThumnail);
+  const editedTitleRef = useRef(blogItem.title);
+  const editedContentRef = useRef(blogItem.content);
+  const editedLinkThumnailRef = useRef(blogItem.linkThumnail);
 
   const handleEditBlog = () => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
@@ -35,9 +35,9 @@ function BlogCard({ blogItem }) {
     const editData = {
       username: jwtDecode(localStorage.getItem('user-access-token')).sub,
       blogId: blogItem.id,
-      title: editedTitle,
-      content: editedContent,
-      linkThumnail: editedLinkThumnail,
+      title: editedTitleRef.current.value, // Lấy giá trị từ useRef bằng cách sử dụng .value
+      content: editedContentRef.current.value, // Lấy giá trị từ useRef bằng cách sử dụng .value
+      linkThumnail: editedLinkThumnailRef.current.value, // Lấy giá trị từ useRef bằng cách sử dụng .value
     };
     authApi
       .updateBlog(editData)
@@ -99,6 +99,7 @@ function BlogCard({ blogItem }) {
     WebkitLineClamp: 4,
     WebkitBoxOrient: 'vertical',
   });
+
   return (
     <CardBox>
       <Grid container columnSpacing={3} rowSpacing={3}>
@@ -120,7 +121,7 @@ function BlogCard({ blogItem }) {
             <Button onClick={() => handleDeleteBlog()}>Delete</Button>
           </Box>
 
-          <Modal open={isEditModalOpen} onClose={handleCloseEditModal}>
+          <Modal open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
             <Card>
               <Box p={2}>
                 <Typography variant="h6" gutterBottom>
@@ -129,24 +130,24 @@ function BlogCard({ blogItem }) {
                 <TextField
                   label="Title"
                   fullWidth
-                  value={editedTitle}
-                  onChange={(e) => setEditedTitle(e.target.value)}
+                  defaultValue={blogItem.title}
+                  inputRef={(ref) => (editedTitleRef.current = ref)} // Sử dụng inputRef để gán giá trị vào useRef
                 />
                 <TextField
                   label="Content"
                   fullWidth
                   multiline
                   rows={4}
-                  value={editedContent}
-                  onChange={(e) => setEditedContent(e.target.value)}
+                  defaultValue={blogItem.content}
+                  inputRef={(ref) => (editedContentRef.current = ref)} // Sử dụng inputRef để gán giá trị vào useRef
                 />
                 <TextField
                   label="Thumbnail Link"
                   fullWidth
-                  value={editedLinkThumnail}
-                  onChange={(e) => setEditedLinkThumnail(e.target.value)}
+                  defaultValue={blogItem.linkThumnail}
+                  inputRef={(ref) => (editedLinkThumnailRef.current = ref)} // Sử dụng inputRef để gán giá trị vào useRef
                 />
-                <Button onClick={() => handleSaveEdit()}>Save</Button>
+                <Button onClick={handleSaveEdit}>Save</Button>
               </Box>
             </Card>
           </Modal>

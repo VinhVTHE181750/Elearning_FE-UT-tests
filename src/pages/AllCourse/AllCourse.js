@@ -16,6 +16,7 @@ export default function AllCourse() {
   const [courses, setCourses] = useState([]);
   const [verticalActive, setVerticalActive] = useState(-1);
   const [listEnrollCourse, setListEnrollCourse] = useState([]);
+  const [role, setRole] = useState('');
 
   const navigate = useNavigate();
 
@@ -23,6 +24,8 @@ export default function AllCourse() {
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       var deCoded = jwtDecode(userString);
+      console.log(deCoded);
+      setRole(deCoded.userInfo[0]);
       authApi
         .getCourseByUser(deCoded.sub)
         .then((resp) => {
@@ -148,6 +151,11 @@ export default function AllCourse() {
       ),
   });
 
+  const handleEnrollCourse = (courseId) => {
+    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    window.location.href = `/payment/${courseId}`;
+  };
+
   const columns = [
     {
       title: 'Name',
@@ -183,11 +191,12 @@ export default function AllCourse() {
     {
       title: 'Create At',
       align: 'center',
+      width: '5%',
       render: (record) => {
         const formatDate = moment(record.createdAt).format('MMMM Do YYYY, h:mm a');
         return <a>{formatDate}</a>;
       },
-      sorter: (a, b) => moment(a).diff(moment(b)),
+      sorter: (a, b) => moment(a.createdAt).diff(moment(b.createdAt)),
       sortDirections: ['descend', 'ascend'],
     },
     {
@@ -195,13 +204,13 @@ export default function AllCourse() {
       align: 'center',
       width: '5%',
       render: (record) => {
-        if (listEnrollCourse.find((courseEnroll) => courseEnroll.id === record.id)) {
+        if (listEnrollCourse.find((courseEnroll) => courseEnroll.id === record.id) || role === 'ADMIN') {
           return <Button onClick={() => handleViewCourse(record.id)}>Go to course</Button>;
         } else {
           return (
             <div>
               <Button onClick={() => handleViewCourse(record.id)}>View Course</Button>
-              <Button onClick={() => (window.location.href = `/payment/${record.id}`)}>Enroll Course</Button>
+              <Button onClick={() => handleEnrollCourse(record.id)}>Enroll Course</Button>
             </div>
           );
         }

@@ -6,6 +6,7 @@ import { Button, Space, Table, Input } from 'antd';
 import moment from 'moment';
 import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
+import jwtDecode from 'jwt-decode';
 
 const ViewCourse = () => {
   const { courseID } = useParams();
@@ -66,7 +67,7 @@ const ViewCourse = () => {
 
     if (window.confirm('Do you want to delete this lesson?')) {
       authApi
-        .deleteLesson(lessonID)
+        .deleteLesson({ username: jwtDecode(localStorage.getItem('user-access-token')).sub, lessonID })
         .then((response) => {
           setLessons(lessons.filter((lesson) => lesson.id !== lessonID));
           setLessons((prevLessons) => prevLessons.map((lesson, index) => ({ ...lesson, id: index + 1 })));

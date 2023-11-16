@@ -69,6 +69,7 @@ export default function Header() {
       <div className="header-options">
         <Link to="/allCourse">All Course</Link>
         <Link to="/blog">Blog</Link>
+        <Link to="/chatgpt">ChatGPT</Link>
         {isSignIn ? (
           <>
             <Link to="/myLearning">My learning</Link>
@@ -84,7 +85,6 @@ export default function Header() {
                   Admin dashboard
                 </Link>
                 <Link to="/changePassword">Change Password</Link>
-                <Link to="/setting">Setting</Link>
                 <Link to="/" onClick={handleLogout}>
                   Logout
                 </Link>

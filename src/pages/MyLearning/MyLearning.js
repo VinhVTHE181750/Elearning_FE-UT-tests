@@ -47,7 +47,14 @@ export default function MyLearning() {
 
   const handleViewCourse = (courseId) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-    navigate(`/viewLesson/${courseId}`);
+    authApi
+      .getLessonByCourseId(courseId)
+      .then((resp) => {
+        if (resp.data.lessonList) {
+          navigate(`/viewLesson/${resp.data.lessonList[0].id}`);
+        }
+      })
+      .catch((err) => {});
   };
 
   const [searchText, setSearchText] = useState('');
@@ -208,7 +215,7 @@ export default function MyLearning() {
   return (
     <>
       <Header />
-      <div style={{ marginBottom: '150px' }}>
+      <div style={{ marginBottom: '150px', paddingBottom: '150px' }}>
         <div className="course-list">
           <h4 style={{ textAlign: 'center', marginTop: '40px' }}>My learning</h4>
           <Table
