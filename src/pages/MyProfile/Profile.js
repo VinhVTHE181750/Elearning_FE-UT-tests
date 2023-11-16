@@ -67,12 +67,21 @@ const Profile = () => {
       setDobError('');
     }
   };
-
+  const isValidFullName = (name) => {
+    const pattern = '/^[a-zA-Zs]+$/'; // Biểu thức chính quy để kiểm tra tên đầy đủ
+    return pattern.test(name);
+  };
   const handleSave = async () => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
+    if (!isValidFullName(fullName)) {
+      // Hiển thị thông báo lỗi nếu tên đầy đủ không hợp lệ
+      setShowErrorAlert(true);
+      return window.alert('Please enter a valid full name');
+    }
+
     try {
-      const trimmedFullName = fullName.trim(); // Loại bỏ khoảng trắng không cần thiết
+      const trimmedFullName = fullName.trim();
       const params = {
         username: user,
         fullName: trimmedFullName,
