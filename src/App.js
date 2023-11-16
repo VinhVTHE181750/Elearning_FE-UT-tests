@@ -5,7 +5,7 @@ import SignIn from './pages/SignIn/SignIn';
 import VerifyOtp from './pages/SignIn/VerifyOtp/VerifyOtp';
 import ForgotPassword from './pages/SignIn/ForgotPassword/ForgotPassword';
 import ChangePassword from './pages/ChangePassword/ChangePassword';
-import Profile from './pages/MyProfile/Profile';
+import Profile from './pages/TotalPage/MyProfile/Profile';
 import AllCourse from './pages/AllCourse/AllCourse';
 import Course from './pages/Course/Course';
 import { ColorModeContext, useMode } from './theme';

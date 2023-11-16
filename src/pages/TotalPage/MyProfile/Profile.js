@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import authApi from '../../api/authApi';
+import authApi from '../../../api/authApi';
 import jwt_decode from 'jwt-decode';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import Header from '../../../components/Header/Header';
+import Footer from '../../../components/Footer/Footer';
 import { Alert } from '@mui/material';
 import './profile.css';
 const Profile = () => {
