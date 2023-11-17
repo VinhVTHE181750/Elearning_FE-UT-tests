@@ -90,6 +90,11 @@ export default function Course() {
       dataIndex: 'description',
       key: 'description',
     },
+    {
+      title: 'Description2',
+      dataIndex: 'description2',
+      key: 'description',
+    },
   ];
 
   return (
@@ -99,6 +104,7 @@ export default function Course() {
         <h2>{course.name}</h2>
         <img src={course.linkThumnail} alt={course.name} />
         <p>{course.description}</p>
+        <p>{course.description2}</p>
         <p style={{ color: '#000000e0', fontWeight: 'unset' }}>
           Price:{course.price && course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
         </p>

@@ -66,9 +66,13 @@ const EditCourse = () => {
     }
   }, [localStorage.getItem('user-access-token')]);
 
+  const nameRegex = /^[a-zA-Z0-9]+[A-Za-zÀ-ỹ0-9!@#$%^&*(),?".:{}|<>':\s]+$/;
+  const priceRegex = /^[1-9]\d*$/;
+  const linkThumbnailRegex =
+    /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
+
   const handleSaveClick = () => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
     const params = {
       username: username,
       courseID: courseID,
@@ -78,6 +82,11 @@ const EditCourse = () => {
       link_thumnail: course.linkThumail,
       categoryID: course.category.id,
     };
+    if (!nameRegex.test(params.name.trim())) return window.alert('Error: Name invalidate!');
+    if (!priceRegex.test(params.price)) return window.alert('Error: The input for price is a positive integer type.');
+    if (!linkThumbnailRegex.test(params.link_thumnail)) return window.alert('Error: Link Thumbnail error!');
+    console.log(params.description.trim());
+    if (!nameRegex.test(params.description.trim())) return window.alert('Error: Description invalidate!');
     if (course.name) {
       const check = courses.find(
         (c) =>

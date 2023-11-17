@@ -11,7 +11,7 @@ import {
 } from '@chatscope/chat-ui-kit-react';
 import Header from '../../components/Header/Header';
 
-const API_KEY = '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';
+const API_KEY = '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';
 // "Explain things like you would to a 10 year old learning how to code."
 const systemMessage = {
   //  Explain things like you're talking to a software professional with 5 years of experience.

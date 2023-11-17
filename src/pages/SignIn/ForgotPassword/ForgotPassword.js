@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import authApi from '../../../api/authApi';
 import './index.css';
-import { useToast } from '@chakra-ui/react';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -11,12 +10,9 @@ export default function ForgotPassword() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const [formState, setFormState] = useState('email');
-  const toast = useToast();
 
   const emailRegex = /^[a-zA-Z0-9]+[@]([a-z]+[.]){1,2}[a-z]+$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-
-  const timeDuration = '1000';
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();

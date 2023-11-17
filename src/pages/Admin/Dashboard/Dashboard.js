@@ -173,8 +173,8 @@ const Dashboard = () => {
                     placeholder="All Course"
                     optionFilterProp="children"
                     onChange={handleCourseChange}
-                    onClear
-                    filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                    allowClear
+                    filterOption={(input, option) => (option?.label ?? '').includes(input.trim())}
                     options={listSelectCourse}
                     style={{ width: '500px' }}
                   />

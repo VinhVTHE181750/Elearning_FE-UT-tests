@@ -190,7 +190,7 @@ const ViewCourse = () => {
                   <span className="label">Category:</span> {courseToView.category.name}
                 </p>
                 <p>
-                  <span className="label">Created:</span> {courseToView.createdAt}
+                  <span className="label">Created:</span> {moment(courseToView.createAt).format('MMMM Do YYYY, h:mm a')}
                 </p>
                 <p>
                   <span className="label">

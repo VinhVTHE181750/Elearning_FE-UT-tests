@@ -68,6 +68,9 @@ const Profile = () => {
     }
   };
 
+  const fullnameRegex = /^[^\d!@#$%^&*(),.?":{}|<>0-9]+(?: [^\d!@#$%^&*(),.?":{}|<>0-9]+)?$/;
+  const phoneRegex = /^0\d{9}$/;
+
   const handleSave = async () => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
@@ -79,6 +82,9 @@ const Profile = () => {
         gender: gender,
         dateOfBirth: dateOfBirth,
       };
+      if (!fullnameRegex.test(fullName)) return window.alert('Error: Fullname invalidate!');
+      if (!phoneRegex.test(phoneNum)) return window.alert('Error: Phone Number invalidate!');
+
       const response = await authApi.changeProfile(params);
       setShowSuccessAlert(true);
       setShowErrorAlert(false);

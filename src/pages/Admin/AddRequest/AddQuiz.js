@@ -44,8 +44,12 @@ function AddQuiz() {
     }
   }, [courseID]);
 
+  const nameRegex = /^[a-zA-Z0-9]+[A-Za-zÀ-ỹ0-9!@#$%^&*(),.?":{}|<>':\s]+$/;
+
   const handleSubmit = (e) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    if (!nameRegex.test(quizName.trim())) return window.alert('Error: Quiz Name invalidate!');
+
     e.preventDefault();
 
     if (lessonID && quizName) {
@@ -81,18 +85,18 @@ function AddQuiz() {
         <div className="add-quiz-container">
           <h1>Add Quiz</h1>
           {message && <p className={isSuccess ? 'success-message' : 'error-message'}>{message}</p>}
-          <form onSubmit={handleSubmit}>
+          <form>
             <div>
               <label>
                 Quiz Name:
                 <input type="text" value={quizName} onChange={(e) => setQuizName(e.target.value)} />
               </label>
             </div>
-            <div>
+            {/* <div>
               <label>
                 Is Final Quiz: <input type="checkbox" checked={isFinal} onChange={() => setIsFinal(!isFinal)} />
               </label>
-            </div>
+            </div> */}
             <button type="submit" onClick={handleSubmit}>
               Add Quiz
             </button>

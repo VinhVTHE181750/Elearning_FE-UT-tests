@@ -31,6 +31,7 @@ export default function SignIn() {
 
   const navigate = useNavigate();
 
+  const fullnameRegex = /^[^\d!@#$%^&*(),.?":{}|<>0-9]+(?: [^\d!@#$%^&*(),.?":{}|<>0-9]+)?$/;
   const emailRegex = /^[a-zA-Z0-9]+[@]([a-z]+[.]){1,2}[a-z]+$/;
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
   const phoneRegex = /^0\d{9}$/;
@@ -47,7 +48,7 @@ export default function SignIn() {
       username: email,
       password: password,
     };
-    if (email === '' && password === '') return;
+    if (email === '' || password === '') return window.alert('Error: Do not leave any blank spaces');
     if (!emailRegex.test(email)) {
       return window.alert('Email invalidate');
     }
@@ -90,6 +91,7 @@ export default function SignIn() {
       rePassword === ''
     )
       return window.alert('Error: Do not leave any blank spaces');
+    if (!fullnameRegex.test(fullName.trim())) return window.alert('Error: Full Name invalidate');
     if (!emailRegex.test(email)) {
       return window.alert('Error: Email invalidate');
     }
@@ -113,11 +115,11 @@ export default function SignIn() {
           localStorage.setItem('emailSignUp', email);
           navigate('/verifyOtp');
         } else {
-          return window.alert(`Sign Up Error: ${response.data.message}`);
+          return window.alert(`Sign Up Error`);
         }
       })
       .catch((error) => {
-        return window.alert('Sign Up Error: System Error');
+        return window.alert('Sign Up Error');
       });
   };
 

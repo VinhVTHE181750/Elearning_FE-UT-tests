@@ -57,9 +57,11 @@ function EditCategory() {
   const handleCategoryNameChange = (e) => {
     setName(e.target.value);
   };
+  const nameRegex = /^[A-Za-zÀ-ỹ0-9!@#$%^&*(),.?":{}|<>':\s]+$/;
+
   const handleSave = (e) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
+    if (!nameRegex.test(name.trim())) return window.alert('Error: Name of category invalidate');
     e.preventDefault();
     const params = {
       username: user,

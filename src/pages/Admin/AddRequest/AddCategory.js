@@ -43,9 +43,11 @@ const AddCategory = () => {
     navigate('/manageCategory');
   };
 
+  const nameRegex = /^[A-Za-zÀ-ỹ0-9!@#$%^&*(),.?":{}|<>':\s]+$/;
+
   const handleSubmit = (e) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
+    if (!nameRegex.test(name.trim())) return window.alert('Error: Category Name invalidate');
     e.preventDefault();
 
     if (name) {
@@ -60,7 +62,6 @@ const AddCategory = () => {
         username: user,
         name,
       };
-
       authApi
         .addCategory(params)
         .then((response) => {

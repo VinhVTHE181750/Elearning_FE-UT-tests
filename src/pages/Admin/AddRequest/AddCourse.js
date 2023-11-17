@@ -55,9 +55,17 @@ const AddCourse = () => {
     setThumbnailPreview(link_thumnail);
   };
 
+  const nameRegex = /^[a-zA-Z0-9]+[A-Za-zÀ-ỹ0-9!@#$%^&*(),?".:{}|<>':\s]+$/;
+  const priceRegex = /^[1-9]\d*$/;
+  const linkThumbnailRegex =
+    /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    if (!nameRegex.test(name.trim())) return window.alert('Error: Name invalidate!');
+    if (!priceRegex.test(price)) return window.alert('Error: The input for price is a positive integer type.');
+    if (!linkThumbnailRegex.test(link_thumnail)) return window.alert('Error: Link Thumbnail error!');
+    if (!nameRegex.test(description.trim())) return window.alert('Error: Description invalidate!');
     if (name.trim() && description && price && link_thumnail && category) {
       const params = {
         username: username,

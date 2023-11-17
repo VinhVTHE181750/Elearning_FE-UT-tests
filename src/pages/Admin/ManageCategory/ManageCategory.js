@@ -10,7 +10,6 @@ import moment from 'moment';
 
 export default function ManageCategory() {
   const [category, setCategory] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -33,7 +32,7 @@ export default function ManageCategory() {
       .then((response) => {
         const categoryArray = (response.data && response.data.categoryList) || [];
         const filteredCategories = categoryArray.filter((category) =>
-          category.name.toLowerCase().includes(searchText.toLowerCase()),
+          category.name.toLowerCase().includes(searchText.toLowerCase().trim()),
         );
         setCategory(filteredCategories);
       })
