@@ -1,0 +1,128 @@
+.container-edit {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black;
+}
+
+.container-edit h2 {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: black;
+}
+
+.container-edit input[type='text'],
+.container-edit input[type='number'] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black; /* Thêm thuộc tính color: black; */
+}
+button[type='submit'] {
+  padding: 10px 20px;
+  background-color: #1f883d;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[type='submit']:hover {
+  background-color: #3d9e53;
+}
+
+.success-message,
+.error-message {
+  font-weight: bold;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  text-align: center;
+}
+
+.success-message {
+  background-color: #3d9e53;
+  color: azure;
+}
+
+.error-message {
+  color: white;
+}
+.container-edit {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black;
+}
+
+.container-edit h2 {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.label-name {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: black;
+}
+
+.input-name {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black;
+}
+
+.button-submit {
+  padding: 10px 20px;
+  background-color: #1f883d;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-submit:hover {
+  background-color: #3d9e53;
+}
+
+.success-message,
+.error-message {
+  font-weight: bold;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  text-align: center;
+}
+
+.success-message {
+  background-color: #3d9e53;
+  color: azure;
+}
+
+.error-message {
+  color: white;
+}

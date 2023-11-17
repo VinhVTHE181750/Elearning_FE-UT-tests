@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import './add.css';
-import authApi from '../../api/authApi';
+import authApi from '../../../api/authApi';
 import jwt_decode from 'jwt-decode';
-import Sidebar from '../../components/Sidebar/Sidebar';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 import { Alert } from '@mui/material';
 import { Button } from 'antd';
 function AddQuestion() {

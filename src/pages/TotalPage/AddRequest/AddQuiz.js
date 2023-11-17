@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import './add.css';
-import authApi from '../../api/authApi';
+import authApi from '../../../api/authApi';
 import jwt_decode from 'jwt-decode';
 import { useEffect } from 'react';
-import Sidebar from '../../components/Sidebar/Sidebar';
+import Sidebar from '../../../components/Sidebar/Sidebar';
 
 function AddQuiz() {
   const { lessonID } = useParams();
@@ -43,18 +43,11 @@ function AddQuiz() {
         .catch((err) => {});
     }
   }, [courseID]);
-  const isValidFullName = (name) => {
-    const pattern = /^[a-zA-Z]{1,40}( [a-zA-Z]{1,40})+$/; // Biểu thức chính quy để kiểm tra tên đầy đủ
-    return pattern.test(name);
-  };
+
   const handleSubmit = (e) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     e.preventDefault();
-    if (!isValidFullName(quizName)) {
-      // Hiển thị thông báo lỗi nếu tên đầy đủ không hợp lệ
 
-      return window.alert('Please enter a valid Quiz name');
-    }
     if (lessonID && quizName) {
       const params = {
         username: user,
@@ -95,7 +88,11 @@ function AddQuiz() {
                 <input type="text" value={quizName} onChange={(e) => setQuizName(e.target.value)} />
               </label>
             </div>
-
+            <div>
+              <label>
+                Is Final Quiz: <input type="checkbox" checked={isFinal} onChange={() => setIsFinal(!isFinal)} />
+              </label>
+            </div>
             <button type="submit" onClick={handleSubmit}>
               Add Quiz
             </button>
