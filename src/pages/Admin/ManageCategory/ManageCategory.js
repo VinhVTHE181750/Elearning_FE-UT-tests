@@ -39,7 +39,30 @@ export default function ManageCategory() {
       })
       .catch((error) => {});
   }, [searchText]);
+  const [notFoundMessage, setNotFoundMessage] = useState('');
 
+  const handleSearch = () => {
+    if (searchText.trim() === '' || /[^a-zA-Z0-9]/.test(searchText)) {
+      window.alert('Category cannot be empty, or contain special characters!');
+    } else {
+      setErrorMessage(null);
+      authApi
+        .findAllCategory()
+        .then((response) => {
+          const categoryArray = (response.data && response.data.categoryList) || [];
+          const filteredCategories = categoryArray.filter((category) =>
+            category.name.toLowerCase().includes(searchText.toLowerCase()),
+          );
+          if (filteredCategories.length === 0) {
+            setNotFoundMessage('Category not exists');
+          } else {
+            setNotFoundMessage('');
+          }
+          setCategory(filteredCategories);
+        })
+        .catch((error) => {});
+    }
+  };
   const handleEditClick = (categoryId) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
@@ -128,13 +151,28 @@ export default function ManageCategory() {
         <Box m="20px">
           <Header title="Category" subtitle="List of Category" />
           <div style={{ marginBottom: '20px' }}>
-            <input
-              type="text"
-              placeholder="Search by name"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              style={{ marginRight: '10px', width: '200px' }}
-            />
+            <div style={{ marginBottom: '20px' }}>
+              <input
+                type="text"
+                placeholder="Search by name"
+                value={searchText}
+                style={{ marginRight: '10px', width: '200px' }}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: '#1F883D',
+                  '&:hover': {
+                    backgroundColor: '#3D9E53',
+                  },
+                }}
+                style={{ width: '120px' }}
+                onClick={handleSearch}
+              >
+                Search
+              </Button>
+            </div>
             <Button
               variant="contained"
               sx={{
