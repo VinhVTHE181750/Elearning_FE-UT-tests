@@ -54,14 +54,14 @@ const Posts = ({ courseId, courseName }) => {
     if (!comment.trim()) {
       return {
         isValid: false,
-        errorMessage: "Nội dung bình luận không được để trống",
+        errorMessage: "Comment content cannot be empty",
       };
     }
 
     if (comment.length > maxLength) {
       return {
         isValid: false,
-        errorMessage: `Nội dung bình luận không được vượt quá ${maxLength} ký tự`,
+        errorMessage: `Comment content cannot exceed ${maxLength} characters`,
       };
     }
 
