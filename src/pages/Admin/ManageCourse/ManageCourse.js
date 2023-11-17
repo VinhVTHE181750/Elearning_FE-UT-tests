@@ -17,13 +17,13 @@ export default function ManageCourse() {
 
   const [username, setUsername] = useState('');
   const [searchText, setSearchText] = useState('');
-
+  // update searchText
   useEffect(() => {
     if (localStorage.getItem('user-access-token')) {
       setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
     }
   }, [localStorage.getItem('user-access-token')]);
-
+  // update searchText
   useEffect(() => {
     authApi
       .findAllCourse()
@@ -37,13 +37,13 @@ export default function ManageCourse() {
         console.error('Error fetching data:', error);
       });
   }, []);
-
+  // update searchText
   const handleEditClick = (courseID) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate(`/editCourse/${courseID}`);
   };
-
+  // update searchText
   const handleDeleteClick = (courseID) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
@@ -65,7 +65,7 @@ export default function ManageCourse() {
         });
     }
   };
-
+  // update searchText
   const handleViewClick = (courseID) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
@@ -77,7 +77,7 @@ export default function ManageCourse() {
 
     navigate('/add-course');
   };
-
+  // update searchText
   const handleSearch = (value) => {
     setSearchText(value);
   };
