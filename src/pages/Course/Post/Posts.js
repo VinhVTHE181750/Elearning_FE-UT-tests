@@ -156,16 +156,13 @@ const Posts = ({ courseId, courseName }) => {
             <List.Item.Meta
               title={<a>Me</a>}
               description={
-                <div style={{ margin: '20px' }}>
+                <div  >
                   <TextArea
                     style={{ width: '900px', height: '60px' }}
                     value={addContent}
                     placeholder="Add a comment"
                     onChange={(e) => setAddContent(e.target.value)}
                   />
-                   {error && (
-                  <p style={{ color: 'red' }}>{error}</p>
-                )}
                   <br />
                   <div>
                     <Button key="list-loadmore-save" type="primary" onClick={() => handleAddPost()}>
@@ -227,9 +224,6 @@ const Posts = ({ courseId, courseName }) => {
                         value={editedContent}
                         onChange={(e) => setEditedContent(e.target.value)}
                       />
-                      {error && (
-                  <p style={{ color: 'red' }}>{error}</p>
-                )}
                       <br />
                       <div>
                         <Button key="list-loadmore-save" type="primary" onClick={() => handleCancel(item.id)}>
