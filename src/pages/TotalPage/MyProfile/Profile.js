@@ -79,7 +79,7 @@ const Profile = () => {
     if (!isValidFullName(fullName)) {
       // Hiển thị thông báo lỗi nếu tên đầy đủ không hợp lệ
       setShowErrorAlert(true);
-      return window.alert('Please enter a valid full name');
+      return window.alert('Please Fill in full information of fullname not blanks and special characters');
     }
     // check vaid phone number
     if (!phoneRegex.test(phoneNum)) {
