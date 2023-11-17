@@ -163,7 +163,9 @@ const Posts = ({ courseId, courseName }) => {
                     placeholder="Add a comment"
                     onChange={(e) => setAddContent(e.target.value)}
                   />
-                
+                   {error && (
+                  <p style={{ color: 'red' }}>{error}</p>
+                )}
                   <br />
                   <div>
                     <Button key="list-loadmore-save" type="primary" onClick={() => handleAddPost()}>
@@ -225,7 +227,9 @@ const Posts = ({ courseId, courseName }) => {
                         value={editedContent}
                         onChange={(e) => setEditedContent(e.target.value)}
                       />
-                 
+                      {error && (
+                  <p style={{ color: 'red' }}>{error}</p>
+                )}
                       <br />
                       <div>
                         <Button key="list-loadmore-save" type="primary" onClick={() => handleCancel(item.id)}>
