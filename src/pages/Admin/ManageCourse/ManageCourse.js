@@ -77,9 +77,30 @@ export default function ManageCourse() {
 
     navigate('/add-course');
   };
-  // update searchText
+  const isInputValid = (input) => {
+    // Kiểm tra xem input có chứa khoảng trắng không
+    if (input.includes(' ')) {
+      return false;
+    }
+    // Kiểm tra xem input có chứa ký tự đặc biệt không
+    const specialChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    if (specialChars.test(input)) {
+      return false;
+    }
+    return true;
+  };
+
   const handleSearch = (value) => {
-    setSearchText(value);
+    const filteredCourses = courses.filter((course) => course.name.toLowerCase().includes(value.toLowerCase()));
+    if (value.trim() === '') {
+      alert("Please can't value of course be empty");
+    } else if (!isInputValid(value)) {
+      alert('Please do not enter special characters!');
+    } else if (filteredCourses.length === 0) {
+      alert('Course not exist');
+    } else {
+      setSearchText(value);
+    }
   };
 
   const filteredCourses = courses.filter((course) => course.name.toLowerCase().includes(searchText.toLowerCase()));
