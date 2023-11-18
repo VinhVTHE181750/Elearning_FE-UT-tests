@@ -42,17 +42,12 @@ const AddCategory = () => {
 
     navigate('/manageCategory');
   };
-  const isValidFullName = (name) => {
-    const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/; // Biểu thức chính quy để kiểm tra tên đầy đủ
-    return pattern.test(name);
-  };
+
+  const nameRegex = /^[A-Za-zÀ-ỹ0-9!@#$%^&*(),.?":{}|<>':\s]+$/;
+
   const handleSubmit = (e) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-    if (!isValidFullName(name)) {
-      // Hiển thị thông báo lỗi nếu tên đầy đủ không hợp lệ
-
-      return window.alert('Please Fill in full information of name not blanks and special characters');
-    }
+    if (!nameRegex.test(name.trim())) return window.alert('Error: Category Name invalidate');
     e.preventDefault();
 
     if (name) {
@@ -67,7 +62,6 @@ const AddCategory = () => {
         username: user,
         name,
       };
-
       authApi
         .addCategory(params)
         .then((response) => {
