@@ -9,9 +9,7 @@ import { Button } from 'antd';
 function AddQuestion() {
   const { quizID } = useParams();
   const [questionName, setQuestionName] = useState('');
-  const [questionType, setQuestionType] = useState('');
-  const [message, setMessage] = useState('');
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [questionType, setQuestionType] = useState('ONE_CHOICE');
   const [optionA, setOptionA] = useState('');
   const [optionB, setOptionB] = useState('');
   const [optionC, setOptionC] = useState('');
@@ -20,7 +18,6 @@ function AddQuestion() {
   const [select, setSelect] = useState([]);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
-  console.log('Quiz ID:', quizID);
 
   const [user, setUser] = useState('');
 
@@ -33,9 +30,16 @@ function AddQuestion() {
       setUser(deCoded.sub);
     }
   }, []);
+
+  const regex = /^[a-zA-Z0-9_&*%$#@! ]{3,50}$/;
   const handleSubmit = (e) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
+    if (!regex.test(questionName.trim())) return window.alert('Error: Question name invalidate!');
+    if (!regex.test(optionA.trim())) return window.alert('Error: Answer A invalidate!');
+    if (!regex.test(optionB.trim())) return window.alert('Error: Answer B invalidate!');
+    if (!regex.test(optionC.trim())) return window.alert('Error: Answer C invalidate!');
+    if (!regex.test(optionD.trim())) return window.alert('Error: Answer D invalidate!');
+    if (!choose) return window.alert('Error: You have not selected the correct answer.');
     e.preventDefault();
 
     if (quizID && questionName && questionType) {
@@ -56,24 +60,6 @@ function AddQuestion() {
         const answerD = {
           answerContent: optionD,
           correct: choose === 'D',
-        };
-        answers = [answerA, answerB, answerC, answerD];
-      } else {
-        const answerA = {
-          answerContent: optionA,
-          correct: select.includes('A'),
-        };
-        const answerB = {
-          answerContent: optionB,
-          correct: select.includes('B'),
-        };
-        const answerC = {
-          answerContent: optionC,
-          correct: select.includes('C'),
-        };
-        const answerD = {
-          answerContent: optionD,
-          correct: select.includes('D'),
         };
         answers = [answerA, answerB, answerC, answerD];
       }
@@ -109,18 +95,6 @@ function AddQuestion() {
     setOptionD('');
     setChoose('');
     setSelect([]);
-  };
-  const addSelect = (value) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
-    const newSelect = [...select, value];
-    setSelect(newSelect);
-  };
-  const removeSelect = (value) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
-    const newSelect = select?.filter((data) => data !== value);
-    setSelect(newSelect);
   };
   const navigate = useNavigate();
 
@@ -188,7 +162,6 @@ function AddQuestion() {
                     id="A"
                     value={'A'}
                     onChange={(e) => {
-                      console.log(e.target.value);
                       setChoose(e.target.value);
                     }}
                   />
