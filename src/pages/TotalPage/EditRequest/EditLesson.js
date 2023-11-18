@@ -47,11 +47,16 @@ const EditLesson = () => {
   }, [lessonID]);
   const navigate = useNavigate();
 
+  const nameRegex = /^[a-zA-Z0-9]+[A-Za-zÀ-ỹ0-9!@#$%^&*(),.?":{}|<>':\s]+$/;
+  const linkThumbnailRegex =
+    /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
   const handleSaveClick = () => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
     console.log(editedLesson);
     const params = { ...editedLesson, username: jwtDecode(localStorage.getItem('user-access-token')).sub };
+    if (!nameRegex.test(params.lessonName.trim())) return window.alert('Error: Lesson Name invalidate!');
+    if (!linkThumbnailRegex.test(params.linkContent)) return window.alert('Error: Link Content error!');
+    if (!nameRegex.test(params.description.trim())) return window.alert('Error: Description invalidate!');
     console.log(params);
     authApi
       .updateLesson(params)
@@ -87,15 +92,6 @@ const EditLesson = () => {
               type="text"
               value={editedLesson.lessonName}
               onChange={(e) => setEditedLesson({ ...editedLesson, lessonName: e.target.value })}
-              className="input"
-            />
-          </div>
-          <div className="form-group">
-            <label className="label">Order Number:</label>
-            <input
-              type="number"
-              value={editedLesson.ordNumber}
-              onChange={(e) => setEditedLesson({ ...editedLesson, ordNumber: parseInt(e.target.value) })}
               className="input"
             />
           </div>
