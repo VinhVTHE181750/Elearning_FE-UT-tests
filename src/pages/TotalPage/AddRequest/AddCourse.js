@@ -11,6 +11,8 @@ const AddCourse = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
+  const [price2, setPrice2] = useState('');
+
   const [link_thumnail, setLinkThumnail] = useState('');
   const [category, setCategory] = useState('');
   const [categories, setCategories] = useState([]);
@@ -55,14 +57,25 @@ const AddCourse = () => {
     setThumbnailPreview(link_thumnail);
   };
 
+  const nameRegex = /^[a-zA-Z0-9]+[A-Za-zÀ-ỹ0-9!@#$%^&*(),?".:{}|<>':\s]+$/;
+  const priceRegex = /^[1-9]\d*$/;
+  const linkThumbnailRegex =
+    /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!nameRegex.test(name.trim())) return window.alert('Error: Name invalidate!');
+    if (!priceRegex.test(price)) return window.alert('Error: The input for price is a positive integer type.');
+    if (!priceRegex.test(price2)) return window.alert('Error: The input for price2 is a positive integer type.');
 
+    if (!linkThumbnailRegex.test(link_thumnail)) return window.alert('Error: Link Thumbnail error!');
+    if (!nameRegex.test(description.trim())) return window.alert('Error: Description invalidate!');
     if (name.trim() && description && price && link_thumnail && category) {
       const params = {
         username: username,
         name: name.trim(),
         price,
+        price2,
         link_thumnail,
         category,
         description,
@@ -75,6 +88,7 @@ const AddCourse = () => {
           setName('');
           setDescription('');
           setPrice('');
+          setPrice2('');
           setLinkThumnail('');
           setCategory('');
           setShowSuccessAlert(true);
@@ -119,6 +133,10 @@ const AddCourse = () => {
             <div className="form-group">
               <label htmlFor="price">Price:</label>
               <input type="text" id="price" value={price} onChange={(e) => setPrice(e.target.value)} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="price2">Price2:</label>
+              <input type="text" id="price2" value={price2} onChange={(e) => setPrice2(e.target.value)} />
             </div>
             <div className="form-group">
               <label htmlFor="link_thumbnail">Link Thumbnail:</label>
