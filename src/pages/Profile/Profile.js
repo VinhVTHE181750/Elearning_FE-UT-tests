@@ -71,6 +71,7 @@ const Profile = () => {
       setDobError('');
     }
   };
+
   const isValidFullName = (name) => {
     const pattern = /^[a-zA-Z]{2,40}( [a-zA-Z]{2,40})+$/; // Biểu thức chính quy để kiểm tra tên đầy đủ
     return pattern.test(name);
@@ -83,12 +84,14 @@ const Profile = () => {
       phoneNumError: '',
       dobError: '',
     };
-  
-    if (!isValidFullName(fullName)) {
+
+    if (!fullName.trim()) {
+      errors.fullNameError = 'Full name cannot be blank.';
+    } else if (!isValidFullName(fullName)) {
       errors.fullNameError = 'Full name should contain only letters and spaces.';
     }
-  
-    if (!phoneNum) {
+
+    if (!phoneNum.trim()) {
       errors.phoneNumError = 'Phone number cannot be blank.';
     } else {
       const phoneRegex = /^0\d{9}$/;
@@ -96,19 +99,19 @@ const Profile = () => {
         errors.phoneNumError = 'Phone number should start with 0 and contain 10 digits.';
       }
     }
-  
+
     if (!isValidDateOfBirth(dateOfBirth)) {
       errors.dobError = 'Date of birth must be at least 15 years ago.';
     }
-  
+
     setErrorMessages(errors);
-  
+
     if (Object.values(errors).some((error) => error !== '')) {
       setShowSuccessAlert(false);
       setShowErrorAlert(true); // Hiển thị thông báo lỗi
       return;
     }
-  
+
     try {
       const trimmedFullName = fullName.trim();
       const params = {
@@ -126,7 +129,7 @@ const Profile = () => {
       setShowErrorAlert(true);
     }
   };
-  
+
   const renderErrorMessages = () => {
     return Object.values(errorMessages).map((message, index) => {
       if (message) {
@@ -135,13 +138,15 @@ const Profile = () => {
       return null;
     });
   };
-  
+
 
   if (!user) {
     return <div>Loading...</div>;
   }
+  const handleReset = () => {
+    window.location.reload(); // Reload lại trang
+  };
 
-  
   return (
     <>
       <Header />
@@ -149,8 +154,8 @@ const Profile = () => {
         <h2>My Profile</h2>
         {showSuccessAlert && <Alert severity="success">Change Profile Successful!</Alert>}
         {showErrorAlert && <Alert severity="error">Error changing profile!</Alert>}
-        
-        
+
+
 
         <label>Fullname:</label>
         <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
@@ -171,14 +176,13 @@ const Profile = () => {
           <option value="OTHER">Other</option>
         </select>
         <br />
-
         <label>Date of Birth:</label>
-        <input type="date" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} />
+        <input type="date" value={dateOfBirth} onChange={handleDateOfBirthChange} />
         {/* Hiển thị thông báo lỗi cho trường Date of Birth */}
-        {dobError && <span style={{ color: 'red' }}>{dobError}</span>}
+        {errorMessages.dobError && <span style={{ color: 'red' }}>{errorMessages.dobError}</span>}
         <br />
-
         <button onClick={handleSave}>Save</button>
+        <button onClick={handleReset}>Reset</button>
       </div>
       <Footer />
     </>
