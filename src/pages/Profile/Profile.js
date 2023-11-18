@@ -61,12 +61,25 @@ const Profile = () => {
     }
     return age >= 15;
   };
+  const isValidDateOfBirth1 = (date) => {
+    const today = new Date();
+    const selectedDate = new Date(date);
+    const age = today.getFullYear() - selectedDate.getFullYear();
+    const monthDiff = today.getMonth() - selectedDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < selectedDate.getDate())) {
+      age--;
+    }
+    return age <= 123;
+  };
+  
 
   const handleDateOfBirthChange = (e) => {
     const date = e.target.value;
     setDateOfBirth(date);
     if (!isValidDateOfBirth(date)) {
       setDobError('Date of birth must be at least 15 years ago');
+     } if (!isValidDateOfBirth1(date)) {
+        setDobError('Year of birth must be 1900 or later'); 
     } else {
       setDobError('');
     }
@@ -103,7 +116,9 @@ const Profile = () => {
     if (!isValidDateOfBirth(dateOfBirth)) {
       errors.dobError = 'Date of birth must be at least 15 years ago.';
     }
-
+    if (!isValidDateOfBirth1(dateOfBirth)) {
+      errors.dobError = 'Year of birth must be 1900 or later';
+    }
     setErrorMessages(errors);
 
     if (Object.values(errors).some((error) => error !== '')) {
