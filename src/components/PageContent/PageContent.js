@@ -48,7 +48,8 @@ export default function PageContent() {
       .findAllCourse()
       .then((response) => {
         const sortedAllCourses = response.data.listCourse.sort((a, b) => a.price - b.price);
-        const topAllCourses = sortedAllCourses.slice(0, 5);
+        const listCourse = sortedAllCourses.filter((item) => !item.deleted);
+        const topAllCourses = listCourse.slice(0, 5);
         setAllCourses(topAllCourses);
       })
       .catch((error) => {
@@ -61,7 +62,8 @@ export default function PageContent() {
       .getNewestCourse()
       .then((response) => {
         const sortedNewCourses = response.data.listCourse.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        const topNewCourses = sortedNewCourses.slice(0, 5);
+        const listCourse = sortedNewCourses.filter((item) => !item.deleted);
+        const topNewCourses = listCourse.slice(0, 5);
         setNewCourses(topNewCourses);
       })
       .catch((error) => {
@@ -138,7 +140,7 @@ export default function PageContent() {
             <h3>{course.name}</h3>
             <p>Price:{course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND</p>
 
-            {!listEnrollCourse.find((courseEnroll) => courseEnroll.id === course.id) ? (
+            {!listEnrollCourse.find((courseEnroll) => courseEnroll.id === course.id) && userRole !== 'ADMIN' ? (
               <div className="page-content-button">
                 <button onClick={() => handleEnrollCourse(course.id, course.name)}>Enroll Course</button>
                 <button onClick={() => handleViewCourse(course.id)}>View Course</button>
@@ -163,7 +165,7 @@ export default function PageContent() {
             <h3>{course.name}</h3>
             <p>Price:{course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND</p>
 
-            {!listEnrollCourse.find((courseEnroll) => courseEnroll.id === course.id) ? (
+            {!listEnrollCourse.find((courseEnroll) => courseEnroll.id === course.id) && userRole !== 'ADMIN' ? (
               <div className="page-content-button">
                 <button onClick={() => handleEnrollCourse(course.id, course.name)}>Enroll Course</button>
                 <button onClick={() => handleViewCourse(course.id)}>View Course</button>

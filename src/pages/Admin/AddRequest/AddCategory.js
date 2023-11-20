@@ -43,7 +43,7 @@ const AddCategory = () => {
     navigate('/manageCategory');
   };
 
-  const nameRegex = /^[A-Za-zÀ-ỹ0-9!@#$%^&*(),.?":{}|<>':\s]+$/;
+  const nameRegex = /^[a-zA-Z0-9]+[A-Za-zÀ-ỹ0-9!@#$%^&*(),.?":{}|<>':\s]+$/;
 
   const handleSubmit = (e) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');

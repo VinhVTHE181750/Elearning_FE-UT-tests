@@ -34,13 +34,13 @@ function AddQuiz() {
   useEffect(() => {
     if (courseID) {
       authApi
-        .getLessonByCourseId(courseID)
+        .checkFinalQuiz({ courseId: courseID })
         .then((resp) => {
-          const listLesson = resp.data.lessonList;
-          var check = false;
-          if (listLesson.length && listLesson[listLesson.length - 1].id === lessonID) setCheckFinalQuiz(true);
+          setCheckFinalQuiz(resp.data.finalQuiz);
         })
-        .catch((err) => {});
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [courseID]);
 
@@ -78,6 +78,7 @@ function AddQuiz() {
     setQuizName('');
   };
 
+  console.log(checkFinalQuiz);
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
@@ -92,11 +93,13 @@ function AddQuiz() {
                 <input type="text" value={quizName} onChange={(e) => setQuizName(e.target.value)} />
               </label>
             </div>
-            {/* <div>
-              <label>
-                Is Final Quiz: <input type="checkbox" checked={isFinal} onChange={() => setIsFinal(!isFinal)} />
-              </label>
-            </div> */}
+            {!checkFinalQuiz && (
+              <div>
+                <label>
+                  Is Final Quiz: <input type="checkbox" checked={isFinal} onChange={() => setIsFinal(!isFinal)} />
+                </label>
+              </div>
+            )}
             <button type="submit" onClick={handleSubmit}>
               Add Quiz
             </button>

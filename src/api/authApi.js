@@ -381,6 +381,10 @@ const authApi = {
     const url = `/api/v1/category/get-category-by-id?id=${params.id}`;
     return axiosClient.get(url, params);
   },
+  checkFinalQuiz: (params) => {
+    const url = `/api/v1/quiz/check-final-quiz?courseId=${params.courseId}`;
+    return axiosClient.get(url, params);
+  },
 };
 
 export default authApi;

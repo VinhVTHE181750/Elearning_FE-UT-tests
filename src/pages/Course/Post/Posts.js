@@ -49,6 +49,9 @@ const Posts = ({ courseId, courseName }) => {
   }, [user]);
 
   const handleAddPost = () => {
+    if (addContent.trim() === '') {
+      return window.alert('Error: Do not leave any blank spaces');
+    }
     const params = {
       username: user,
       courseId: courseId,

@@ -213,7 +213,7 @@ const Dashboard = () => {
                   </Box>
                   <Box color={colors.grey[100]}>{moment(transaction.createdAt).format('MMMM Do YYYY, h:mm a')}</Box>
                   <Box backgroundColor={colors.greenAccent[500]} p="5px 10px" borderRadius="4px">
-                    {transaction.amount}VND
+                    {transaction.amount && transaction.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
                   </Box>
                 </Box>
               ))}

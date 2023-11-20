@@ -127,7 +127,7 @@ const ViewCourse = () => {
   const columns = [
     {
       title: 'No',
-      dataIndex: 'ordNumber',
+      dataIndex: 'no',
       align: 'center',
     },
     {
@@ -169,7 +169,12 @@ const ViewCourse = () => {
     setSearchText(value);
   };
 
-  const filteredLessons = lessons.filter((lesson) => lesson.name.toLowerCase().includes(searchText.toLowerCase()));
+  const filteredLessons = lessons
+    .filter((lesson) => lesson.name.toLowerCase().includes(searchText.toLowerCase().trim()))
+    .map((lesson, index) => ({
+      ...lesson,
+      no: index + 1,
+    }));
 
   return (
     <div style={{ display: 'flex' }}>

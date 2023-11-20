@@ -204,8 +204,12 @@ export default function AllCourse() {
       align: 'center',
       width: '5%',
       render: (record) => {
-        if (listEnrollCourse.find((courseEnroll) => courseEnroll.id === record.id) || role === 'ADMIN') {
-          return <Button onClick={() => handleViewCourse(record.id)}>Go to course</Button>;
+        if (
+          listEnrollCourse.find((courseEnroll) => courseEnroll.id === record.id) ||
+          role === 'ADMIN' ||
+          record.deleted
+        ) {
+          return <Button onClick={() => handleViewCourse(record.id)}>View Course</Button>;
         } else {
           return (
             <div>

@@ -37,7 +37,7 @@ function AddLesson() {
     if (!linkThumbnailRegex.test(linkContent)) return window.alert('Error: Link Content error!');
     if (!nameRegex.test(description.trim())) return window.alert('Error: Description invalidate!');
     e.preventDefault();
-    if (lessonName && ordNumber && linkContent && description) {
+    if (lessonName && linkContent && description) {
       const params = {
         username: username,
         lessonName,

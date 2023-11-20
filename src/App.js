@@ -106,6 +106,7 @@ function App() {
               <Route path="/blog" element={<Blog />} />
               <Route path="/chatgpt" element={<Chatgpt />} />
               <Route path="/takeQuiz/:quizId/:courseID/:lessonID/:session" element={<TakeQuiz />} />
+              <Route path="/page-not-found" element={<PageNotFound />} />
 
               {/* <Route path="*" element={<PageNotFound />} /> */}
             </Routes>

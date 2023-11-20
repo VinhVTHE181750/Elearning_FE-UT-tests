@@ -83,7 +83,12 @@ export default function Lesson() {
       authApi
         .getLessonByCourseId(courseID)
         .then((response) => {
-          setListLesson(response.data.lessonList);
+          setListLesson(
+            response.data.lessonList.map((item, index) => ({
+              ...item,
+              no: index + 1,
+            })),
+          );
         })
         .catch((err) => {
           console.log(err);
@@ -114,7 +119,7 @@ export default function Lesson() {
   const columns = [
     {
       title: 'No',
-      dataIndex: 'ordNumber',
+      dataIndex: 'no',
     },
     {
       title: 'Name',

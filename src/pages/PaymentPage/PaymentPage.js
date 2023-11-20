@@ -18,6 +18,9 @@ const PaymentPage = () => {
     authApi
       .getCourseById(courseId)
       .then((response) => {
+        if (response.data && response.data.deleted === true) {
+          return (window.location.href = '/page-not-found');
+        }
         setCourse(response.data);
       })
       .catch((error) => {

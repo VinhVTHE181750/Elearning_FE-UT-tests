@@ -29,6 +29,10 @@ function BlogCard({ blogItem }) {
     setIsEditModalOpen(false);
   };
 
+  const nameRegex = /^[a-zA-Z0-9]+[A-Za-zÀ-ỹ0-9!@#$%^&*(),?".:{}|<>':\s]+$/;
+  const linkThumbnailRegex =
+    /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
+
   const handleSaveEdit = () => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
@@ -39,6 +43,10 @@ function BlogCard({ blogItem }) {
       content: editedContentRef.current.value, // Lấy giá trị từ useRef bằng cách sử dụng .value
       linkThumnail: editedLinkThumnailRef.current.value, // Lấy giá trị từ useRef bằng cách sử dụng .value
     };
+
+    if (!nameRegex.test(editData.title)) return window.alert('Error: Title invalidate');
+    if (!nameRegex.test(editData.content)) return window.alert('Error: Content invalidate');
+    if (!linkThumbnailRegex.test(editData.linkThumnail)) return window.alert('Error: Link thumbnail invalidate');
     authApi
       .updateBlog(editData)
       .then((response) => {
