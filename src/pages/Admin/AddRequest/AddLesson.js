@@ -107,7 +107,7 @@ function AddLesson() {
                 type="button"
                 onClick={handleBackClick}
                 style={{ width: '100px', backgroundColor: 'gray', color: 'white' }}
-              >
+              > 
                 Back
               </Button>
             </div>
