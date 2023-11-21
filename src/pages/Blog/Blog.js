@@ -114,6 +114,10 @@ const Blog = () => {
     setIsAddModalOpen(false);
   };
 
+  const nameRegex = /^[a-zA-Z0-9]+[A-Za-zÀ-ỹ0-9!@#$%^&*(),?".:{}|<>':\s]+$/;
+  const linkThumbnailRegex =
+    /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
+
   const handleSaveAddBlog = (e) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     e.preventDefault();
@@ -126,6 +130,9 @@ const Blog = () => {
       content: formData.get('content'),
       linkThumnail: formData.get('linkThumnail'),
     };
+    if (!nameRegex.test(newBlog.title)) return window.alert('Error: Title invalidate');
+    if (!nameRegex.test(newBlog.content)) return window.alert('Error: Content invalidate');
+    if (!linkThumbnailRegex.test(newBlog.linkThumnail)) return window.alert('Error: Link thumbnail invalidate');
     console.log(newBlog);
 
     authApi

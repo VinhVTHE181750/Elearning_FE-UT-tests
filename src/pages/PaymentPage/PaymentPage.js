@@ -18,6 +18,9 @@ const PaymentPage = () => {
     authApi
       .getCourseById(courseId)
       .then((response) => {
+        if (response.data && response.data.deleted === true) {
+          return (window.location.href = '/page-not-found');
+        }
         setCourse(response.data);
       })
       .catch((error) => {
@@ -67,7 +70,7 @@ const PaymentPage = () => {
 
           localStorage.setItem('paymentUrl', urlPayment);
           localStorage.setItem('orderID', orderId);
-          window.location.replace(urlPayment);
+          return window.location.replace(urlPayment);
         })
         .catch((error) => {
           console.error('Error enrolling course:', error);

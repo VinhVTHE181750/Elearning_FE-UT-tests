@@ -6,6 +6,7 @@ import { Button, Space, Table, Input } from 'antd';
 import moment from 'moment';
 import jwt_decode from 'jwt-decode';
 import Sidebar from '../../../components/Sidebar/Sidebar';
+import jwtDecode from 'jwt-decode';
 
 const ViewCourse = () => {
   const { courseID } = useParams();
@@ -66,7 +67,7 @@ const ViewCourse = () => {
 
     if (window.confirm('Do you want to delete this lesson?')) {
       authApi
-        .deleteLesson(lessonID)
+        .deleteLesson({ username: jwtDecode(localStorage.getItem('user-access-token')).sub, lessonID })
         .then((response) => {
           setLessons(lessons.filter((lesson) => lesson.id !== lessonID));
           setLessons((prevLessons) => prevLessons.map((lesson, index) => ({ ...lesson, id: index + 1 })));
@@ -126,7 +127,7 @@ const ViewCourse = () => {
   const columns = [
     {
       title: 'No',
-      dataIndex: 'ordNumber',
+      dataIndex: 'no',
       align: 'center',
     },
     {
@@ -168,7 +169,12 @@ const ViewCourse = () => {
     setSearchText(value);
   };
 
-  const filteredLessons = lessons.filter((lesson) => lesson.name.toLowerCase().includes(searchText.toLowerCase()));
+  const filteredLessons = lessons
+    .filter((lesson) => lesson.name.toLowerCase().includes(searchText.toLowerCase().trim()))
+    .map((lesson, index) => ({
+      ...lesson,
+      no: index + 1,
+    }));
 
   return (
     <div style={{ display: 'flex' }}>
@@ -189,7 +195,7 @@ const ViewCourse = () => {
                   <span className="label">Category:</span> {courseToView.category.name}
                 </p>
                 <p>
-                  <span className="label">Created:</span> {courseToView.createdAt}
+                  <span className="label">Created:</span> {moment(courseToView.createAt).format('MMMM Do YYYY, h:mm a')}
                 </p>
                 <p>
                   <span className="label">

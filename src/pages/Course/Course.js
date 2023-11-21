@@ -5,7 +5,7 @@ import './index.css';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import jwtDecode from 'jwt-decode';
-import { Table } from 'antd';
+import { Button, Table } from 'antd';
 import Posts from './Post/Posts';
 
 export default function Course() {
@@ -73,6 +73,7 @@ export default function Course() {
       navigate(`/payment/${id}`);
     }
   };
+
   const columns = [
     {
       title: 'No',
@@ -89,6 +90,13 @@ export default function Course() {
       dataIndex: 'description',
       key: 'description',
     },
+    {
+      title: 'Action',
+      render: (record) => {
+        if (payments.filter((payment) => payment.courseName === course.name).length !== 0 || role === 'ADMIN')
+          return <Button onClick={() => handleViewLesson(record.id)}>View Lesson</Button>;
+      },
+    },
   ];
 
   return (
@@ -101,16 +109,13 @@ export default function Course() {
         <p style={{ color: '#000000e0', fontWeight: 'unset' }}>
           Price:{course.price && course.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
         </p>
-
-        <Table
-          columns={columns}
-          dataSource={lesson}
-          rowKey={(record) => record.id}
-          style={{ cursor: 'pointer' }}
-          onRow={(record) => ({
-            onClick: () => handleViewLesson(record.id),
-          })}
-        />
+        {(payments.filter((payment) => payment.courseName === course.name).length === 0 || role !== 'ADMIN') &&
+          !course.deleted && (
+            <Button style={{ color: 'black' }} onClick={() => navigate(`/payment/${id}`)}>
+              Enroll Course
+            </Button>
+          )}
+        <Table columns={columns} dataSource={lesson} rowKey={(record) => record.id} style={{ cursor: 'pointer' }} />
       </div>
 
       <div>

@@ -53,14 +53,6 @@ const ViewQuiz = () => {
   }, []);
 
   useEffect(() => {
-    console.log('Data của quizToView:', quizToView);
-  }, [quizToView]);
-
-  useEffect(() => {
-    console.log('Data của questions:', questions);
-  }, [questions]);
-
-  useEffect(() => {
     setQuizName(quizToView.find((quiz) => quiz.id === parseInt(quizID))?.name || '');
   }, [quizToView, quizID]);
 
@@ -154,7 +146,7 @@ const ViewQuiz = () => {
 
   const filteredData = questions
     .filter((question) => question.quizID === parseInt(quizID))
-    .filter((question) => question.questionName.toLowerCase().includes(searchQuery.toLowerCase()))
+    .filter((question) => question.questionName.toLowerCase().includes(searchQuery.toLowerCase().trim()))
     .map((question, index) => ({
       key: index,
       index: index + 1,

@@ -15,8 +15,8 @@ export default function VerifyOtp() {
     authApi
       .verifyOTP(data)
       .then((response) => {
-        console.log(response);
         if (response.code === 0) {
+          window.alert('Sign Up Success');
           localStorage.clear('emailSignUp');
           return navigate('/signin');
         }
@@ -49,7 +49,6 @@ export default function VerifyOtp() {
     authApi
       .resendOTP(localStorage.getItem('emailSignUp'))
       .then((response) => {
-        console.log(response);
         if (response.code === 0) {
           return window.alert('A new OTP has been sent to your email.');
         }

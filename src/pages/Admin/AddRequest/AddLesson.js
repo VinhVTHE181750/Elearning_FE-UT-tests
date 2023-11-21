@@ -37,7 +37,7 @@ function AddLesson() {
     if (!linkThumbnailRegex.test(linkContent)) return window.alert('Error: Link Content error!');
     if (!nameRegex.test(description.trim())) return window.alert('Error: Description invalidate!');
     e.preventDefault();
-    if (lessonName && ordNumber && linkContent && description) {
+    if (lessonName && linkContent && description) {
       const params = {
         username: username,
         lessonName,
@@ -107,7 +107,7 @@ function AddLesson() {
                 type="button"
                 onClick={handleBackClick}
                 style={{ width: '100px', backgroundColor: 'gray', color: 'white' }}
-              > 
+              >
                 Back
               </Button>
             </div>

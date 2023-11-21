@@ -10,12 +10,13 @@ function EditCategory() {
   const { categoryId } = useParams();
   const [categoryEdit, setCategoryEdit] = useState(null);
   const [category, setCategory] = useState([]);
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
+ 
   const [name, setName] = useState('');
   const navigate = useNavigate();
   const [user, setUser] = useState('');
   const [nameExistsError, setNameExistsError] = useState(false);
+  const [inputError, setInputError] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
   useEffect(() => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
@@ -37,18 +38,19 @@ function EditCategory() {
       .catch((error) => {});
   }, []);
   useEffect(() => {
-    authApi
-      .getCategoryById(categoryId)
-      .then((response) => {
-        const category = response.data;
-        console.log('category: ', category);
-        setCategoryEdit(category);
-        setName(category.name);
-      })
-      .catch((error) => {
-        console.log(error);
-        setCategoryEdit(null);
-      });
+    if (categoryId)
+      authApi
+        .getCategoryById({ id: categoryId })
+        .then((response) => {
+          const category = response.data;
+          console.log('category: ', category);
+          setCategoryEdit(category);
+          setName(category.name);
+        })
+        .catch((error) => {
+          console.log(error);
+          setCategoryEdit(null);
+        });
   }, [categoryId]);
   if (!categoryEdit) {
     return <div>Category not found</div>;
@@ -56,10 +58,28 @@ function EditCategory() {
   const handleCategoryNameChange = (e) => {
     setName(e.target.value);
   };
+  const nameRegex = /^[a-zA-Z0-9]+[A-Za-zÀ-ỹ0-9!@#$%^&*(),.?":{}|<>':\s]+$/;
+
   const handleSave = (e) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
+   
     e.preventDefault();
+    if (!name.trim()) {
+      setInputError('Category Name cannot be blank.');
+      setIsSuccess(false);
+      return;
+    } else if(!nameRegex.test(name.trim())) {
+      setInputError('Error: Category Name is invalid.');
+      setIsSuccess(false);
+      return;
+    }
+
+    const check = category.find((c) => c.name === name);
+    if (check) {
+      setInputError('Category already exists!');
+      setIsSuccess(false);
+      return;
+    }
     const params = {
       username: user,
       categoryID: categoryId,
@@ -74,15 +94,17 @@ function EditCategory() {
         authApi
           .updateCategory(params)
           .then((response) => {
-            console.log(response);
-            setSuccessMessage('Edit success');
+            setInputError('');
+            setIsSuccess(true);
+            setName(''); // Reset trường nhập liệu sau khi thêm thành công
+            navigate('/manageCategory');
           })
           .catch((error) => {
-            setErrorMessage('Edit failed');
+            setInputError('Add Fail Category');
+            setIsSuccess(false);
           });
       }
-    } else {
-      setErrorMessage('Edit failed');
+  
     }
   };
   const handleBackClick = () => {
@@ -96,13 +118,9 @@ function EditCategory() {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <div className="container-edit">
           <h2>Edit Category</h2>
-          {successMessage && <div className="success-message">{successMessage}</div>}
-          {errorMessage && <div className="error-message">{errorMessage}</div>}
-          {nameExistsError && (
-            <div className="error-message" style={{ color: 'red' }}>
-              If you cannot edit, the name already exists
-            </div>
-          )}
+          {isSuccess && <p className="message success">Update Successfully Category</p>}
+          {!isSuccess && inputError && <p className="message error">Update Fail Category</p>}
+          
           <form>
             <div>
               <label>ID:</label>
@@ -111,6 +129,7 @@ function EditCategory() {
             <div>
               <label>Name:</label>
               <input type="text" value={name} onChange={handleCategoryNameChange} />
+              {inputError &&  <p  style={{ color: 'red' }}>{inputError}</p>}
             </div>
             <div>
               <Button

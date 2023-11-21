@@ -14,7 +14,7 @@ const Posts = ({ courseId, courseName }) => {
   const [addContent, setAddContent] = useState('');
   const [payments, setPayments] = useState([]);
   const [role, setRole] = useState('');
-  const [error, setError] = useState(''); // State để lưu thông báo lỗi
+
   useEffect(() => {
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
@@ -47,54 +47,26 @@ const Posts = ({ courseId, courseName }) => {
         });
     }
   }, [user]);
-  const validateComment = (comment) => {
-    let isValid = true;
-    const maxLength = 500;
-
-    if (!comment.trim()) {
-      return {
-        isValid: false,
-        errorMessage: "Comment content cannot be empty",
-      };
-    }
-
-    if (comment.length > maxLength) {
-      return {
-        isValid: false,
-        errorMessage: `Comment content cannot exceed ${maxLength} characters`,
-      };
-    }
-
-    return {
-      isValid: isValid,
-      errorMessage: "",
-    };
-  };
-  
-
 
   const handleAddPost = () => {
-    const validationResult = validateComment(addContent);
-  
-    if (validationResult.isValid) {
-      const params = {
-        username: user,
-        courseId: courseId,
-        content: addContent,
-      };
-      authApi
-        .addPost(params)
-        .then((response) => {
-          console.log(response);
-          setContent('');
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      setError(validationResult.errorMessage); // Hiển thị thông báo lỗi
+    if (addContent.trim() === '') {
+      return window.alert('Error: Do not leave any blank spaces');
     }
+    const params = {
+      username: user,
+      courseId: courseId,
+      content: addContent,
+    };
+    authApi
+      .addPost(params)
+      .then((response) => {
+        console.log(response);
+        setContent('');
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleDeletePost = (postId) => {
@@ -120,28 +92,23 @@ const Posts = ({ courseId, courseName }) => {
   };
 
   const handleSaveEdit = (postId) => {
-    const validationResult = validateComment(editedContent);
-  
-    if (validationResult.isValid) {
-      const params = {
-        username: user,
-        courseId: courseId,
-        postId,
-        content: editedContent,
-      };
-      authApi
-        .updatePost(params)
-        .then((response) => {
-          console.log(response);
-          setEditMode(null);
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      setError(validationResult.errorMessage); // Hiển thị thông báo lỗi
-    }
+    const params = {
+      username: user,
+      courseId: courseId,
+      postId,
+      content: editedContent,
+    };
+
+    authApi
+      .updatePost(params)
+      .then((response) => {
+        console.log(response);
+        setEditMode(null);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleCancel = () => {
@@ -156,16 +123,13 @@ const Posts = ({ courseId, courseName }) => {
             <List.Item.Meta
               title={<a>Me</a>}
               description={
-                <div style={{ margin: '20px' }}>
+                <div>
                   <TextArea
                     style={{ width: '900px', height: '60px' }}
                     value={addContent}
                     placeholder="Add a comment"
                     onChange={(e) => setAddContent(e.target.value)}
                   />
-                   {error && (
-                  <p style={{ color: 'red' }}>{error}</p>
-                )}
                   <br />
                   <div>
                     <Button key="list-loadmore-save" type="primary" onClick={() => handleAddPost()}>
@@ -227,9 +191,6 @@ const Posts = ({ courseId, courseName }) => {
                         value={editedContent}
                         onChange={(e) => setEditedContent(e.target.value)}
                       />
-                      {error && (
-                  <p style={{ color: 'red' }}>{error}</p>
-                )}
                       <br />
                       <div>
                         <Button key="list-loadmore-save" type="primary" onClick={() => handleCancel(item.id)}>

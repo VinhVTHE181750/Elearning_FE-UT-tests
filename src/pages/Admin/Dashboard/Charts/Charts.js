@@ -2,6 +2,7 @@ import { BarChart } from '@mui/x-charts';
 import React from 'react';
 
 export default function Charts({ list }) {
+  const modifiedList = list.map((value) => value / 2);
   return (
     <div className="chart-container">
       <BarChart
@@ -14,7 +15,7 @@ export default function Charts({ list }) {
         ]}
         series={[
           {
-            data: list,
+            data: modifiedList,
           },
         ]}
         width={700}

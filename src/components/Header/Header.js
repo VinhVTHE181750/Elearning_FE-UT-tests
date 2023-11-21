@@ -85,7 +85,6 @@ export default function Header() {
                   Admin dashboard
                 </Link>
                 <Link to="/changePassword">Change Password</Link>
-                <Link to="/setting">Setting</Link>
                 <Link to="/" onClick={handleLogout}>
                   Logout
                 </Link>

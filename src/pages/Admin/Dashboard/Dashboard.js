@@ -36,13 +36,24 @@ const Dashboard = () => {
       .catch((err) => {});
 
     authApi
+      .totalUser()
+      .then((resp) => {
+        setTotalUser(resp.data.totalUser);
+      })
+      .catch((err) => {});
+
+    authApi
       .findAllCourse()
       .then((resp) => {
         setListCourse(resp.data.listCourse);
-        const newListSelectCourse = resp.data.listCourse.map((course) => ({
-          value: course.id,
-          label: course.name,
-        }));
+        const allCourseOption = { value: -1, label: 'All Course' };
+        const newListSelectCourse = [
+          allCourseOption,
+          ...resp.data.listCourse.map((course) => ({
+            value: course.id,
+            label: course.name,
+          })),
+        ];
         setListSelectCourse(newListSelectCourse);
       })
       .catch((err) => {});
@@ -80,9 +91,11 @@ const Dashboard = () => {
   };
 
   const handleCourseChange = (value) => {
-    setSelectedCourse(value);
+    if (value === -1) {
+      setSelectedCourse('');
+    } else setSelectedCourse(value);
   };
-  console.log(recentTransactions);
+
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
@@ -137,7 +150,7 @@ const Dashboard = () => {
                     Revenue Generated
                   </Typography>
                   <Typography variant="h3" fontWeight="bold" color={colors.greenAccent[500]}>
-                    {totalTransactionValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
+                    {(totalTransactionValue / 2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
                   </Typography>
                 </Box>
               </Box>
@@ -157,11 +170,11 @@ const Dashboard = () => {
                   </label>
                   <Select
                     showSearch
-                    placeholder="Select a course"
+                    placeholder="All Course"
                     optionFilterProp="children"
                     onChange={handleCourseChange}
-                    onClear
-                    filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                    allowClear
+                    filterOption={(input, option) => (option?.label ?? '').includes(input.trim())}
                     options={listSelectCourse}
                     style={{ width: '500px' }}
                   />
@@ -200,7 +213,7 @@ const Dashboard = () => {
                   </Box>
                   <Box color={colors.grey[100]}>{moment(transaction.createdAt).format('MMMM Do YYYY, h:mm a')}</Box>
                   <Box backgroundColor={colors.greenAccent[500]} p="5px 10px" borderRadius="4px">
-                    {transaction.amount}VND
+                    {transaction.amount && transaction.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}VND
                   </Box>
                 </Box>
               ))}

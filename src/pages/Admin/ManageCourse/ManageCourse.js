@@ -82,7 +82,9 @@ export default function ManageCourse() {
     setSearchText(value);
   };
 
-  const filteredCourses = courses.filter((course) => course.name.toLowerCase().includes(searchText.toLowerCase()));
+  const filteredCourses = courses.filter((course) =>
+    course.name.toLowerCase().includes(searchText.toLowerCase().trim()),
+  );
 
   const columns = [
     {

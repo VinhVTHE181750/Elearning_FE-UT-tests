@@ -6,6 +6,7 @@ import jwtDecode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { Alert } from '@mui/material';
 import { Button } from 'antd';
+
 const AddCourse = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -18,6 +19,7 @@ const AddCourse = () => {
   const [username, setUsername] = useState('');
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const AddCourse = () => {
     if (localStorage.getItem('user-access-token')) {
       setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
     }
-  }, [localStorage.getItem('user-access-token')]);
+  }, []);
 
   useEffect(() => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
@@ -45,29 +47,39 @@ const AddCourse = () => {
       });
   }, []);
 
+  const handleThumbnailChange = (e) => {
+    setLinkThumnail(e.target.value);
+  };
+
+  const handleThumbnailBlur = () => {
+    setThumbnailPreview(link_thumnail);
+  };
+
+  const nameRegex = /^[a-zA-Z0-9]+[A-Za-zÀ-ỹ0-9!@#$%^&*(),?".:{}|<>':\s]+$/;
+  const priceRegex = /^[1-9]\d*$/;
+  const linkThumbnailRegex =
+    /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
+
   const handleSubmit = (e) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
     e.preventDefault();
-
-    if (name && description && price && link_thumnail && category) {
+    if (!nameRegex.test(name.trim())) return window.alert('Error: Name invalidate!');
+    if (!priceRegex.test(price)) return window.alert('Error: The input for price is a positive integer type.');
+    if (!linkThumbnailRegex.test(link_thumnail)) return window.alert('Error: Link Thumbnail error!');
+    if (!nameRegex.test(description.trim())) return window.alert('Error: Description invalidate!');
+    if (name.trim() && description && price && link_thumnail && category) {
       const params = {
         username: username,
-        name,
+        name: name.trim(),
         price,
         link_thumnail,
-        category, // Use the category state directly
+        category,
         description,
       };
-      console.log(params);
       authApi
         .addCourse(params)
         .then((response) => {
-          // Handle the success response
           setMessage('Add Course Successful');
           setIsSuccess(true);
-          console.log(response);
-          // Reset the form fields
           setName('');
           setDescription('');
           setPrice('');
@@ -77,7 +89,6 @@ const AddCourse = () => {
           setShowErrorAlert(false);
         })
         .catch((error) => {
-          // Handle the error response
           setShowSuccessAlert(false);
           setShowErrorAlert(true);
         });
@@ -86,11 +97,11 @@ const AddCourse = () => {
       setShowErrorAlert(true);
     }
   };
-  const handleBackClick = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
+  const handleBackClick = () => {
     navigate('/manageCourse');
   };
+
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
@@ -123,9 +134,11 @@ const AddCourse = () => {
                 type="text"
                 id="link_thumbnail"
                 value={link_thumnail}
-                onChange={(e) => setLinkThumnail(e.target.value)}
+                onChange={handleThumbnailChange}
+                onBlur={handleThumbnailBlur}
               />
             </div>
+            {thumbnailPreview && <img src={thumbnailPreview} alt="Thumbnail Preview" />}
             <div className="form-group">
               <label htmlFor="category">Category:</label>
               <select id="category" value={category} onChange={(e) => setCategory(e.target.value)}>

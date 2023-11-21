@@ -12,6 +12,7 @@ function AddQuiz() {
   const [quizName, setQuizName] = useState('');
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isFinal, setIsFinal] = useState(false);
   const [checkFinalQuiz, setCheckFinalQuiz] = useState(false);
 
   const [user, setUser] = useState('');
@@ -33,17 +34,22 @@ function AddQuiz() {
   useEffect(() => {
     if (courseID) {
       authApi
-        .getLessonByCourseId(courseID)
+        .checkFinalQuiz({ courseId: courseID })
         .then((resp) => {
-          const listLesson = resp.data.lessonList;
-          if (listLesson.length && listLesson[listLesson.length - 1].id === lessonID) setCheckFinalQuiz(true);
+          setCheckFinalQuiz(resp.data.finalQuiz);
         })
-        .catch((err) => {});
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [courseID]);
 
+  const nameRegex = /^[a-zA-Z0-9]+[A-Za-zÀ-ỹ0-9!@#$%^&*(),.?":{}|<>':\s]+$/;
+
   const handleSubmit = (e) => {
     if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    if (!nameRegex.test(quizName.trim())) return window.alert('Error: Quiz Name invalidate!');
+
     e.preventDefault();
 
     if (lessonID && quizName) {
@@ -51,9 +57,9 @@ function AddQuiz() {
         username: user,
         lessonID: lessonID,
         quizName,
-        finalQuiz: checkFinalQuiz,
+        finalQuiz: isFinal, // Use the updated state variable
       };
-      console.log(params);
+
       authApi
         .addQuiz(params)
         .then((response) => {
@@ -72,6 +78,7 @@ function AddQuiz() {
     setQuizName('');
   };
 
+  console.log(checkFinalQuiz);
   return (
     <div style={{ display: 'flex' }}>
       <Sidebar />
@@ -79,12 +86,20 @@ function AddQuiz() {
         <div className="add-quiz-container">
           <h1>Add Quiz</h1>
           {message && <p className={isSuccess ? 'success-message' : 'error-message'}>{message}</p>}
-          <form onSubmit={handleSubmit}>
-            <label>
-              Quiz Name:
-              <input type="text" value={quizName} onChange={(e) => setQuizName(e.target.value)} />
-            </label>
-
+          <form>
+            <div>
+              <label>
+                Quiz Name:
+                <input type="text" value={quizName} onChange={(e) => setQuizName(e.target.value)} />
+              </label>
+            </div>
+            {!checkFinalQuiz && (
+              <div>
+                <label>
+                  Is Final Quiz: <input type="checkbox" checked={isFinal} onChange={() => setIsFinal(!isFinal)} />
+                </label>
+              </div>
+            )}
             <button type="submit" onClick={handleSubmit}>
               Add Quiz
             </button>
