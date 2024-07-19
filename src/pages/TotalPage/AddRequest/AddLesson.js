@@ -20,7 +20,7 @@ function AddLesson() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     if (localStorage.getItem('user-access-token')) {
       setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
@@ -32,7 +32,7 @@ function AddLesson() {
     /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
 
   const handleSubmit = (e) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     if (!nameRegex.test(lessonName.trim())) return window.alert('Error: Lesson Name invalidate!');
     if (!linkThumbnailRegex.test(linkContent)) return window.alert('Error: Link Content error!');
     if (!nameRegex.test(description.trim())) return window.alert('Error: Description invalidate!');
@@ -60,7 +60,7 @@ function AddLesson() {
     }
   };
   const handleBackClick = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate('/manageCourse');
   };

@@ -106,7 +106,7 @@ const Blog = () => {
   });
 
   const handleAddBlog = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     setIsAddModalOpen(true);
   };
 
@@ -115,7 +115,7 @@ const Blog = () => {
   };
 
   const handleSaveAddBlog = (e) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);

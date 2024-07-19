@@ -22,7 +22,7 @@ function AddQuestion() {
   const [user, setUser] = useState('');
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
@@ -33,7 +33,7 @@ function AddQuestion() {
 
   const regex = /^[a-zA-Z0-9_&*%$#@! ]{3,50}$/;
   const handleSubmit = (e) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     if (!regex.test(questionName.trim())) return window.alert('Error: Question name invalidate!');
     if (!regex.test(optionA.trim())) return window.alert('Error: Answer A invalidate!');
     if (!regex.test(optionB.trim())) return window.alert('Error: Answer B invalidate!');
@@ -99,7 +99,7 @@ function AddQuestion() {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate(`/view-quiz/${quizID}`);
   };

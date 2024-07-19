@@ -21,7 +21,7 @@ function BlogCard({ blogItem }) {
   const editedLinkThumnailRef = useRef(blogItem.linkThumnail);
 
   const handleEditBlog = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     setIsEditModalOpen(true);
   };
 
@@ -30,7 +30,7 @@ function BlogCard({ blogItem }) {
   };
 
   const handleSaveEdit = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const editData = {
       username: jwtDecode(localStorage.getItem('user-access-token')).sub,
@@ -49,7 +49,7 @@ function BlogCard({ blogItem }) {
   };
 
   const handleDeleteBlog = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     if (window.confirm(`Delete blog: ${blogItem.title}`)) {
       const deleteData = {
         username: jwtDecode(localStorage.getItem('user-access-token')).sub,

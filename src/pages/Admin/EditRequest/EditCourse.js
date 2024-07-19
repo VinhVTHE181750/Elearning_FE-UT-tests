@@ -59,7 +59,7 @@ const EditCourse = () => {
   }, []);
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     if (localStorage.getItem('user-access-token')) {
       setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
@@ -67,7 +67,7 @@ const EditCourse = () => {
   }, [localStorage.getItem('user-access-token')]);
 
   const handleSaveClick = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const params = {
       username: username,
@@ -102,7 +102,7 @@ const EditCourse = () => {
       });
   };
   const handleBackClick = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate('/manageCourse');
   };

@@ -17,7 +17,7 @@ const AddCategory = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
@@ -38,7 +38,7 @@ const AddCategory = () => {
   }, []);
 
   const handleBackClick = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate('/manageCategory');
   };
@@ -46,7 +46,7 @@ const AddCategory = () => {
   const nameRegex = /^[A-Za-zÀ-ỹ0-9!@#$%^&*(),.?":{}|<>':\s]+$/;
 
   const handleSubmit = (e) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     if (!nameRegex.test(name.trim())) return window.alert('Error: Category Name invalidate');
     e.preventDefault();
 

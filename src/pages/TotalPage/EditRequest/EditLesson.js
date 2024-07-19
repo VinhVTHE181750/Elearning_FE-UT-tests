@@ -21,7 +21,7 @@ const EditLesson = () => {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     if (localStorage.getItem('user-access-token')) {
       setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
@@ -51,7 +51,7 @@ const EditLesson = () => {
   const linkThumbnailRegex =
     /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
   const handleSaveClick = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     console.log(editedLesson);
     const params = { ...editedLesson, username: jwtDecode(localStorage.getItem('user-access-token')).sub };
     if (!nameRegex.test(params.lessonName.trim())) return window.alert('Error: Lesson Name invalidate!');

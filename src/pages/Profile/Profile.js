@@ -17,7 +17,7 @@ const Profile = () => {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
@@ -27,7 +27,7 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const getUserByUsername = async () => {
       if (user) {
@@ -69,7 +69,7 @@ const Profile = () => {
   };
 
   const handleSave = async () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     try {
       const params = {

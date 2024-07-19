@@ -12,7 +12,7 @@ const Answer = () => {
   const navigate = useNavigate();
 
   const handleEditAnswer = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     const params = {
       questionID,
       answerID,

@@ -22,7 +22,7 @@ function AddLesson() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     if (localStorage.getItem('user-access-token')) {
       setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
@@ -30,7 +30,7 @@ function AddLesson() {
   }, [localStorage.getItem('user-access-token')]);
 
   const handleSubmit = (e) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     e.preventDefault();
     if (lessonName.trim() && ordNumber && linkContent && description) {
@@ -56,7 +56,7 @@ function AddLesson() {
     }
   };
   const handleBackClick = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate('/manageCourse');
   };

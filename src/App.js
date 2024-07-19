@@ -78,7 +78,8 @@ const useServerStatus = () => {
 
 function App() {
   const [theme, colorMode] = useMode();
-  const isServerDown = useServerStatus();
+  // const isServerDown = useServerStatus();
+  const isServerDown = false;
   return (
     <div>
       {isServerDown ? (
@@ -113,7 +114,7 @@ function App() {
             <ColorModeContext.Provider value={colorMode}>
               <ThemeProvider theme={theme}>
                 <Routes>
-                  <Route element={<PrivateOutlet />}>
+                  {/* <Route element={<PrivateOutlet />}> */}
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/manageUser" element={<ManageUser />} />
                     <Route path="/manageCourse" element={<ManageCourse />} />
@@ -141,7 +142,7 @@ function App() {
                     <Route path="/edit-answer" element={<EditAnswer />} />
 
                     <Route path="/recycleBin" element={<RecycleBin />} />
-                  </Route>
+                  {/* </Route> */}
                 </Routes>
               </ThemeProvider>
             </ColorModeContext.Provider>

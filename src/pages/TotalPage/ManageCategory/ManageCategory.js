@@ -41,14 +41,14 @@ export default function ManageCategory() {
   }, [searchText]);
 
   const handleEditClick = (categoryId) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const categoryEdit = category.find((categorys) => categorys.id === parseInt(categoryId));
     navigate(`/editCategory/${categoryId}`);
   };
 
   const handleDeleteClick = (categoryId) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const categoryToDelete = category.find((category) => category.id === parseInt(categoryId));
     setSelectedCategoryId(categoryToDelete.id);
@@ -74,7 +74,7 @@ export default function ManageCategory() {
   };
 
   const handleAddCategoryClick = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate('/add-category');
   };

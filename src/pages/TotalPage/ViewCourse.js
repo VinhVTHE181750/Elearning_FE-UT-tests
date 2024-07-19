@@ -56,13 +56,13 @@ const ViewCourse = () => {
   }, []);
 
   const handleAddLesson = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate(`/add-lesson/${courseID}`);
   };
 
   const handleDeleteLesson = (lessonID) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     console.log(lessonID);
 
     if (window.confirm('Do you want to delete this lesson?')) {
@@ -77,25 +77,25 @@ const ViewCourse = () => {
   };
 
   const handleEditLesson = (id) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate(`/edit-lesson/${id}`);
   };
 
   const handleViewLesson = (id) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate(`/viewLesson/${id}`);
   };
 
   const handleEditQuiz = (id) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate(`/edit-quiz/${id}`);
   };
 
   const handleDeleteQuiz = (quizID) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const params = {
       username: user,
@@ -113,13 +113,13 @@ const ViewCourse = () => {
   };
 
   const handleViewQuiz = (id) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate(`/view-quiz/${id}`);
   };
 
   const handleAddQuiz = (id) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate(`/add-quiz/${id}`);
   };

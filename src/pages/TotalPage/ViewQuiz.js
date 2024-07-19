@@ -66,25 +66,25 @@ const ViewQuiz = () => {
   }, [quizToView, quizID]);
 
   const handleAddQuestion = (id) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate(`/add-question/${id}`);
   };
 
   const handleViewAnswer = (questionID) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate(`/view-answer/${questionID}`);
   };
 
   const handleEditQuestion = (id) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate(`/edit-question/${id}`);
   };
 
   const handleDeleteQuestion = (questionID) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const questionToDelete = questions.find((question) => question.quizID === parseInt(quizID));
     if (questionToDelete) {

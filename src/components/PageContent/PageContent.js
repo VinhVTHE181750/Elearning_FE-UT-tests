@@ -109,7 +109,7 @@ export default function PageContent() {
     }
   }, [user]);
   const handleEnrollCourse = (courseId, courseName) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       handleGetCourseById(courseId);

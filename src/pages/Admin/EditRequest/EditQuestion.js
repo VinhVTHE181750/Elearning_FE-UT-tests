@@ -19,7 +19,7 @@ function EditQuestion() {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
@@ -49,12 +49,12 @@ function EditQuestion() {
   }, [questionID]);
 
   const handleBack = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate(`/view-quiz/${quizID}`);
   };
   const handleEditQuestion = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const params = {
       username: user,
