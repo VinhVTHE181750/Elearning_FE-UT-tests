@@ -152,7 +152,7 @@ export default function AllCourse() {
   });
 
   const handleEnrollCourse = (courseId) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     window.location.href = `/payment/${courseId}`;
   };
 

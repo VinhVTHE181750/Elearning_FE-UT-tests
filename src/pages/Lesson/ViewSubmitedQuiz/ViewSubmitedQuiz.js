@@ -72,7 +72,7 @@ export default function ViewSubmitedQuiz({ quizId }) {
   }, [type]);
 
   const handleViewClick = (sessionId, no) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     setType(`Submitted of quiz number ${no}`);
     authApi
       .getCorrectAnswerBySession(sessionId)

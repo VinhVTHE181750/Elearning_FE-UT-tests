@@ -14,7 +14,7 @@ const PaymentPage = () => {
   const [payments, setPayments] = useState([]);
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     authApi
       .getCourseById(courseId)
       .then((response) => {
@@ -26,7 +26,7 @@ const PaymentPage = () => {
   }, [courseId]);
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       const decoded = jwtDecode(userString);
@@ -45,7 +45,7 @@ const PaymentPage = () => {
   }, []);
 
   const handleEnroll = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const userString = localStorage.getItem('user-access-token');
     if (userString) {

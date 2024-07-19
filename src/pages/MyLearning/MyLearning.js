@@ -17,7 +17,7 @@ export default function MyLearning() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       var decoded = jwtDecode(userString);
@@ -46,7 +46,7 @@ export default function MyLearning() {
   }, []);
 
   const handleViewCourse = (courseId) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     authApi
       .getLessonByCourseId(courseId)
       .then((resp) => {

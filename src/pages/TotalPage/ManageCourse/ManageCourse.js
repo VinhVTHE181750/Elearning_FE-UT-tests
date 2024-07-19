@@ -17,13 +17,13 @@ export default function ManageCourse() {
 
   const [username, setUsername] = useState('');
   const [searchText, setSearchText] = useState('');
-  // update searchText
+
   useEffect(() => {
     if (localStorage.getItem('user-access-token')) {
       setUsername(jwtDecode(localStorage.getItem('user-access-token')).sub);
     }
   }, [localStorage.getItem('user-access-token')]);
-  // update searchText
+
   useEffect(() => {
     authApi
       .findAllCourse()
@@ -37,13 +37,13 @@ export default function ManageCourse() {
         console.error('Error fetching data:', error);
       });
   }, []);
-  // update searchText
+
   const handleEditClick = (courseID) => {
     // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     navigate(`/editCourse/${courseID}`);
   };
-  // update searchText
+
   const handleDeleteClick = (courseID) => {
     // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
@@ -65,7 +65,7 @@ export default function ManageCourse() {
         });
     }
   };
-  // update searchText
+
   const handleViewClick = (courseID) => {
     // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
@@ -77,30 +77,9 @@ export default function ManageCourse() {
 
     navigate('/add-course');
   };
-  const isInputValid = (input) => {
-    // Kiểm tra xem input có chứa khoảng trắng không
-    if (input.includes(' ')) {
-      return false;
-    }
-    // Kiểm tra xem input có chứa ký tự đặc biệt không
-    const specialChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-    if (specialChars.test(input)) {
-      return false;
-    }
-    return true;
-  };
 
   const handleSearch = (value) => {
-    const filteredCourses = courses.filter((course) => course.name.toLowerCase().includes(value.toLowerCase()));
-    if (value.trim() === '') {
-      alert("Please can't value of course be empty");
-    } else if (!isInputValid(value)) {
-      alert('Please do not enter special characters!');
-    } else if (filteredCourses.length === 0) {
-      alert('Course not exist');
-    } else {
-      setSearchText(value);
-    }
+    setSearchText(value);
   };
 
   const filteredCourses = courses.filter((course) => course.name.toLowerCase().includes(searchText.toLowerCase()));

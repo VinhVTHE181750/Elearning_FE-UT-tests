@@ -18,12 +18,12 @@ import ViewUser from './pages/Admin/ViewRequest';
 import ViewCourse from './pages/TotalPage/ViewCourse';
 import ViewQuiz from './pages/TotalPage/ViewQuiz';
 import ViewAnswer from './pages/Admin/ViewRequest/ViewAnswer';
-import AddCourse from './pages/Admin/AddRequest/AddCourse';
-import AddCategory from './pages/Admin/AddRequest/AddCategory';
-import AddLesson from './pages/Admin/AddRequest/AddLesson';
-import AddAnswer from './pages/Admin/AddRequest/AddAnswer';
-import AddQuiz from './pages/Admin/AddRequest/AddQuiz';
-import AddQuestion from './pages/Admin/AddRequest/AddQuestion';
+import AddCourse from './pages/TotalPage/AddRequest/AddCourse';
+import AddCategory from './pages/TotalPage/AddRequest/AddCategory';
+import AddLesson from './pages/TotalPage/AddRequest/AddLesson';
+import AddAnswer from './pages/TotalPage/AddRequest/AddAnswer';
+import AddQuiz from './pages/TotalPage/AddRequest/AddQuiz';
+import AddQuestion from './pages/TotalPage/AddRequest/AddQuestion';
 import EditUser from './pages/Admin/EditRequest';
 import EditCourse from './pages/Admin/EditRequest/EditCourse';
 import EditCategory from './pages/Admin/EditRequest/EditCategory';
@@ -78,7 +78,8 @@ const useServerStatus = () => {
 
 function App() {
   const [theme, colorMode] = useMode();
-  const isServerDown = useServerStatus();
+  // const isServerDown = useServerStatus();
+  const isServerDown = false;
   return (
     <div>
       {isServerDown ? (
@@ -113,7 +114,7 @@ function App() {
             <ColorModeContext.Provider value={colorMode}>
               <ThemeProvider theme={theme}>
                 <Routes>
-                  <Route element={<PrivateOutlet />}>
+                  {/* <Route element={<PrivateOutlet />}> */}
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/manageUser" element={<ManageUser />} />
                     <Route path="/manageCourse" element={<ManageCourse />} />
@@ -141,7 +142,7 @@ function App() {
                     <Route path="/edit-answer" element={<EditAnswer />} />
 
                     <Route path="/recycleBin" element={<RecycleBin />} />
-                  </Route>
+                  {/* </Route> */}
                 </Routes>
               </ThemeProvider>
             </ColorModeContext.Provider>

@@ -14,8 +14,6 @@ function AddLesson() {
   const { courseID } = useParams();
   const [linkContent, setLinkContent] = useState('');
   const [description, setDescription] = useState('');
-  const [message, setMessage] = useState('');
-  const [isSuccess, setIsSuccess] = useState(false);
   const [username, setUsername] = useState('');
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showErrorAlert, setShowErrorAlert] = useState(false);
@@ -29,14 +27,20 @@ function AddLesson() {
     }
   }, [localStorage.getItem('user-access-token')]);
 
+  const nameRegex = /^[a-zA-Z0-9]+[A-Za-zÀ-ỹ0-9!@#$%^&*(),.?":{}|<>':\s]+$/;
+  const linkThumbnailRegex =
+    /^(http(s):\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/;
+
   const handleSubmit = (e) => {
     // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
+    if (!nameRegex.test(lessonName.trim())) return window.alert('Error: Lesson Name invalidate!');
+    if (!linkThumbnailRegex.test(linkContent)) return window.alert('Error: Link Content error!');
+    if (!nameRegex.test(description.trim())) return window.alert('Error: Description invalidate!');
     e.preventDefault();
-    if (lessonName.trim() && ordNumber && linkContent && description) {
+    if (lessonName && ordNumber && linkContent && description) {
       const params = {
         username: username,
-        lessonName: lessonName.trim(),
+        lessonName,
         ordNumber,
         courseID: courseID,
         linkContent,
@@ -83,11 +87,6 @@ function AddLesson() {
             </label>
 
             <label>
-              Order Number:
-              <input type="number" value={ordNumber} onChange={(e) => setOrdNumber(parseInt(e.target.value))} />
-            </label>
-
-            <label>
               Link Content:
               <input type="text" value={linkContent} onChange={(e) => setLinkContent(e.target.value)} />
             </label>
@@ -96,7 +95,6 @@ function AddLesson() {
               Description:
               <textarea value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
             </label>
-
             <div>
               <Button
                 type="submit"

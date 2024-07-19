@@ -11,7 +11,7 @@ const MyPayment = () => {
   const [payments, setPayments] = useState([]);
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     const userString = localStorage.getItem('user-access-token');
     if (userString) {
       var deCoded = jwt_decode(userString);
@@ -20,7 +20,7 @@ const MyPayment = () => {
   }, []);
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     if (user) {
       authApi

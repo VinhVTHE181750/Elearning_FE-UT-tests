@@ -28,7 +28,7 @@ export default function Lesson() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     authApi
       .getLessonById(id)
@@ -46,7 +46,7 @@ export default function Lesson() {
   }, [id]);
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     if (courseID) {
       authApi
         .getCompleteLessonByCourse({
@@ -61,7 +61,7 @@ export default function Lesson() {
   }, [courseID]);
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     const decoded = jwtDecode(localStorage.getItem('user-access-token'));
     setUser(decoded.userInfo[0]);
@@ -77,7 +77,7 @@ export default function Lesson() {
   }, []);
 
   useEffect(() => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     if (courseID) {
       authApi
@@ -93,7 +93,7 @@ export default function Lesson() {
 
   const handleQuiz = (type, quizId, isFinal, quizLessonId) => {
     const handleQuiz = (type, quizId, isFinal, quizLessonId) => {
-      if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+      // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
       if (type === 'Start') {
         if (isFinal) {
           const listComplete = listDone.filter((item) => item !== quizLessonId);
@@ -133,7 +133,7 @@ export default function Lesson() {
     ];
 
     const handleVideoEnd = () => {
-      if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+      // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
       const quiz = listQuiz.find((quiz) => quiz.lesson.id === id);
       if (!quiz) {
         authApi

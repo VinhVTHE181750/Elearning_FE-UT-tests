@@ -64,7 +64,7 @@ export default function TakeQuiz() {
   };
 
   const handleSubmit = () => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     if (listUserChooseAnswer.length !== listQuestion.length) {
       return window.alert('The question is not choose answer!');
     }
@@ -102,7 +102,7 @@ export default function TakeQuiz() {
   };
 
   const handleClose = (percent) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     if (checkChangeTab) {
       return (window.location.href = `/viewLesson/${lessonID}`);
     }

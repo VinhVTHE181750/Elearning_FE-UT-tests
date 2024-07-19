@@ -11,7 +11,7 @@ function EditQuestion() {
   const [questionName, setQuestionName] = useState('');
   const [quizID, setQuizID] = useState('');
 
-  const [questionType, setQuestionType] = useState('');
+  const [questionType, setQuestionType] = useState('ONE_CHOICE');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const [answers, setAnswers] = useState([]);
@@ -53,9 +53,16 @@ function EditQuestion() {
 
     navigate(`/view-quiz/${quizID}`);
   };
+  const regex = /^[a-zA-Z0-9_&*%$#@! ]{3,50}$/;
+
   const handleEditQuestion = () => {
     // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
-
+    if (!regex.test(questionName.trim())) return window.alert('Error: Question name invalidate!');
+    {
+      answers.map((item) => {
+        if (!regex.test(item.answerContent)) return window.alert('Error: Answer invalidate!');
+      });
+    }
     const params = {
       username: user,
       questionID,
@@ -103,14 +110,6 @@ function EditQuestion() {
             <label>
               Question Name:
               <input type="text" value={questionName} onChange={(e) => setQuestionName(e.target.value)} />
-            </label>
-
-            <label>
-              Question Type:
-              <select value={questionType} onChange={(e) => setQuestionType(e.target.value)}>
-                <option value="">Select Question Type</option>
-                <option value="ONE_CHOICE">One Choice</option>
-              </select>
             </label>
 
             {questionType === 'ONE_CHOICE' && (

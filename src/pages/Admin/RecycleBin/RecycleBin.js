@@ -48,7 +48,7 @@ export default function RecycleBin() {
   }, [categoryEntity]);
 
   const handleRestore = (entity) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
 
     if (window.confirm('Do you want restore?')) {
       const params = {};
@@ -156,7 +156,7 @@ export default function RecycleBin() {
   ];
 
   const handleChange = (value) => {
-    if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
+    // if (!localStorage.getItem('user-access-token')) return (window.location.href = '/signin');
     setCategoryEntity(value.value);
   };
 
