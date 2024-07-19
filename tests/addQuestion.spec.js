@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('test', async ({ page }) => {
+test('Add question: ___', async ({ page }) => {
   await page.goto('http://localhost:3000/add-question/1');
 
   await page.getByLabel('Question Name:').click();

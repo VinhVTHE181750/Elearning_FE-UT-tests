@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 
 // username does not exist
-test('test', async ({ page }) => {
+test('Login: ___', async ({ page }) => {
   await page.goto('http://localhost:3000/signin');
   await page.getByRole('textbox', { name: 'Enter your email' }).click();
   await page.getByRole('textbox', { name: 'Enter your email' }).fill('abc@gmail.com');
