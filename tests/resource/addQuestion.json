@@ -1,0 +1,173 @@
+{
+  "notes": {
+    "1": "Cases will reuse default, except for overrides",
+    "2": "If no expected is provided, it will default to 'Add question successfully' and a navigation to the quiz page"
+  },
+  "default": {
+    "name": "Question 1",
+    "type": "ONE_CHOICE",
+    "a": "Answer 1a",
+    "b": "Answer 1b",
+    "c": "Answer 1c",
+    "d": "Answer 1d",
+    "result": "a",
+    "expected": "Add question successful",
+    "navigate": "http://localhost:3000/quiz/1"
+  },
+  "cases": [
+    {
+      "tc": "Single choice all valid data"
+    },
+    {
+      "tc": "Name length = 0",
+      "name": "",
+      "expected": "Question is required"
+    },
+    {
+      "tc": "Name length = 1",
+      "name": "a"
+    },
+    {
+      "tc": "Name length = 2",
+      "name": "aa"
+    },
+    {
+      "tc": "Name length = 100",
+      "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "tc": "Name length = 254",
+      "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "tc": "Name length = 255",
+      "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "tc": "Name length = 256",
+      "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected": "Fail to add question"
+    },
+    {
+      "tc": "Name length = 400",
+      "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected": "Fail to add question"
+    },
+    {
+      "tc": "Multiple choice no answer",
+      "type": "MULTIPLE_CHOICE",
+      "result": "",
+      "expected": "Fail to add question"
+    },
+    {
+      "tc": "Multiple choice only has 1 answer: a",
+      "type": "MULTIPLE_CHOICE",
+      "result": "a"
+    },
+    {
+      "tc": "Multiple choice only has 1 answer: b",
+      "type": "MULTIPLE_CHOICE",
+      "result": "b"
+    },
+    {
+      "tc": "Multiple choice only has 1 answer: c",
+      "type": "MULTIPLE_CHOICE",
+      "result": "c"
+    },
+    {
+      "tc": "Multiple choice only has 1 answer: d",
+      "type": "MULTIPLE_CHOICE",
+      "result": "d"
+    },
+    {
+      "tc": "Multiple choice has 2 answers: a, b",
+      "type": "MULTIPLE_CHOICE",
+      "result": "a,b"
+    },
+    {
+      "tc": "Multiple choice has 2 answers: a, c",
+      "type": "MULTIPLE_CHOICE",
+      "result": "a,c"
+    },
+    {
+      "tc": "Multiple choice has 2 answers: a, d",
+      "type": "MULTIPLE_CHOICE",
+      "result": "a,d"
+    },
+    {
+      "tc": "Multiple choice has 2 answers: b, c",
+      "type": "MULTIPLE_CHOICE",
+      "result": "b,c"
+    },
+    {
+      "tc": "Multiple choice has 2 answers: b, d",
+      "type": "MULTIPLE_CHOICE",
+      "result": "b,d"
+    },
+    {
+      "tc": "Multiple choice has 2 answers: c, d",
+      "type": "MULTIPLE_CHOICE",
+      "result": "c,d"
+    },
+    {
+      "tc": "Multiple choice has 3 answers: a, b, c",
+      "type": "MULTIPLE_CHOICE",
+      "result": "a,b,c"
+    },
+    {
+      "tc": "Multiple choice has 3 answers: a, b, d",
+      "type": "MULTIPLE_CHOICE",
+      "result": "a,b,d"
+    },
+    {
+      "tc": "Multiple choice has 3 answers: a, c, d",
+      "type": "MULTIPLE_CHOICE",
+      "result": "a,c,d"
+    },
+    {
+      "tc": "Multiple choice has 3 answers: b, c, d",
+      "type": "MULTIPLE_CHOICE",
+      "result": "b,c,d"
+    },
+    {
+      "tc": "Multiple choice has 4 answers: a, b, c, d",
+      "type": "MULTIPLE_CHOICE",
+      "result": "a,b,c,d"
+    },
+    {
+      "tc": "Answer length = 0",
+      "a": "",
+      "expected": "Fail to add question"
+    },
+    {
+      "tc": "Answer length = 1",
+      "a": "a"
+    },
+    {
+      "tc": "Answer length = 2",
+      "a": "aa"
+    },
+    {
+      "tc": "Answer length = 100",
+      "a": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "tc": "Answer length = 254",
+      "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "tc": "Answer length = 255",
+      "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "tc": "Answer length = 256",
+      "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected": "Fail to add question"
+    },
+    {
+      "tc": "Answer length = 400",
+      "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected": "Fail to add question"
+    }
+  ]
+}

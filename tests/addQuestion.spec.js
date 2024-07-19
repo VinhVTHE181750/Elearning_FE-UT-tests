@@ -1,35 +1,89 @@
 import { test, expect } from '@playwright/test';
 
-test('Add question: ___', async ({ page }) => {
-  await page.goto('http://localhost:3000/add-question/1');
+test.describe.configure({ mode: 'parallel' });
 
-  await page.getByLabel('Question Name:').click();
+const testData = require('./resource/addQuestion.json');
 
-  await page.getByLabel('Question Name:').fill('name');
+const defaultCase = testData.default;
+const testCases = testData.cases;
 
-  await page.getByLabel('Question Name:').press('Tab');
+const signInUrl = 'http://localhost:3000/signin';
+const url = 'http://localhost:3000/add-question/1';
+const successUrl = 'http://localhost:3000/quiz/1';
+const noQuizUrl = 'http://localhost:3000/add-question/10000';
 
-  await page.getByPlaceholder('Answer A').fill('a');
+// test every cases in testCases
 
-  await page.getByPlaceholder('Answer A').press('Tab');
+for (const testCase of testCases) {
+  test(testCase.tc, async ({ page }) => {
+    page.setDefaultTimeout(10000);
+    // navigate to login
+    await page.goto(signInUrl);
 
-  await page.getByPlaceholder('Answer B').fill('b');
+    // input username and password
+    let emailInput = await page.getByRole('textbox', { name: 'Enter your email' });
+    if (!emailInput) return fail('Email input not found');
+    await emailInput.fill('admin@mail.com');
 
-  await page.getByPlaceholder('Answer B').press('Tab');
+    let passwordInput = await page.getByRole('textbox', { name: 'Enter your password' });
+    if (!passwordInput) return fail('Password input not found');
+    await passwordInput.fill('Pass_1234');
 
-  await page.getByPlaceholder('Answer C').fill('c');
+    let signInButton = await page.getByRole('button', { name: 'Sign In' });
+    if (!signInButton) return fail('Sign In button not found');
+    await signInButton.click();
 
-  await page.getByPlaceholder('Answer C').press('Tab');
+    // navigate to this screen
+    await page.goto(url);
 
-  await page.getByPlaceholder('Answer D').fill('d');
+    // fill the form
 
-  await page.getByLabel('A', { exact: true }).check();
+    // set the question name
+    let questionNameInput = await page.getByLabel('Question Name:');
+    if (!questionNameInput) return fail('Question Name input not found');
+    await questionNameInput.fill(testCase.name || defaultCase.name);
 
-  page.once('dialog', (dialog) => {
-    console.log(`Dialog message: ${dialog.message()}`);
+    // set the question type
+    // let questionTypeSelect = await page.getByLabel('Question Type:');
+    // if (!questionTypeSelect) return fail('Question Type select not found');
+    // await questionTypeSelect.selectOption(testCase.type || defaultCase.type);
 
-    dialog.dismiss().catch(() => {});
+    // fill the answers
+    let answerAInput = await page.getByPlaceholder('Answer A');
+    if (!answerAInput) return fail('Answer A input not found');
+    await answerAInput.fill(testCase.a || defaultCase.a);
+
+    let answerBInput = await page.getByPlaceholder('Answer B');
+    if (!answerBInput) return fail('Answer B input not found');
+    await answerBInput.fill(testCase.b || defaultCase.b);
+
+    let answerCInput = await page.getByPlaceholder('Answer C');
+    if (!answerCInput) return fail('Answer C input not found');
+    await answerCInput.fill(testCase.c || defaultCase.c);
+
+    let answerDInput = await page.getByPlaceholder('Answer D');
+    if (!answerDInput) return fail('Answer D input not found');
+    await answerDInput.fill(testCase.d || defaultCase.d);
+
+    // for each char in correctAnswer, check the corresponding checkbox
+    for (const char of testCase.result || defaultCase.result) {
+      let checkbox = await page.getByLabel(char.toUpperCase(), { exact: true });
+      if (!checkbox) return fail(`Checkbox for ${char} not found`);
+      await checkbox.setChecked(true, );
+    }
+
+    // submit the form
+    let addButton = await page.getByRole('button', { name: 'Add Question' });
+    if (!addButton) return fail('Add Question button not found');
+    await addButton.click();
+
+    // if error => check the message and does not navigate
+    if (testCase.expected) {
+      await page.getByText(testCase.expected);
+      return
+    }
+    
+    // else => navigate to success page
+    await expect(page.url()).toBe(successUrl);
   });
-
-  await page.getByRole('button', { name: 'Add Question' }).click();
-});
+}
