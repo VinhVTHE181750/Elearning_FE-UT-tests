@@ -7,12 +7,14 @@ const testData = require('./resource/addQuestion.json');
 const defaultCase = testData.default;
 const testCases = testData.cases;
 
-const signInUrl = 'http://localhost:3000/signin';
-const url = 'http://localhost:3000/edit-question/1';
-const successUrl = 'http://localhost:3000/quiz/1';
-const noQuestionUrl = 'http://localhost:3000/edit-question/10000';
-const expectedFail = "Failed to update question"
-
+const config = require('./resource/config.json');
+const signInUrl = config.signInUrl;
+const url = config.functions.updateQuestion.url;
+const successUrl = config.functions.updateQuestion.successUrl;
+const noQuestionUrl = config.functions.updateQuestion.noQuestionUrl;
+const email = config.email;
+const password = config.password;
+const timeout = config.timeout;
 // when the quiz does not exist
 test('Question does not exist', async ({ page }) => {
   page.setDefaultTimeout(10000);
@@ -22,11 +24,11 @@ test('Question does not exist', async ({ page }) => {
   // input username and password
   let emailInput = await page.getByRole('textbox', { name: 'Enter your email' });
   if (!emailInput) return fail('Email input not found');
-  await emailInput.fill('admin@mail.com');
+  await emailInput.fill(email);
 
   let passwordInput = await page.getByRole('textbox', { name: 'Enter your password' });
   if (!passwordInput) return fail('Password input not found');
-  await passwordInput.fill('Pass_1234');
+  await passwordInput.fill(password);
 
   let signInButton = await page.getByRole('button', { name: 'Sign In' });
   if (!signInButton) return fail('Sign In button not found');
@@ -49,11 +51,11 @@ for (const testCase of testCases) {
     // input username and password
     let emailInput = await page.getByRole('textbox', { name: 'Enter your email' });
     if (!emailInput) return fail('Email input not found');
-    await emailInput.fill('admin@mail.com');
+    await emailInput.fill(email);
 
     let passwordInput = await page.getByRole('textbox', { name: 'Enter your password' });
     if (!passwordInput) return fail('Password input not found');
-    await passwordInput.fill('Pass_1234');
+    await passwordInput.fill(password);
 
     let signInButton = await page.getByRole('button', { name: 'Sign In' });
     if (!signInButton) return fail('Sign In button not found');
