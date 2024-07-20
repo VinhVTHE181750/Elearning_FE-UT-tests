@@ -6,8 +6,8 @@ const testData = require('./resource/addQuiz.json');
 
 const defaultCase = testData.default;
 const testCases = testData.cases;
-const failmessage = 'Failed to update quiz';
-const successmessage = 'Quiz updated successfully';
+const failMessage = 'Failed to update quiz';
+const successMessage = 'Quiz updated successfully';
 
 const signInUrl = 'http://localhost:3000/signin';
 const url = 'http://localhost:3000/edit-quiz/1';
@@ -18,6 +18,8 @@ const url = 'http://localhost:3000/edit-quiz/1';
 
 for (const testCase of testCases) {
   test(testCase.tc, async ({ page }) => {
+    const expectTo = testCase.expected || defaultCase.expected;
+    const msg = expectTo ? successMessage : failMessage;
     page.setDefaultTimeout(10000);
     // navigate to login
     await page.goto(signInUrl);
@@ -53,12 +55,11 @@ for (const testCase of testCases) {
 
     // if error => check the message and does not navigate
 
-    let response = await page.getByText(testCase.expected || defaultCase.expected);
+    let response = await page.getByText(msg);
     if (!response) return fail('Response not found');
 
     // else => navigate to success page
     // await expect(page.url()).toBe(successUrl);
     await expect(response).toHaveText(testCase.expected || defaultCase.expected, { exact: false });
-
   });
 }
