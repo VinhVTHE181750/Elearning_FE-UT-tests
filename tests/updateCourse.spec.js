@@ -9,25 +9,29 @@ const testCases = testData.cases;
 const failmessage = 'Failed to update course';
 const successmessage = 'Course updated successfully';
 
-const signInUrl = 'http://localhost:3000/signin';
-const url = 'http://localhost:3000/editCourse/1';
+const config = require('./resource/config.json');
+const signInUrl = config.signInUrl;
+const url = config.functions.updateQuestion.url;
+const email = config.email;
+const password = config.password;
+const timeout = config.timeout;
 
 // Test every case in testCases
 for (const testCase of testCases) {
   test(testCase.tc, async ({ page }) => {
     page.setDefaultTimeout(10000);
-    
+
     // Navigate to login
     await page.goto(signInUrl);
 
     // Input username and password
     const emailInput = await page.getByRole('textbox', { name: 'Enter your email' });
     if (!emailInput) throw new Error('Email input not found');
-    await emailInput.fill('admin@mail.com');
+    await emailInput.fill(email);
 
     const passwordInput = await page.getByRole('textbox', { name: 'Enter your password' });
     if (!passwordInput) throw new Error('Password input not found');
-    await passwordInput.fill('Pass_1234');
+    await passwordInput.fill(password);
 
     const signInButton = await page.getByRole('button', { name: 'Sign In' });
     if (!signInButton) throw new Error('Sign In button not found');
