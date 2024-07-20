@@ -1,0 +1,37 @@
+{
+  "signInUrl": "http://localhost:3000/signin",
+  "email": "admin@mail.com",
+  "password": "Pass_12345",
+  "timeout": 10000,
+  "functions": {
+    "addQuestion": {
+      "url": "http://localhost:3000/add-question/1",
+      "successUrl": "http://localhost:3000/quiz/1",
+      "noQuizUrl": "http://localhost:3000/add-question/10000"
+    },
+    "updateQuestion": {
+      "url": "http://localhost:3000/edit-question/1",
+      "successUrl": "http://localhost:3000/quiz/1",
+      "noQuestionUrl": "http://localhost:3000/edit-question/10000"
+    },
+    "addCourse": {
+      "url": "http://localhost:3000/add-course",
+      "successUrl": "http://localhost:3000/courses"
+    },
+    "updateCourse": {
+      "url": "http://localhost:3000/edit-course/1",
+      "successUrl": "http://localhost:3000/courses",
+      "noCourseUrl": "http://localhost:3000/edit-course/10000"
+    },
+    "addQuiz": {
+      "url": "http://localhost:3000/add-quiz/1",
+      "successUrl": "http://localhost:3000/courses",
+      "noCourseUrl": "http://localhost:3000/add-quiz/10000"
+    },
+    "updateQuiz": {
+      "url": "http://localhost:3000/edit-quiz/1",
+      "successUrl": "http://localhost:3000/courses",
+      "noQuizUrl": "http://localhost:3000/edit-quiz/10000"
+    }
+  }
+}

@@ -7,26 +7,29 @@ const testData = require('./resource/addQuestion.json');
 const defaultCase = testData.default;
 const testCases = testData.cases;
 
-const signInUrl = 'http://localhost:3000/signin';
-const url = 'http://localhost:3000/add-question/1';
-const successUrl = 'http://localhost:3000/quiz/1';
-const noQuizUrl = 'http://localhost:3000/add-question/10000';
-
+const config = require('./resource/config.json');
+const signInUrl = config.signInUrl;
+const url = config.functions.addQuestion;
+const successUrl = config.functions.addQuestion.successUrl;
+const noQuizUrl = config.functions.addQuestion.noQuizUrl;
+const email = config.email;
+const password = config.password;
+const timeout = config.timeout;
 
 // when the quiz does not exist
 test('Quiz does not exist', async ({ page }) => {
-  page.setDefaultTimeout(10000);
+  page.setDefaultTimeout(timeout);
   // navigate to login
   await page.goto(signInUrl);
 
   // input username and password
   let emailInput = await page.getByRole('textbox', { name: 'Enter your email' });
   if (!emailInput) return fail('Email input not found');
-  await emailInput.fill('admin@mail.com');
+  await emailInput.fill(email);
 
   let passwordInput = await page.getByRole('textbox', { name: 'Enter your password' });
   if (!passwordInput) return fail('Password input not found');
-  await passwordInput.fill('Pass_1234');
+  await passwordInput.fill(password);
 
   let signInButton = await page.getByRole('button', { name: 'Sign In' });
   if (!signInButton) return fail('Sign In button not found');
@@ -42,18 +45,18 @@ test('Quiz does not exist', async ({ page }) => {
 // test every cases in testCases
 for (const testCase of testCases) {
   test(testCase.tc, async ({ page }) => {
-    page.setDefaultTimeout(10000);
+    page.setDefaultTimeout(timeout);
     // navigate to login
     await page.goto(signInUrl);
 
     // input username and password
     let emailInput = await page.getByRole('textbox', { name: 'Enter your email' });
     if (!emailInput) return fail('Email input not found');
-    await emailInput.fill('admin@mail.com');
+    await emailInput.fill(email);
 
     let passwordInput = await page.getByRole('textbox', { name: 'Enter your password' });
     if (!passwordInput) return fail('Password input not found');
-    await passwordInput.fill('Pass_1234');
+    await passwordInput.fill(password);
 
     let signInButton = await page.getByRole('button', { name: 'Sign In' });
     if (!signInButton) return fail('Sign In button not found');
@@ -95,7 +98,7 @@ for (const testCase of testCases) {
     for (const char of testCase.result || defaultCase.result) {
       let checkbox = await page.getByLabel(char.toUpperCase(), { exact: true });
       if (!checkbox) return fail(`Checkbox for ${char} not found`);
-      await checkbox.setChecked(true, );
+      await checkbox.setChecked(true);
     }
 
     // submit the form
@@ -106,9 +109,9 @@ for (const testCase of testCases) {
     // if error => check the message and does not navigate
     if (testCase.expected) {
       await page.getByText(testCase.expected);
-      return
+      return;
     }
-    
+
     // else => navigate to success page
     await expect(page.url()).toBe(successUrl);
   });
