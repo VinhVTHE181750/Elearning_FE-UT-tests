@@ -55,6 +55,7 @@
     "jwt-decode": "^3.1.2",
     "mdb-react-ui-kit": "^6.3.0",
     "moment": "^2.29.4",
+    "playwright": "^1.45.2",
     "popper.js": "^1.16.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
