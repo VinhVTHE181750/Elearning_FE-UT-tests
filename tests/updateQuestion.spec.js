@@ -70,9 +70,9 @@ for (const testCase of testCases) {
     await questionNameInput.fill(testCase.name || defaultCase.name);
 
     // set the question type
-    // let questionTypeSelect = await page.getByLabel('Question Type:');
-    // if (!questionTypeSelect) return fail('Question Type select not found');
-    // await questionTypeSelect.selectOption(testCase.type || defaultCase.type);
+    let questionTypeSelect = await page.getByLabel('Question Type:');
+    if (!questionTypeSelect) return fail('Question Type select not found');
+    await questionTypeSelect.selectOption(testCase.type || defaultCase.type);
 
     // fill the answers
     let answerAInput = await page.getByPlaceholder('Answer A');
