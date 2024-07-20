@@ -12,8 +12,34 @@ const url = 'http://localhost:3000/add-question/1';
 const successUrl = 'http://localhost:3000/quiz/1';
 const noQuizUrl = 'http://localhost:3000/add-question/10000';
 
-// test every cases in testCases
 
+// when the quiz does not exist
+test('Quiz does not exist', async ({ page }) => {
+  page.setDefaultTimeout(10000);
+  // navigate to login
+  await page.goto(signInUrl);
+
+  // input username and password
+  let emailInput = await page.getByRole('textbox', { name: 'Enter your email' });
+  if (!emailInput) return fail('Email input not found');
+  await emailInput.fill('admin@mail.com');
+
+  let passwordInput = await page.getByRole('textbox', { name: 'Enter your password' });
+  if (!passwordInput) return fail('Password input not found');
+  await passwordInput.fill('Pass_1234');
+
+  let signInButton = await page.getByRole('button', { name: 'Sign In' });
+  if (!signInButton) return fail('Sign In button not found');
+  await signInButton.click();
+
+  // navigate to this screen
+  await page.goto(noQuizUrl);
+
+  const message = await page.getByText('Quiz does not exist');
+  await expect(message).toBeVisible();
+});
+
+// test every cases in testCases
 for (const testCase of testCases) {
   test(testCase.tc, async ({ page }) => {
     page.setDefaultTimeout(10000);
