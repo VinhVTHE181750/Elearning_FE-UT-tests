@@ -7,9 +7,13 @@ const testData = require('./resource/addCourse.json');
 const defaultCase = testData.default;
 const testCases = testData.cases;
 
-const signInUrl = 'http://localhost:3000/signin';
-const url = 'http://localhost:3000/add-course';
-const successUrl = 'http://localhost:3000/add-course';
+const config = require('./resource/config.json');
+const signInUrl = config.signInUrl;
+const url = config.functions.addCourse.url;
+const successUrl = config.functions.addCourse.successUrl;
+const email = config.email;
+const password = config.password;
+const timeout = config.timeout;
 
 // test every case in testCases
 for (const testCase of testCases) {
@@ -22,11 +26,11 @@ for (const testCase of testCases) {
     // Input username and password
     const emailInput = await page.getByRole('textbox', { name: 'Enter your email' });
     if (!emailInput) throw new Error('Email input not found');
-    await emailInput.fill('admin@mail.com');
+    await emailInput.fill(email);
 
     const passwordInput = await page.getByRole('textbox', { name: 'Enter your password' });
     if (!passwordInput) throw new Error('Password input not found');
-    await passwordInput.fill('Pass_1234');
+    await passwordInput.fill(password)
 
     const signInButton = await page.getByRole('button', { name: 'Sign In' });
     if (!signInButton) throw new Error('Sign In button not found');

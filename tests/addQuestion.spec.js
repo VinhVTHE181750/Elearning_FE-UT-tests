@@ -9,7 +9,7 @@ const testCases = testData.cases;
 
 const config = require('./resource/config.json');
 const signInUrl = config.signInUrl;
-const url = config.functions.addQuestion;
+const url = config.functions.addQuestion.url;
 const successUrl = config.functions.addQuestion.successUrl;
 const noQuizUrl = config.functions.addQuestion.noQuizUrl;
 const email = config.email;

@@ -9,13 +9,17 @@ const testCases = testData.cases;
 const failMessage = 'Failed to update quiz';
 const successMessage = 'Quiz updated successfully';
 
-const signInUrl = 'http://localhost:3000/signin';
-const url = 'http://localhost:3000/edit-quiz/1';
+const config = require('./resource/config.json');
+const signInUrl = config.signInUrl;
+const url = config.functions.updateQuiz.url;
+const email = config.email;
+const password = config.password;
+const timeout = config.timeout;
+
 // const successUrl = 'http://localhost:3000/quiz/1';
 // const noQuizUrl = 'http://localhost:3000/add-question/10000';
 
 // test every cases in testCases
-
 for (const testCase of testCases) {
   test(testCase.tc, async ({ page }) => {
     const expectTo = testCase.expected || defaultCase.expected;
@@ -27,11 +31,11 @@ for (const testCase of testCases) {
     // input username and password
     let emailInput = await page.getByRole('textbox', { name: 'Enter your email' });
     if (!emailInput) return fail('Email input not found');
-    await emailInput.fill('admin@mail.com');
+    await emailInput.fill(email);
 
     let passwordInput = await page.getByRole('textbox', { name: 'Enter your password' });
     if (!passwordInput) return fail('Password input not found');
-    await passwordInput.fill('Pass_1234');
+    await passwordInput.fill(password)
 
     let signInButton = await page.getByRole('button', { name: 'Sign In' });
     if (!signInButton) return fail('Sign In button not found');
