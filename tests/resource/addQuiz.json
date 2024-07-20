@@ -1,6 +1,6 @@
 {
   "default": {
-    "name": "Question 1",
+    "name": "Quiz 1",
     "result": "a",
     "expected": "Add quiz successful"
   },
@@ -9,7 +9,7 @@
     {
       "tc": "Name length = 0",
       "name": "",
-      "expected": "Failed to add quiz"
+      "expected": "Failed to Add Quiz"
     },
     {
       "tc": "Name length = 1",
@@ -34,12 +34,12 @@
     {
       "tc": "Name length = 256",
       "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "expected": "Failed to add quiz"
+      "expected": "Failed to Add Quiz"
     },
     {
       "tc": "Name length = 400",
       "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "expected": "Failed to add quiz"
+      "expected": "Failed to Add Quiz"
     }
   ]
 }

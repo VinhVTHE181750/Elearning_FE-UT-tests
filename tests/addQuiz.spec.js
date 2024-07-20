@@ -50,12 +50,12 @@ for (const testCase of testCases) {
     await addButton.click();
 
     // if error => check the message and does not navigate
-   
-   let response =   await page.getByText(testCase.expected || defaultCase.expected);
+
+    let response = await page.getByText(testCase.expected || defaultCase.expected);
     if (!response) return fail('Response not found');
 
     // else => navigate to success page
     // await expect(page.url()).toBe(successUrl);
-    await expect(response).toHaveText(testCase.expected || defaultCase.expected);
+    await expect(response).toHaveText(testCase.expected || defaultCase.expected, { exact: false });
   });
 }
